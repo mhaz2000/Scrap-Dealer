@@ -1,0 +1,25 @@
+# build artifacts
+bin/
+obj/
+
+# user/IDE files
+*.user
+*.suo
+*.vs/
+.vscode/
+.project
+.settings/
+.toolstarget
+
+# git
+.git/
+.gitignore
+
+# docker configs (optional)
+docker-compose.override.yml
+docker-compose.local.yml
+
+# logs/temp
+*.log
+*.dbmdl
+*.jfm
