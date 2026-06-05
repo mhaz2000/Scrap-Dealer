@@ -4,5 +4,5 @@ using ScrapDealer.Shared.Models;
 
 namespace ScrapDealer.Application.Queries.Tickets
 {
-    public record GetTicketsQuery : PaginationQuery, IQuery<PaginatedResult<TicketDto>>;
+    public record GetTicketsQuery(Guid UserId) : PaginationQuery, IQuery<PaginatedResult<TicketDto>>;
 }

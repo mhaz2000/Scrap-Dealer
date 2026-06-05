@@ -1,29 +1,27 @@
-﻿using ScrapDealer.Domain.ValueObjects.Base;
-
-namespace ScrapDealer.Domain.ValueObjects.SaleOrders
+﻿namespace ScrapDealer.Domain.ValueObjects.Base
 {
-    public class SaleOrderDescription : ValueObject
+    public class Description : ValueObject
     {
         public string? Value { get; }
 
-        private SaleOrderDescription(string? value)
+        private Description(string? value)
         {
             Value = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
         }
 
-        public static SaleOrderDescription? Create(string? value)
+        public static Description? Create(string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
-                return new SaleOrderDescription(null);
+                return new Description(null);
 
-            return new SaleOrderDescription(value);
+            return new Description(value);
         }
 
         public override string? ToString() => Value;
 
         public override bool Equals(object? obj)
         {
-            if (obj is SaleOrderDescription other)
+            if (obj is Description other)
                 return Value == other.Value;
 
             return false;
@@ -36,10 +34,10 @@ namespace ScrapDealer.Domain.ValueObjects.SaleOrders
             yield return Value;
         }
 
-        public static implicit operator string?(SaleOrderDescription? description)
+        public static implicit operator string?(Description? description)
             => description?.Value;
 
-        public static implicit operator SaleOrderDescription?(string? value)
+        public static implicit operator Description?(string? value)
             => Create(value);
     }
 }

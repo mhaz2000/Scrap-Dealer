@@ -1,6 +1,8 @@
-﻿namespace ScrapDealer.Application.DTO
+﻿using DNTPersianUtils.Core;
+
+namespace ScrapDealer.Application.DTO
 {
-    public class SubCategoryDto(Guid id, string name, decimal minPrice, decimal maxPrice, Guid parentCategoryId, ICollection<Guid> images)
+    public class SubCategoryDto(Guid id, string name, decimal minPrice, decimal maxPrice, string lastUpdate, Guid parentCategoryId, ICollection<Guid> images)
     {
         public Guid Id { get; set; } = id;
         public string Name { get; set; } = name;
@@ -8,6 +10,7 @@
         public decimal MaxPrice { get; set; } = maxPrice;
         public Guid ParentCategoryId { get; set; } = parentCategoryId;
         public ICollection<Guid> Images { get; set; } = images;
+        public string LastUpdate { get; set; } = lastUpdate;
 
 
         public decimal LastMinPrice { get; set; }

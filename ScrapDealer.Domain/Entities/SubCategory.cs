@@ -7,6 +7,7 @@ namespace ScrapDealer.Domain.Entities
     {
         public CategoryPriceRange PriceRange { get; private set; }
         public CategoryName Name { get; private set; }
+        public DateTime LastUpdate { get; private set; }
 
         public Category Category { get; private set; }
         public Guid CategoryId { get; private set; }
@@ -23,6 +24,7 @@ namespace ScrapDealer.Domain.Entities
             PriceRange = priceRange;
             Name = name;
             Category = category; ;
+            LastUpdate = DateTime.Now;
             CategoryId = category.Id;
             Images = images;
         }
@@ -32,6 +34,7 @@ namespace ScrapDealer.Domain.Entities
             PriceRange = priceRange;
             Name = name;
             Images = images;
+            LastUpdate = DateTime.Now;
         }
     }
 }

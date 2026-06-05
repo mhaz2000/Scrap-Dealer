@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DNTPersianUtils.Core;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using ScrapDealer.Application.DTO;
 using ScrapDealer.Infrastructure.EF.Models;
@@ -30,7 +31,7 @@ namespace ScrapDealer.Infrastructure.Profiles
                         SellerDescription = s.SellerDescription,
                         SystemDescription = s.SystemDescription,
                         SubCategory = s.SubCategory == null ? null : 
-                            new SubCategoryDto(s.SubCategory.Id, s.SubCategory.Name, s.SubCategory.MinPrice, s.SubCategory.MaxPrice, s.SubCategory.CategoryId, s.SubCategory.Images)
+                            new SubCategoryDto(s.SubCategory.Id, s.SubCategory.Name, s.SubCategory.MinPrice, s.SubCategory.MaxPrice, s.SubCategory.LastUpdate.ToPersianDateTimeString("yyyy/MM/dd HH:mm", false), s.SubCategory.CategoryId, s.SubCategory.Images)
                     })
                 }).ForAllMembers(opt => opt.Ignore());
         }

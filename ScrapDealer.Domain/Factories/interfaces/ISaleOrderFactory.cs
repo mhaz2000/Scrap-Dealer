@@ -1,5 +1,6 @@
 ﻿using ScrapDealer.Domain.Consts;
 using ScrapDealer.Domain.Entities;
+using ScrapDealer.Domain.ValueObjects.Base;
 using ScrapDealer.Domain.ValueObjects.SaleOrders;
 
 namespace ScrapDealer.Domain.Factories.interfaces
@@ -10,8 +11,8 @@ namespace ScrapDealer.Domain.Factories.interfaces
         SaleOrder Update(SaleOrderAddress address, double latitude, double longitude, Telephone? telephone, SaleOrder saleOrder);
 
         SaleOrderItem CreateItem(ICollection<Guid> images, SubCategory? subCategory,
-            SaleOrderDescription? systemDescription, SaleOrderDescription? sellerDescription, SaleType saleType);
+            Description? systemDescription, Description? sellerDescription, SaleType saleType);
 
-        SaleOrderItem UpdateItem(SubCategory? subCategory, SaleOrderDescription? systemDescription, SaleType saleType, SaleOrderItem item, SaleOrder saleOrder);
+        SaleOrderItem UpdateItem(SubCategory? subCategory, Description? systemDescription, SaleType saleType, SaleOrderItem item, SaleOrder saleOrder);
     }
 }

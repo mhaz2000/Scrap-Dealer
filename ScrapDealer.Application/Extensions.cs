@@ -24,6 +24,7 @@ namespace ScrapDealer.Application
             services.AddScoped<INewsFactory, NewsFactory>();
             services.AddScoped<INotificationFactory, NotificationFactory>();
             services.AddScoped<ISettingsFactory, SettingsFactory>();
+            services.AddScoped<IWalletFactory, WalletFactory>();
             services.AddScoped<ITicketFactory, TicketFactory>();
 
             services.AddShared(configuration);

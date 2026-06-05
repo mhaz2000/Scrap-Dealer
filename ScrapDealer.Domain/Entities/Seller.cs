@@ -4,6 +4,8 @@ using ScrapDealer.Shared.Abstractions.Domain;
 
 namespace ScrapDealer.Domain.Entities
 {
+
+
     public class Seller : AggregateRoot<Guid>
     {
         public PersonName PersonName { get; private set; }
@@ -21,7 +23,7 @@ namespace ScrapDealer.Domain.Entities
 
         public Seller()
         {
-            
+
         }
 
         public Seller(PersonName personName, NationalCode nationalCode,

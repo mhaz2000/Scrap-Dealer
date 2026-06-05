@@ -1,6 +1,7 @@
 ﻿using ScrapDealer.Domain.Consts;
 using ScrapDealer.Domain.Entities;
 using ScrapDealer.Domain.Factories.interfaces;
+using ScrapDealer.Domain.ValueObjects.Base;
 using ScrapDealer.Domain.ValueObjects.SaleOrders;
 
 namespace ScrapDealer.Domain.Factories
@@ -17,10 +18,10 @@ namespace ScrapDealer.Domain.Factories
         }
 
         public SaleOrderItem CreateItem(ICollection<Guid> images, SubCategory? subCategory,
-            SaleOrderDescription? systemDescription, SaleOrderDescription? sellerDescription, SaleType saleType)
+            Description? systemDescription, Description? sellerDescription, SaleType saleType)
         {
-            var sellerDescriptionValue = SaleOrderDescription.Create(sellerDescription);
-            var systemDescriptionValue = SaleOrderDescription.Create(systemDescription);
+            var sellerDescriptionValue = Description.Create(sellerDescription);
+            var systemDescriptionValue = Description.Create(systemDescription);
 
             return new SaleOrderItem(images, subCategory, systemDescription, sellerDescription, saleType);
         }
@@ -37,9 +38,9 @@ namespace ScrapDealer.Domain.Factories
 
         }
 
-        public SaleOrderItem UpdateItem(SubCategory? subCategory, SaleOrderDescription? systemDescription, SaleType saleType, SaleOrderItem item, SaleOrder saleOrder)
+        public SaleOrderItem UpdateItem(SubCategory? subCategory, Description? systemDescription, SaleType saleType, SaleOrderItem item, SaleOrder saleOrder)
         {
-            var systemDescriptionValue = SaleOrderDescription.Create(systemDescription);
+            var systemDescriptionValue = Description.Create(systemDescription);
 
             saleOrder.SetAsUpdated();
             item.AdminUpdate(subCategory, systemDescriptionValue, saleType);

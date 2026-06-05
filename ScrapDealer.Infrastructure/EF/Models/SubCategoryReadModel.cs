@@ -8,6 +8,7 @@
         public decimal MaxPrice { get; set; }
         public string Name { get; set; }
         public Guid CategoryId { get; set; }
+        public DateTime LastUpdate { get; set; }  = DateTime.Now;
         public ICollection<Guid> Images { get; private set; } = [];
         public CategoryReadModel Category { get; set; }
     }

@@ -9,6 +9,7 @@ namespace ScrapDealer.Domain.Entities
     {
         public CategoryName Name { get; private set; }
         public CategoryPriceRange PriceRange { get; private set; }
+        public DateTime LastUpdate { get; private set; }
 
         private readonly List<SubCategory> _subCategories = new List<SubCategory>();
         public IReadOnlyCollection<SubCategory> SubCategories => _subCategories.AsReadOnly();
@@ -34,6 +35,7 @@ namespace ScrapDealer.Domain.Entities
             Name = name;
             PriceRange = priceRange;
             Images = images;
+            LastUpdate = DateTime.Now;
         }
 
         internal void Update(CategoryName name, CategoryPriceRange priceRange, ICollection<Guid> images)
@@ -41,6 +43,7 @@ namespace ScrapDealer.Domain.Entities
             Name = name;
             PriceRange = priceRange;
             Images = images;
+            LastUpdate = DateTime.Now;
         }
     }
 }

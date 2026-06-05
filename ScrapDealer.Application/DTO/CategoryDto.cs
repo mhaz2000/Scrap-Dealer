@@ -1,4 +1,6 @@
-﻿namespace ScrapDealer.Application.DTO
+﻿using DNTPersianUtils.Core;
+
+namespace ScrapDealer.Application.DTO
 {
     public class CategoryDto(Guid id, string name, decimal minPrice, decimal maxPrice, ICollection<SubCategoryDto> subCategories,
         ICollection<Guid> images)
@@ -7,7 +9,7 @@
         public string Name { get; set; } = name;
         public decimal MinPrice { get; set; } = minPrice;
         public decimal MaxPrice { get; set; } = maxPrice;
-
+        public string LastUpdate { get; set; }
         public decimal LastMinPrice { get; set; }
         public decimal LastMaxPrice { get; set; }
         public string DailyMinPriceChangeRate => CalculatePercentageChange(MinPrice, LastMinPrice);

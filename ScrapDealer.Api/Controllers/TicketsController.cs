@@ -30,7 +30,7 @@ namespace ScrapDealer.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<PaginatedResult<TicketDto>>> GetTickets([FromQuery] GetTicketsQuery query)
         {
-            var result = await queryDispatcher.QueryAsync(query);
+            var result = await queryDispatcher.QueryAsync(query with { UserId = UserId});
             return OkOrNotFound(result);
         }
 

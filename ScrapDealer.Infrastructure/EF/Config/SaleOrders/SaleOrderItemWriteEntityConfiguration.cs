@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ScrapDealer.Domain.Entities;
-using ScrapDealer.Domain.ValueObjects.SaleOrders;
+using ScrapDealer.Domain.ValueObjects.Base;
 
 namespace ScrapDealer.Infrastructure.EF.Config.SaleOrders
 {
@@ -14,12 +14,12 @@ namespace ScrapDealer.Infrastructure.EF.Config.SaleOrders
 
             builder.Property(u => u.SystemDescription)
                 .HasConversion(description => description == null ? null : description.Value,
-                    value => string.IsNullOrWhiteSpace(value) ? null : SaleOrderDescription.Create(value))
+                    value => string.IsNullOrWhiteSpace(value) ? null : Description.Create(value))
                 .IsRequired(false);
 
             builder.Property(u => u.SellerDescription)
                 .HasConversion(description => description == null ? null : description.Value,
-                    value => string.IsNullOrWhiteSpace(value) ? null : SaleOrderDescription.Create(value))
+                    value => string.IsNullOrWhiteSpace(value) ? null : Description.Create(value))
                 .IsRequired(false);
 
             builder.HasOne(u => u.SubCategory)
