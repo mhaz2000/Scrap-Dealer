@@ -7,6 +7,7 @@ namespace ScrapDealer.Domain.ValueObjects.Profiles
     {
         public string Value { get; }
 
+        private NationalCode() { }
         private NationalCode(string value)
         {
             if (string.IsNullOrWhiteSpace(value))

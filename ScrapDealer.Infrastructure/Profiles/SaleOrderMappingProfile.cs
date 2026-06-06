@@ -22,6 +22,7 @@ namespace ScrapDealer.Infrastructure.Profiles
                     RejectionReason = c.RejectionReason,
                     Latitude = c.Latitude,
                     Longitude = c.Longitude,
+                    SaleAtBuyersLocation = c.SaleAtBuyersLocation,
                     Telephone = c.Telephone,
                     Items = c.Items.Select(s => new SaleOrderItemDto()
                     {

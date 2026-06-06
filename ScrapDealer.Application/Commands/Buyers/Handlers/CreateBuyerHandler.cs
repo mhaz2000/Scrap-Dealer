@@ -1,5 +1,4 @@
-﻿using ScrapDealer.Application.Commands.Sellers;
-using ScrapDealer.Application.Services.DbReadServices;
+﻿using ScrapDealer.Application.Services.DbReadServices;
 using ScrapDealer.Domain.Factories.interfaces;
 using ScrapDealer.Domain.Repositories;
 using ScrapDealer.Shared.Abstractions.Commands;
@@ -12,6 +11,8 @@ namespace ScrapDealer.Application.Commands.Buyers.Handlers
         private const string buyerRoleName = "Buyer";
 
         private readonly IBuyerFactory _factory;
+        private readonly IWalletFactory _walletFactory;
+        private readonly IWalletRepository _walletRepository;
         private readonly IBuyerRepository _repository;
         private readonly IBuyerReadService _readService;
         private readonly ISellerReadService _sellerReadService;
@@ -19,7 +20,8 @@ namespace ScrapDealer.Application.Commands.Buyers.Handlers
         private readonly IRoleRepository _roleRepository;
         private readonly IUserRoleRepository _userRoleRepository;
         public CreateBuyerHandler(IBuyerFactory factory, IBuyerRepository repository, IBuyerReadService readService,
-            IUserRepository userRepository, IRoleRepository roleRepository, IUserRoleRepository userRoleRepository, ISellerReadService sellerReadService)
+            IUserRepository userRepository, IRoleRepository roleRepository, IUserRoleRepository userRoleRepository,
+            ISellerReadService sellerReadService, IWalletFactory walletFactory, IWalletRepository walletRepository)
         {
             _factory = factory;
             _repository = repository;
@@ -28,6 +30,8 @@ namespace ScrapDealer.Application.Commands.Buyers.Handlers
             _roleRepository = roleRepository;
             _userRoleRepository = userRoleRepository;
             _sellerReadService = sellerReadService;
+            _walletFactory = walletFactory;
+            _walletRepository = walletRepository;
         }
 
         public async Task Handle(CreateBuyerCommand request, CancellationToken cancellationToken)
@@ -50,9 +54,12 @@ namespace ScrapDealer.Application.Commands.Buyers.Handlers
 
             var buyerUserRole = user.AddRole(buyerRole!);
 
-            await _userRoleRepository.AddAsync(buyerUserRole);
+            var wallet = _walletFactory.Create(null, buyer);
 
+            await _userRoleRepository.AddAsync(buyerUserRole);
             await _repository.AddAsync(buyer);
+            await _walletRepository.AddAsync(wallet);
+
         }
     }
 }

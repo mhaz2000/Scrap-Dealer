@@ -21,8 +21,8 @@ namespace ScrapDealer.Domain.Entities
             Balance = balance;
             Seller = seller;
             Buyer = buyer;
-            SellerId = seller.Id;
-            BuyerId = buyer.Id;
+            SellerId = seller?.Id;
+            BuyerId = buyer?.Id;
         }
     }
 }

@@ -13,6 +13,7 @@ namespace ScrapDealer.Infrastructure.EF.Contexts
         public DbSet<Role> Roles { get; set; }
         public DbSet<Buyer> Buyers { get; set; }
         public DbSet<Reward> Rewards { get; set; }
+        public DbSet<Wallet> Wallets { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Seller> Sellers { get; set; }
         public DbSet<Settings> Settings { get; set; }
@@ -25,6 +26,7 @@ namespace ScrapDealer.Infrastructure.EF.Contexts
         public DbSet<SaleOrderItem> SaleOrderItems { get; set; }
         public DbSet<TicketMessage> TicketMessages { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<WalletTransaction> WalletTransactions { get; set; }
         public DbSet<CategoryPriceHistory> CategoryPriceHistories { get; set; }
 
         public WriteDbContext(DbContextOptions<WriteDbContext> options) : base(options)

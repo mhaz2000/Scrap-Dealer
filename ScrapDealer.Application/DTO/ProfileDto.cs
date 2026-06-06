@@ -21,5 +21,7 @@ namespace ScrapDealer.Application.DTO
         public Guid ProfileFormFileId { get; set; }
         public bool Verified { get; set; }
         public bool IsActive { get; set; }
+        public string? WalletNumber { get; set; }
+        public decimal? WalletBalance { get; set; }
     }
 }

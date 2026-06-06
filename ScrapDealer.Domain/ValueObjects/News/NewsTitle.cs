@@ -1,10 +1,4 @@
 ﻿using ScrapDealer.Domain.ValueObjects.Base;
-using ScrapDealer.Domain.ValueObjects.SaleOrders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScrapDealer.Domain.ValueObjects.News
 {
@@ -12,6 +6,7 @@ namespace ScrapDealer.Domain.ValueObjects.News
     {
         public string Value { get; }
 
+        private NewsTitle() { }
         private NewsTitle(string value)
         {
             Value = value.Trim();

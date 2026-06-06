@@ -34,7 +34,7 @@ namespace ScrapDealer.Application.Commands.SaleOrders.Handlers
             if (!seller.Verified)
                 throw new BusinessException("ابتدا فرایند احراز هویت خود را تکمیل کنید.");
 
-            var saleOrder = _factory.Create(request.IsIndustrial, seller, request.Address, request.Latitude, request.Longitude, request.Telephone);
+            var saleOrder = _factory.Create(request.IsIndustrial, seller, request.Address, request.Latitude, request.Longitude, request.SaleAtBuyersLocation, request.Telephone);
 
             foreach (var item in request.Items)
             {

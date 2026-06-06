@@ -8,6 +8,7 @@ namespace ScrapDealer.Domain.ValueObjects.Category
     {
         public string Value { get; set; }
 
+        private CategoryName() { }
         private CategoryName(string value)
         {
             if (string.IsNullOrWhiteSpace(value))

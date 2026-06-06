@@ -11,6 +11,7 @@ namespace ScrapDealer.Infrastructure.EF.Contexts
         public DbSet<RoleReadModel> Roles { get; set; }
         public DbSet<BuyerReadModel> Buyers { get; set; }
         public DbSet<RewardReadModel> Rewards { get; set; }
+        public DbSet<WalletReadModel> Wallets { get; set; }
         public DbSet<TicketReadModel> Tickets { get; set; }
         public DbSet<SellerReadModel> Sellers { get; set; }
         public DbSet<SettingsReadModel> Settings { get; set; }
@@ -23,6 +24,7 @@ namespace ScrapDealer.Infrastructure.EF.Contexts
         public DbSet<TicketMessageReadModel> TicketMessages { get; set; }
         public DbSet<SaleOrderItemReadModel> SaleOrderItems { get; set; }
         public DbSet<RolePermissionReadModel> RolePermissions { get; set; }
+        public DbSet<WalletTransactionReadModel> WalletTransactions { get; set; }
         public DbSet<CategoryPriceHistoryReadModel> CategoryPriceHistories { get; set; }
 
         public ReadDbContext(DbContextOptions<ReadDbContext> options) : base(options)

@@ -7,6 +7,7 @@ namespace ScrapDealer.Domain.ValueObjects.SaleOrders
     {
         public string Value { get; }
 
+        private SaleOrderAddress() { }
         private SaleOrderAddress(string value)
         {
             if (string.IsNullOrWhiteSpace(value))

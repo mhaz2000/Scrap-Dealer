@@ -7,6 +7,7 @@ namespace ScrapDealer.Domain.ValueObjects.Profiles
     {
         public string Value { get; }
 
+        private Email() { }
         private Email(string value)
         {
             if (string.IsNullOrWhiteSpace(value))

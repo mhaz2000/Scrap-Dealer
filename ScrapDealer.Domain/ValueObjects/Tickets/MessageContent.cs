@@ -5,6 +5,7 @@ public class MessageContent : ValueObject
 {
     public string Value { get; }
 
+    private MessageContent() { }
     private MessageContent(string value)
     {
         Value = value.Trim();

@@ -12,6 +12,7 @@ namespace ScrapDealer.Domain.ValueObjects.Profiles
         public string Description { get; }
         public ActivityArea? ActivityArea { get; set; }
 
+        private ProfileAddress() { }
         private ProfileAddress(string province, string city, string? postalCode, string description, ActivityArea? activityArea)
         {
             if (string.IsNullOrWhiteSpace(province))

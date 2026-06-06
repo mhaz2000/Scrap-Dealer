@@ -33,6 +33,7 @@ namespace ScrapDealer.Domain.Entities
             ProfileAddress address, CompanyName? companyName, NumberPlate? numberPlate, Gender gender,
             Guid businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, bool isWholeSaleBuyer, bool isFixedLocation, Guid userId)
         {
+            Id = Guid.NewGuid();
             PersonName = personName;
             NationalCode = nationalCode;
             Address = address;
@@ -62,7 +63,7 @@ namespace ScrapDealer.Domain.Entities
             CompanyName = companyName;
             BusinessLicenseFileId = businessLicenseFileId;
             NationalCardFileId = nationalCardFileId;
-            ProfileFormFileId = ProfileFormFileId;
+            ProfileFormFileId = profileFormFileId;
         }
 
         public void SetAsVerified() => Verified = true;

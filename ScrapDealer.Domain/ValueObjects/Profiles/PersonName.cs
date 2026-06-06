@@ -8,6 +8,7 @@ namespace ScrapDealer.Domain.ValueObjects.Profiles
         public string FirstName { get; }
         public string LastName { get; }
 
+        private PersonName() { }
         private PersonName(string firstName, string lastName)
         {
             if (string.IsNullOrWhiteSpace(firstName))

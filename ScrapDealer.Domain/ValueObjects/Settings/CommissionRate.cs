@@ -7,6 +7,7 @@ namespace ScrapDealer.Domain.ValueObjects.Settings
     {
         public float Value { get; }
 
+        private CommissionRate() { }
         private CommissionRate(float value)
         {
             if (value < 0 || value >100)

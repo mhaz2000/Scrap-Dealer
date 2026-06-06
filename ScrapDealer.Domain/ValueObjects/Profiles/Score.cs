@@ -7,6 +7,7 @@ namespace ScrapDealer.Domain.ValueObjects.Profiles
     {
         public float Value { get; }
 
+        private Score() { }
         private Score(float value)
         {
             if (value < 0)

@@ -7,6 +7,7 @@ namespace ScrapDealer.Domain.ValueObjects.Roles
     {
         public string Value { get; }
 
+        private RoleName() { }
         private RoleName(string value)
         {
             if (string.IsNullOrWhiteSpace(value))

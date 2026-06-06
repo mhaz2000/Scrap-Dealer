@@ -6,6 +6,7 @@ namespace ScrapDealer.Domain.ValueObjects.Tickets
     {
         public string Value { get; }
 
+        private TicketTitle() { }
         private TicketTitle(string value)
         {
             Value = value.Trim();

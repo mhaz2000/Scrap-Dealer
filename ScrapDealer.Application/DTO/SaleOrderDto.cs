@@ -7,8 +7,9 @@ namespace ScrapDealer.Application.DTO
         public Guid Id { get; set; }
         public required string Address { get; set; }
         public string? Telephone { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+        public bool SaleAtBuyersLocation { get; set; }
         public bool IsIndustrial { get; set; }
         public required string SellerName { get; set; }
         public string? RejectionReason { get; set; }

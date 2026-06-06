@@ -12,6 +12,7 @@ using ScrapDealer.Infrastructure.EF.Config.RolePermissions;
 using ScrapDealer.Infrastructure.EF.Config.SaleOrders;
 using ScrapDealer.Infrastructure.EF.Config.Tickets;
 using ScrapDealer.Infrastructure.EF.Config.Users;
+using ScrapDealer.Infrastructure.EF.Config.Wallets;
 using ScrapDealer.Infrastructure.EF.Models;
 
 namespace ScrapDealer.Infrastructure.EF.Config
@@ -32,12 +33,14 @@ namespace ScrapDealer.Infrastructure.EF.Config
             modelBuilder.ApplyConfiguration(new BuyerReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SellerReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new RewardReadEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new WalletReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SettingsReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ContractReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SaleOrderReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SaleOrderItemReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new RolePermissionReadEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new WalletTransactionReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryPriceHistoryReadEntityConfiguration());
         }
 
@@ -54,6 +57,7 @@ namespace ScrapDealer.Infrastructure.EF.Config
             modelBuilder.ApplyConfiguration(new NewsWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BuyerWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new RewardWriteEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new WalletWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SellerWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SettingsWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ContractWriteEntityConfiguration());
@@ -61,6 +65,7 @@ namespace ScrapDealer.Infrastructure.EF.Config
             modelBuilder.ApplyConfiguration(new NotificationWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SaleOrderItemWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new RolePermissionWriteEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new WalletTransactionWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryPriceHistoryWriteEntityConfiguration());
 
         }

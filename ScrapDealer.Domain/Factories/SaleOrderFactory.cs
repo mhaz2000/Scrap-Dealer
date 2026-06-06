@@ -8,13 +8,14 @@ namespace ScrapDealer.Domain.Factories
 {
     public class SaleOrderFactory : ISaleOrderFactory
     {
-        public SaleOrder Create(bool isIndustrial, Seller seller, SaleOrderAddress address, double latitude, double longitude, Telephone? telephone)
+        public SaleOrder Create(bool isIndustrial, Seller seller, SaleOrderAddress address, double? latitude, double? longitude, 
+            bool saleAtBuyersLocation, Telephone? telephone)
         {
             var telephoneValue = string.IsNullOrEmpty(telephone) ? null: Telephone.Create(telephone);
             var addressValue = SaleOrderAddress.Create(address);
-            var locationValue = Location.Create(latitude, longitude);
+            var locationValue = latitude is null || longitude is null ? null : Location.Create(latitude.Value, longitude.Value);
 
-            return new SaleOrder(isIndustrial, seller, addressValue, locationValue, telephoneValue);
+            return new SaleOrder(isIndustrial, seller, addressValue, locationValue, telephoneValue, saleAtBuyersLocation);
         }
 
         public SaleOrderItem CreateItem(ICollection<Guid> images, SubCategory? subCategory,
@@ -26,13 +27,13 @@ namespace ScrapDealer.Domain.Factories
             return new SaleOrderItem(images, subCategory, systemDescription, sellerDescription, saleType);
         }
 
-        public SaleOrder Update(SaleOrderAddress address, double latitude, double longitude, Telephone? telephone, SaleOrder saleOrder)
+        public SaleOrder Update(SaleOrderAddress address, double latitude, double longitude, Telephone? telephone, bool saleAtBuyersLocation, SaleOrder saleOrder)
         {
             var telephoneValue = string.IsNullOrEmpty(telephone) ? null: Telephone.Create(telephone);
             var addressValue = SaleOrderAddress.Create(address);
             var locationValue = Location.Create(latitude, longitude);
 
-            saleOrder.Update(addressValue, locationValue, telephoneValue);
+            saleOrder.Update(addressValue, locationValue, telephoneValue, saleAtBuyersLocation);
 
             return saleOrder;
 

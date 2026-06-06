@@ -13,6 +13,7 @@ namespace ScrapDealer.Domain.Entities
         private readonly List<RolePermission> _rolePermissions = new List<RolePermission>();
         public IReadOnlyCollection<RolePermission> RolePermissions => _rolePermissions.AsReadOnly();
 
+        private Role() { }
         public Role(Guid id, RoleName name) : base(id)
         {
             Name = name;

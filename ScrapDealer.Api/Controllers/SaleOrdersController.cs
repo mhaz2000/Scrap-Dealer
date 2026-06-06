@@ -85,10 +85,18 @@ namespace ScrapDealer.Api.Controllers
         }
 
         [Authorize(Roles = "Buyer")]
-        [HttpGet("NearbyOrders")]
-        public async Task<ActionResult<List<SaleOrderDto>>> GetNearbyOrders()
+        [HttpGet("NearbyOrdersForBuyers")]
+        public async Task<ActionResult<List<SaleOrderDto>>> GetNearbyOrdersForBuyers()
         {
-            var result = await _queryDispatcher.QueryAsync(new GetNearbyOrdersQuery(UserId));
+            var result = await _queryDispatcher.QueryAsync(new GetNearbyOrdersForBuyersQuery(UserId));
+            return OkOrNotFound(result);
+        }
+
+        [Authorize(Roles = "Seller")]
+        [HttpGet("NearbyOrdersForSellers/{saleOrderId:guid}")]
+        public async Task<ActionResult<List<NearbyBuyerDto>>> GetNearbyBuyers([FromRoute] Guid saleOrderId)
+        {
+            var result = await _queryDispatcher.QueryAsync(new GetNearbyBuyersQuery(UserId, saleOrderId));
             return OkOrNotFound(result);
         }
 

@@ -1,5 +1,4 @@
-﻿using ScrapDealer.Application.Services.DbReadServices;
-using ScrapDealer.Domain.Factories.interfaces;
+﻿using ScrapDealer.Domain.Factories.interfaces;
 using ScrapDealer.Domain.Repositories;
 using ScrapDealer.Shared.Abstractions.Commands;
 using ScrapDealer.Shared.Abstractions.Exceptions;
@@ -37,7 +36,7 @@ namespace ScrapDealer.Application.Commands.SaleOrders.Handlers
                 saleOrder.AddItem(saleItem);
             }
 
-            _factory.Update(request.Address, request.Latitude, request.Longitude, request.Telephone, saleOrder);
+            _factory.Update(request.Address, request.Latitude, request.Longitude, request.Telephone, request.saleAtBuyersLocation, saleOrder);
 
             await _saleOrderRepository.UpdateAsync(saleOrder);
         }

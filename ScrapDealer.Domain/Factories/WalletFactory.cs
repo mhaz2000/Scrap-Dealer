@@ -7,10 +7,9 @@ namespace ScrapDealer.Domain.Factories
 {
     public class WalletFactory : IWalletFactory
     {
-        public Wallet Create(Seller? seller, Buyer? buyer, string walletNumber)
+        public Wallet Create(Seller? seller, Buyer? buyer)
         {
-            var walletNumberText = WalletNumber.GenerateFromNationalCode(buyer?.NationalCode ?? seller?.NationalCode);
-            var walletNumberValue = WalletNumber.Create(walletNumberText);
+            var walletNumberValue = WalletNumber.GenerateFromNationalCode(buyer?.NationalCode ?? seller?.NationalCode);
             return new Wallet(walletNumberValue, Amount.Create(0), seller, buyer);
         }
     }

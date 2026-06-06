@@ -9,6 +9,7 @@ namespace ScrapDealer.Domain.ValueObjects.Category
         public decimal MinValue { get; }
         public decimal MaxValue { get; }
 
+        private CategoryPriceRange() { }
         private CategoryPriceRange(decimal minValue, decimal maxValue)
         {
             if (minValue < 0 || maxValue < 0)

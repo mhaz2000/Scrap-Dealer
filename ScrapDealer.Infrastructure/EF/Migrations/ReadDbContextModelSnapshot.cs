@@ -378,10 +378,10 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Property<bool>("IsIndustrial")
                         .HasColumnType("bit");
 
-                    b.Property<double>("Latitude")
+                    b.Property<double?>("Latitude")
                         .HasColumnType("float");
 
-                    b.Property<double>("Longitude")
+                    b.Property<double?>("Longitude")
                         .HasColumnType("float");
 
                     b.Property<bool>("ModifiedByAdmin")
@@ -389,6 +389,9 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
 
                     b.Property<string>("RejectionReason")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("SaleAtBuyersLocation")
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("SellerId")
                         .HasColumnType("uniqueidentifier");
@@ -646,6 +649,66 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("UserRoles", (string)null);
                 });
 
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.WalletReadModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("BuyerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("SellerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BuyerId");
+
+                    b.HasIndex("SellerId");
+
+                    b.ToTable("Wallets", (string)null);
+                });
+
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.WalletTransactionReadModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("WalletId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WalletId");
+
+                    b.ToTable("WalletTransactions", (string)null);
+                });
+
             modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.BuyerReadModel", b =>
                 {
                     b.HasOne("ScrapDealer.Infrastructure.EF.Models.UserReadModel", "User")
@@ -804,6 +867,34 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.WalletReadModel", b =>
+                {
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.BuyerReadModel", "Buyer")
+                        .WithMany()
+                        .HasForeignKey("BuyerId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.SellerReadModel", "Seller")
+                        .WithMany()
+                        .HasForeignKey("SellerId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Buyer");
+
+                    b.Navigation("Seller");
+                });
+
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.WalletTransactionReadModel", b =>
+                {
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.WalletReadModel", "Wallet")
+                        .WithMany()
+                        .HasForeignKey("WalletId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Wallet");
                 });
 
             modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.CategoryReadModel", b =>

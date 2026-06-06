@@ -4,6 +4,7 @@ public class Title : ValueObject
 {
     public string Value { get; }
 
+    private Title() { }
     private Title(string value)
     {
         Value = value.Trim();

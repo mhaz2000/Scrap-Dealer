@@ -11,6 +11,7 @@ namespace ScrapDealer.Domain.ValueObjects.Notifications
     {
         public string Value { get; }
 
+        private NotificationContent() { }
         private NotificationContent(string value)
         {
             Value = value.Trim();

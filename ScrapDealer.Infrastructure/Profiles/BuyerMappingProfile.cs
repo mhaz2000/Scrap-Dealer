@@ -8,6 +8,7 @@ namespace ScrapDealer.Infrastructure.Profiles
     {
         public BuyerMappingProfile()
         {
+            CreateMap<BuyerReadModel, NearbyBuyerDto>();
             CreateMap<BuyerReadModel, BuyerProfileDto>()
                 .ForMember(dest => dest.Phone, opt => opt.MapFrom(b => b.User.Phone))
                 .ForMember(dest => dest.Verified, opt => opt.MapFrom(b => b.Verified));

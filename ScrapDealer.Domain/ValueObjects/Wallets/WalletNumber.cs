@@ -9,6 +9,7 @@ public class WalletNumber : ValueObject
 {
     public string Value { get; }
 
+    private WalletNumber() { }
     private WalletNumber(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -50,15 +51,12 @@ public class WalletNumber : ValueObject
 
         var prefix = nationalCode.Substring(6, 4);
 
-        var randomBytes = new byte[9]; // 9 bytes = 12 chars in base64
+        var randomBytes = new byte[8]; // 8 bytes = 64 bits
         using var rng = RandomNumberGenerator.Create();
         rng.GetBytes(randomBytes);
 
-        var suffix = Convert.ToBase64String(randomBytes)
-            .Replace('+', 'M')
-            .Replace('/', 'N')
-            .Replace('=', 'P')
-            .Substring(0, 12);
+        var randomNumber = BitConverter.ToUInt64(randomBytes, 0) % 1_000_000_000_000; // Mod 10^12
+        var suffix = randomNumber.ToString("D12"); // Pad with leading zeros to 12 digits
 
         var walletNumber = $"{prefix}{suffix}";
 

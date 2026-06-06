@@ -2,11 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ScrapDealer.Domain.Entities;
 using ScrapDealer.Domain.ValueObjects.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScrapDealer.Infrastructure.EF.Config.Contracts
 {

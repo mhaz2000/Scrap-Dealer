@@ -8,6 +8,7 @@ namespace ScrapDealer.Domain.ValueObjects.Users
     {
         public string Value { get; }
 
+        private Username() { }
         private Username(string value)
         {
             if (string.IsNullOrWhiteSpace(value))

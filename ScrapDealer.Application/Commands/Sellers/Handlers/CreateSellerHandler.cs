@@ -13,12 +13,15 @@ namespace ScrapDealer.Application.Commands.Sellers.Handlers
         private readonly ISellerFactory _factory;
         private readonly ISellerRepository _repository;
         private readonly ISellerReadService _readService;
+        private readonly IWalletRepository _walletRepository;
+        private readonly IWalletFactory _walletFactory;
         private readonly IBuyerReadService _buyerReadService;
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IUserRoleRepository _userRoleRepository;
         public CreateSellerHandler(ISellerFactory factory, ISellerRepository repository, ISellerReadService readService,
-            IUserRepository userRepository, IRoleRepository roleRepository, IUserRoleRepository userRoleRepository, IBuyerReadService buyerReadService)
+            IUserRepository userRepository, IRoleRepository roleRepository, IUserRoleRepository userRoleRepository,
+            IBuyerReadService buyerReadService, IWalletRepository walletRepository, IWalletFactory walletFactory)
         {
             _factory = factory;
             _repository = repository;
@@ -27,6 +30,8 @@ namespace ScrapDealer.Application.Commands.Sellers.Handlers
             _roleRepository = roleRepository;
             _userRoleRepository = userRoleRepository;
             _buyerReadService = buyerReadService;
+            _walletRepository = walletRepository;
+            _walletFactory = walletFactory;
         }
 
         public async Task Handle(CreateSellerCommand request, CancellationToken cancellationToken)
@@ -47,6 +52,11 @@ namespace ScrapDealer.Application.Commands.Sellers.Handlers
                 request.PostalCode, request.AddressDescription, request.Email, request.Gender, request.PersonType, request.UserId);
 
             var sellerUserRole = user.AddRole(sellerRole!);
+
+
+            var wallet = _walletFactory.Create(seller, null);
+
+            await _walletRepository.AddAsync(wallet);
 
             await _userRoleRepository.AddAsync(sellerUserRole);
 

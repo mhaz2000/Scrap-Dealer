@@ -8,6 +8,7 @@ namespace ScrapDealer.Domain.ValueObjects.SaleOrders
         public double Latitude { get; }
         public double Longitude { get; }
 
+        private Location() { }
         private Location(double latitude, double longitude)
         {
             if (!IsValidCoordinate(latitude, longitude))

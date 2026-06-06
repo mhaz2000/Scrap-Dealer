@@ -29,6 +29,7 @@ namespace ScrapDealer.Domain.Entities
         public Seller(PersonName personName, NationalCode nationalCode,
             ProfileAddress address, Email email, PersonType personType, Gender gender, Guid userId)
         {
+            Id = Guid.NewGuid();
             PersonName = personName;
             NationalCode = nationalCode;
             Address = address;

@@ -1,16 +1,12 @@
-﻿using ScrapDealer.Shared.Abstractions.Exceptions;
-
-namespace ScrapDealer.Domain.ValueObjects.Base;
+﻿namespace ScrapDealer.Domain.ValueObjects.Base;
 
 public class Amount : ValueObject
 {
     public decimal Value { get; }
 
+    private Amount() { }
     private Amount(decimal value)
     {
-        if (value < 0)
-            throw new BusinessException("مبلغ باید بزرکتر از صفر باشد.");
-
         Value = value;
     }
 

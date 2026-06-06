@@ -1,11 +1,6 @@
 ﻿using ScrapDealer.Domain.ValueObjects.Base;
 using ScrapDealer.Shared.Abstractions.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ScrapDealer.Domain.ValueObjects.Users
 {
@@ -15,6 +10,7 @@ namespace ScrapDealer.Domain.ValueObjects.Users
 
         public string Value { get; }
 
+        private Phone() { }
         private Phone(string value)
         {
             if (string.IsNullOrWhiteSpace(value))

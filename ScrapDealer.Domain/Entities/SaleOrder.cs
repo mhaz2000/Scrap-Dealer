@@ -11,9 +11,10 @@ namespace ScrapDealer.Domain.Entities
         public Seller Seller { get; private set; }
         public SaleOrderAddress Address { get; set; }
         public Telephone? Telephone { get; set; }
-        public Location Location { get; set; }
+        public Location? Location { get; set; }
         public Guid SellerId { get; private set; }
         public bool IsIndustrial { get; private set; }
+        public bool SaleAtBuyersLocation { get; private set; }
         public SaleOrderStatus Status { get; set; }
         public bool ModifiedByAdmin { get; set; } = false;
         public string? RejectionReason { get; set; }
@@ -26,7 +27,7 @@ namespace ScrapDealer.Domain.Entities
             
         }
 
-        public SaleOrder(bool isIndustrial, Seller seller, SaleOrderAddress address, Location location, Telephone? telephone)
+        public SaleOrder(bool isIndustrial, Seller seller, SaleOrderAddress address, Location? location, Telephone? telephone, bool saleAtBuyersLocation)
         {
             Seller = seller;
             Address = address;
@@ -35,12 +36,13 @@ namespace ScrapDealer.Domain.Entities
             Location = location;
             Status = SaleOrderStatus.CreatedOrUpdated;
             Telephone = telephone;
+            SaleAtBuyersLocation = saleAtBuyersLocation;
         }
 
         public void AddItem(SaleOrderItem item) 
             => _items.Add(item);
 
-        internal void Update(SaleOrderAddress address, Location location, Telephone? telephone)
+        internal void Update(SaleOrderAddress address, Location? location, Telephone? telephone, bool saleAtBuyersLocation)
         {
             ModifiedByAdmin = false;
             RejectionReason = null;
@@ -49,6 +51,7 @@ namespace ScrapDealer.Domain.Entities
             Address = address;
             Location = location;
             Telephone = telephone;
+            SaleAtBuyersLocation = saleAtBuyersLocation;
         }
 
         internal void SetAsUpdated() => ModifiedByAdmin = true;

@@ -6,6 +6,7 @@ namespace ScrapDealer.Domain.ValueObjects.News
     {
         public string Value { get; }
 
+        private NewsSummary() { }
         private NewsSummary(string value)
         {
             Value = value.Trim();

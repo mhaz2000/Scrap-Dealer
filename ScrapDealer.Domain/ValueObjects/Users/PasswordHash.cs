@@ -11,6 +11,7 @@ namespace ScrapDealer.Domain.ValueObjects.Users
         public string Value { get; }
         private static readonly Regex PasswordRegex = new(@"^(?=.*[A-Za-z])(?=.*\d).{8,}$", RegexOptions.Compiled);
 
+        private PasswordHash() { }
         private PasswordHash(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
