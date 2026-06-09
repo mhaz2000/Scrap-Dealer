@@ -3,9 +3,10 @@ using ScrapDealer.Domain.Repositories;
 using ScrapDealer.Shared.Abstractions.Commands;
 using ScrapDealer.Shared.Abstractions.Exceptions;
 
-namespace ScrapDealer.Application.Commands.SaleOrders
+namespace ScrapDealer.Application.Commands.SaleOrders.Handlers
 {
-    public class AcceptOrderCommandHandler(IContractFactory factory, IContractRepository repository, IBuyerRepository buyerRepository, ISaleOrderRepository saleOrderRepository)
+    public class AcceptOrderHandler(IContractFactory factory, IContractRepository repository, ISaleOrderRequestRepository saleOrderRequestRepository,
+        IBuyerRepository buyerRepository, ISaleOrderRepository saleOrderRepository)
         : ICommandHandler<AcceptOrderCommand>
     {
         public async Task Handle(AcceptOrderCommand request, CancellationToken cancellationToken)
@@ -17,9 +18,15 @@ namespace ScrapDealer.Application.Commands.SaleOrders
             var buyer = await buyerRepository.GetAsync(c => c.UserId == request.UserId && c.IsActive);
             if (buyer is null)
                 throw new BusinessException("خریدار یافت نشد.");
+            
+            var saleOrderRequest = await saleOrderRequestRepository.GetAsync(t => t.SaleOrderId == request.Id && t.BuyerId == buyer.Id);
+            if (saleOrderRequest is not null)
+                await saleOrderRequestRepository.DeleteAsync(saleOrderRequest.Id);
 
             var contract = factory.Create(saleOrder.Id, 0, 0, buyer.Id);
             await repository.AddAsync(contract);
+            await repository.CommitAsync();
+
         }
     }
 }

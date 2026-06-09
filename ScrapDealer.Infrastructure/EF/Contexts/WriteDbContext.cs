@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ScrapDealer.Domain.Entities;
 using ScrapDealer.Infrastructure.EF.Config;
+using ScrapDealer.Infrastructure.EF.Models;
 using ScrapDealer.Shared.Abstractions.Domain;
 using System.Linq.Expressions;
 
@@ -26,6 +27,7 @@ namespace ScrapDealer.Infrastructure.EF.Contexts
         public DbSet<SaleOrderItem> SaleOrderItems { get; set; }
         public DbSet<TicketMessage> TicketMessages { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<SaleOrderRequest> SaleOrderRequests { get; set; }
         public DbSet<WalletTransaction> WalletTransactions { get; set; }
         public DbSet<CategoryPriceHistory> CategoryPriceHistories { get; set; }
 

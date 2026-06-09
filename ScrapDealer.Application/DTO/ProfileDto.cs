@@ -16,9 +16,8 @@ namespace ScrapDealer.Application.DTO
         public ActivityArea ActivityArea { get; set; }
         public string? CompanyName { get; set; }
         public string? NumberPlate { get; set; }
-        public Guid BusinessLicenseFileId { get; set; }
-        public Guid NationalCardFileId { get; set; }
-        public Guid ProfileFormFileId { get; set; }
+        public Guid? NationalCardFileId { get; set; }
+        public Guid? ProfileFormFileId { get; set; }
         public bool Verified { get; set; }
         public bool IsActive { get; set; }
         public string? WalletNumber { get; set; }

@@ -44,6 +44,7 @@ namespace ScrapDealer.Application.Commands.Authentication.Handlers
                     throw new BusinessException("کد تایید اشتباه است.");
             }
 
+            bool newUserCreated = false;
             if (userId is null)
             {
                 var newUser = _userFactory.Create(request.Phone, request.Phone);
@@ -51,6 +52,7 @@ namespace ScrapDealer.Application.Commands.Authentication.Handlers
                 await _userRepository.AddAsync(newUser);
 
                 userId = newUser.Id;
+                newUserCreated = true;
             }
 
             var userRoleName = await _roleReadService.GetUserRoleNameAsync(userId.Value);
@@ -60,8 +62,10 @@ namespace ScrapDealer.Application.Commands.Authentication.Handlers
             var token = _tokenService.GenerateToken(userId.Value.ToString(), new List<Claim> { new("role", userRoleName) });
             await _redisCacheService.SetAsync<Guid>($"refreshToken:{token.refreshToken}", userId.Value, TimeSpan.FromDays(7));
 
-            if (!await _userReadService.CheckIfUserActiveAsync(userId.Value))
+            if (!newUserCreated && !(await _userReadService.CheckIfUserActiveAsync(userId.Value)))
                 throw new BusinessException("حساب کاربری شما غیر فعال شده است.");
+
+            await _userRepository.CommitAsync();
 
             return new AuthenticationDto() { Token = token.token, RefreshToken = token.refreshToken };
         }

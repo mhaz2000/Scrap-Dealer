@@ -21,6 +21,7 @@ internal class UpdatePermissionHandler(IRolePermissionRepository _repository, IR
         {
             var permissionToAdd = _factory.Create(permission, supportRole!);
             await _repository.AddAsync(permissionToAdd);
+            await _repository.CommitAsync();
         }
     }
 }

@@ -47,6 +47,8 @@ namespace ScrapDealer.Application.Commands.SaleOrders.Handlers
             }
 
             await _saleOrderRepository.AddAsync(saleOrder);
+            await _saleOrderRepository.CommitAsync();
+
         }
     }
 }

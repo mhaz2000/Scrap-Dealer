@@ -7,9 +7,9 @@ namespace ScrapDealer.Domain.Factories.interfaces
     public interface ISellerFactory
     {
         Seller Create(string fisrtName, string lastName, NationalCode nationalCode, string city, string province, string postalCode,
-            string addressDescription, Email email, Gender gender, PersonType personType, Guid userId);
+            string addressDescription, Email email, Gender gender, PersonType personType, Guid userId, Guid? nationalCardFileId, Guid? profileFormFileId);
 
         Seller Update(string fisrtName, string lastName, NationalCode nationalCode, string city, string province, string postalCode,
-            string addressDescription, Email email, Gender gender, PersonType personType, Seller buyer);
+            string addressDescription, Email email, Gender gender, PersonType personType, Guid? nationalCardFileId, Guid? profileFormFileId, Seller buyer);
     }
 }

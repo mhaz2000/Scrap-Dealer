@@ -50,7 +50,8 @@ namespace ScrapDealer.Application.Commands.Buyers.Handlers
 
             var buyer = _factory.Create(request.FirstName, request.LastName, request.NationalCode, request.City, request.Province,
                 request.CompanyName, request.NumberPlate, request.AddressDescription, request.Gender, request.ActivityArea,
-                request.BusinessLicenseFileId, request.NationalCardFileId, request.ProfileFormFileId, request.IsWholeSaleBuyer, request.IsFixedLocation, request.UserId);
+                request.BusinessLicenseFileId, request.NationalCardFileId, request.ProfileFormFileId, request.CarCardFileId,
+                request.IsWholeSaleBuyer, request.IsFixedLocation, request.UserId);
 
             var buyerUserRole = user.AddRole(buyerRole!);
 
@@ -60,6 +61,7 @@ namespace ScrapDealer.Application.Commands.Buyers.Handlers
             await _repository.AddAsync(buyer);
             await _walletRepository.AddAsync(wallet);
 
+            await _userRepository.CommitAsync();
         }
     }
 }

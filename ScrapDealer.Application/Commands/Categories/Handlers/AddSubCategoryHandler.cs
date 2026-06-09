@@ -41,6 +41,7 @@ namespace ScrapDealer.Application.Commands.Categories.Handlers
 
             await _mediator.Publish(new AddCategoryHistoryEvent(subCategory.Id, request.minPrice, request.maxPrice, nameof(SubCategory)));
 
+            await _repository.CommitAsync();
         }
     }
 }

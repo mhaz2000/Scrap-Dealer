@@ -11,6 +11,8 @@ namespace ScrapDealer.Application.Commands.Notifications.Handlers
             var notification = factory.Create(request.Title, request.Content);
 
             await repository.AddAsync(notification);
+            await repository.CommitAsync();
+
         }
     }
 }

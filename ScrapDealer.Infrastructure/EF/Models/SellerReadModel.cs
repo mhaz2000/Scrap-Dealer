@@ -23,6 +23,9 @@ namespace ScrapDealer.Infrastructure.EF.Models
         public required UserReadModel User { get; set; }
         public Guid UserId { get; set; }
 
+        public Guid? ProfileFormFileId { get; set; }
+        public Guid? NationalCardFileId { get; set; }
+
 
     }
 }

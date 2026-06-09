@@ -21,13 +21,16 @@ namespace ScrapDealer.Domain.Entities
         public bool IsActive { get; private set; }
         public Score Score { get; set; }
 
+        public Guid? ProfileFormFileId { get; private set; }
+        public Guid? NationalCardFileId { get; private set; }
+
         public Seller()
         {
 
         }
 
         public Seller(PersonName personName, NationalCode nationalCode,
-            ProfileAddress address, Email email, PersonType personType, Gender gender, Guid userId)
+            ProfileAddress address, Email email, PersonType personType, Gender gender, Guid userId, Guid? nationalCardFileId, Guid? profileFormFileId)
         {
             Id = Guid.NewGuid();
             PersonName = personName;
@@ -40,10 +43,12 @@ namespace ScrapDealer.Domain.Entities
             Verified = false;
             IsActive = true;
             Score = 0;
+            NationalCardFileId = nationalCardFileId;
+            ProfileFormFileId = profileFormFileId;
         }
 
         public void Update(PersonName personName, NationalCode nationalCode,
-            ProfileAddress address, Email email, PersonType personType, Gender gender)
+            ProfileAddress address, Email email, PersonType personType, Gender gender, Guid? nationalCardFileId, Guid? profileFormFileId)
         {
             PersonName = personName;
             NationalCode = nationalCode;
@@ -51,6 +56,8 @@ namespace ScrapDealer.Domain.Entities
             Email = email;
             Gender = gender;
             PersonType = personType;
+            NationalCardFileId = nationalCardFileId;
+            ProfileFormFileId = profileFormFileId;
         }
 
         public void SetAsVerified() => Verified = true;

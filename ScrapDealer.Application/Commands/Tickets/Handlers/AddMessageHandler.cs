@@ -32,6 +32,7 @@ namespace ScrapDealer.Application.Commands.Tickets.Handlers
             ticket.AddMessage(ticketMessage);
 
             await ticketMessageRepository.AddAsync(ticketMessage);
+            await ticketMessageRepository.CommitAsync();
         }
     }
 }

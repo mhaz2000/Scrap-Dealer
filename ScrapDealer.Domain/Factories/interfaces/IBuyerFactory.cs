@@ -9,10 +9,10 @@ namespace ScrapDealer.Domain.Factories.interfaces
     {
         Buyer Create(string fisrtName, string lastName, NationalCode nationalCode, string city, string province,
             string? companyName, string? numberPlate, string addressDescription, Gender gender, ActivityArea ActivityArea,
-            Guid businessLicenseFileId, Guid NationalCardFileId, Guid ProfileFormFileId, bool isWholeSaleBuyer, bool isFixedLocation, Guid userId);
+            Guid? businessLicenseFileId, Guid NationalCardFileId, Guid ProfileFormFileId, Guid? CarCardFileId, bool isWholeSaleBuyer, bool isFixedLocation, Guid userId);
 
         Buyer Update(string fisrtName, string lastName, NationalCode nationalCode, string city, string province,
             string? companyName, string? numberPlate, string addressDescription, Gender gender, ActivityArea ActivityArea,
-            Guid businessLicenseFileId, Guid NationalCardFileId, Guid ProfileFormFileId, Buyer buyer);
+            Guid? businessLicenseFileId, Guid NationalCardFileId, Guid ProfileFormFileId, Guid? CarCardFileId, Buyer buyer);
     }
 }

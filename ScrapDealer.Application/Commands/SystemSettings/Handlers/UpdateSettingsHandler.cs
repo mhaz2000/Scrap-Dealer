@@ -20,6 +20,7 @@ namespace ScrapDealer.Application.Commands.SystemSettings.Handlers
                 settings = factory.Update(request.BuyerCommissionFixedAmount, request.BuyerCommissionRate, settings);
                 await repository.UpdateAsync(settings);
             }
+            await repository.CommitAsync();
         }
     }
 }

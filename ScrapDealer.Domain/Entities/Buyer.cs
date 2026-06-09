@@ -17,7 +17,8 @@ namespace ScrapDealer.Domain.Entities
         public Guid UserId { get; private set; }
         public Guid ProfileFormFileId { get; private set; }
         public Guid NationalCardFileId { get; private set; }
-        public Guid BusinessLicenseFileId { get; private set; }
+        public Guid? BusinessLicenseFileId { get; private set; }
+        public Guid? CarCardFileId { get; private set; }
         public bool Verified { get; private set; }
         public bool IsActive { get; private set; }
         public bool IsWholeSaleBuyer { get; private set; }
@@ -31,7 +32,7 @@ namespace ScrapDealer.Domain.Entities
 
         public Buyer(PersonName personName, NationalCode nationalCode,
             ProfileAddress address, CompanyName? companyName, NumberPlate? numberPlate, Gender gender,
-            Guid businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, bool isWholeSaleBuyer, bool isFixedLocation, Guid userId)
+            Guid? businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, Guid? carCardFileId, bool isWholeSaleBuyer, bool isFixedLocation, Guid userId)
         {
             Id = Guid.NewGuid();
             PersonName = personName;
@@ -46,6 +47,7 @@ namespace ScrapDealer.Domain.Entities
             ProfileFormFileId = profileFormFileId;
             Verified = false;
             IsFixedLocation = isFixedLocation;
+            CarCardFileId = carCardFileId;
             IsWholeSaleBuyer = isWholeSaleBuyer;
             IsActive = true;
             Score = 0;
@@ -53,7 +55,7 @@ namespace ScrapDealer.Domain.Entities
 
         public void Update(PersonName personName, NationalCode nationalCode,
             ProfileAddress address, CompanyName? companyName, NumberPlate? numberPlate, Gender gender,
-            Guid businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId)
+            Guid? businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, Guid? carCardFileId)
         {
             PersonName = personName;
             NationalCode = nationalCode;
@@ -64,6 +66,7 @@ namespace ScrapDealer.Domain.Entities
             BusinessLicenseFileId = businessLicenseFileId;
             NationalCardFileId = nationalCardFileId;
             ProfileFormFileId = profileFormFileId;
+            CarCardFileId = carCardFileId;
         }
 
         public void SetAsVerified() => Verified = true;

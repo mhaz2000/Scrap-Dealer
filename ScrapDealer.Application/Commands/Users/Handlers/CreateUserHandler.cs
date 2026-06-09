@@ -46,6 +46,8 @@ namespace ScrapDealer.Application.Commands.Users.Handlers
             user.AddRole(new Role(roleId, "User"));
 
             await _repository.AddAsync(user);
+            await _repository.CommitAsync();
+
         }
     }
 }

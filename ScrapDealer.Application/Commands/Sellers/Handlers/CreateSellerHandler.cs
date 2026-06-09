@@ -49,7 +49,8 @@ namespace ScrapDealer.Application.Commands.Sellers.Handlers
             var sellerRole = await _roleRepository.GetAsync(r => r.Name == sellerRoleName);
 
             var seller = _factory.Create(request.FirstName, request.LastName, request.NationalCode, request.City, request.Province,
-                request.PostalCode, request.AddressDescription, request.Email, request.Gender, request.PersonType, request.UserId);
+                request.PostalCode, request.AddressDescription, request.Email, request.Gender, request.PersonType, request.UserId,
+                request.NationalCardFileId, request.ProfileFormFileId);
 
             var sellerUserRole = user.AddRole(sellerRole!);
 
@@ -61,6 +62,8 @@ namespace ScrapDealer.Application.Commands.Sellers.Handlers
             await _userRoleRepository.AddAsync(sellerUserRole);
 
             await _repository.AddAsync(seller);
+            await _repository.CommitAsync();
+
         }
     }
 }

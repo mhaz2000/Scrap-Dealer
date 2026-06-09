@@ -24,6 +24,7 @@ namespace ScrapDealer.Infrastructure.EF.Contexts
         public DbSet<TicketMessageReadModel> TicketMessages { get; set; }
         public DbSet<SaleOrderItemReadModel> SaleOrderItems { get; set; }
         public DbSet<RolePermissionReadModel> RolePermissions { get; set; }
+        public DbSet<SaleOrderRequestReadModel> SaleOrderRequests  { get; set; }
         public DbSet<WalletTransactionReadModel> WalletTransactions { get; set; }
         public DbSet<CategoryPriceHistoryReadModel> CategoryPriceHistories { get; set; }
 

@@ -17,6 +17,8 @@ namespace ScrapDealer.Application.Commands.Rewards.Handlers
             var reward = factory.Create(request.Amount, request.Description, user);
 
             await rewardRepository.AddAsync(reward);
+            await rewardRepository.CommitAsync();
+
         }
     }
 }

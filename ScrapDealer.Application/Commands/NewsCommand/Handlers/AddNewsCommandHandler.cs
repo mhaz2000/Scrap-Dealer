@@ -19,6 +19,8 @@ namespace ScrapDealer.Application.Commands.NewsCommand.Handlers
             var news = _factory.Create(request.title, request.summary, request.content);
 
             await _repository.AddAsync(news);
+
+            await _repository.CommitAsync();
         }
     }
 }

@@ -23,7 +23,8 @@ namespace ScrapDealer.Infrastructure.EF.Models
         public ActivityArea ActivityArea { get; set; }
         public Guid ProfileFormFileId { get; set; }
         public Guid NationalCardFileId { get; set; }
-        public Guid BusinessLicenseFileId { get; set; }
+        public Guid? BusinessLicenseFileId { get; set; }
+        public Guid? CarCardFileId { get; set; }
 
         public required UserReadModel User { get; set; }
         public Guid UserId { get; set; }

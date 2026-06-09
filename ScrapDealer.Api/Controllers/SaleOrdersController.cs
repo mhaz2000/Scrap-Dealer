@@ -93,7 +93,7 @@ namespace ScrapDealer.Api.Controllers
         }
 
         [Authorize(Roles = "Seller")]
-        [HttpGet("NearbyOrdersForSellers/{saleOrderId:guid}")]
+        [HttpGet("GetNearbyBuyers/{saleOrderId:guid}")]
         public async Task<ActionResult<List<NearbyBuyerDto>>> GetNearbyBuyers([FromRoute] Guid saleOrderId)
         {
             var result = await _queryDispatcher.QueryAsync(new GetNearbyBuyersQuery(UserId, saleOrderId));
@@ -108,5 +108,12 @@ namespace ScrapDealer.Api.Controllers
             return BaseOk();
         }
 
+        [Authorize(Roles = "Seller")]
+        [HttpPut("SendOrder")]
+        public async Task<IActionResult> SendOrder([FromBody] SendOrderCommand command)
+        {
+            await _commandDispatcher.DispatchAsync(command);
+            return BaseOk();
+        }
     }
 }

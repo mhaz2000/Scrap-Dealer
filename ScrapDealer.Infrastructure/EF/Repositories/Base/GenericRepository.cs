@@ -21,7 +21,6 @@ namespace ScrapDealer.Infrastructure.EF.Repositories.Base
                 throw new ArgumentNullException(nameof(entity));
 
             await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync();
         }
 
         public Task CommitAsync()

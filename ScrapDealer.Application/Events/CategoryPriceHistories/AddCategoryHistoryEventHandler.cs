@@ -19,6 +19,8 @@ namespace ScrapDealer.Application.Events.CategoryPriceHistories
                 categoryPriceHistory.SubCategoryId = @event.Id;
 
             await repository.AddAsync(categoryPriceHistory);
+            await repository.CommitAsync();
+
         }
     }
 }
