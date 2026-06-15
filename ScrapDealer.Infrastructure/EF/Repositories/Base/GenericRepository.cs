@@ -48,14 +48,14 @@ namespace ScrapDealer.Infrastructure.EF.Repositories.Base
 
         public async Task<T?> GetAsync(
                 Expression<Func<T, bool>> predicate,
-                Expression<Func<T, object>>? include = null)
+                Func<IQueryable<T>, IQueryable<T>>? include = null)
 
         {
             IQueryable<T> query = _context.Set<T>();
 
             if (include != null)
             {
-                query = query.Include(include);
+                query = include(query);
             }
 
             return await query.FirstOrDefaultAsync(predicate);

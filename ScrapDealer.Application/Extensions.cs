@@ -18,6 +18,7 @@ namespace ScrapDealer.Application
             services.AddScoped<ISellerFactory, SellerFactory>();
             services.AddScoped<ITicketFactory, TicketFactory>();
             services.AddScoped<IWalletFactory, WalletFactory>();
+            services.AddScoped<IInvoiceFactory, InvoiceFactory>();
             services.AddScoped<IContractFactory, ContractFactory>();
             services.AddScoped<ICategoryFactory, CategoryFactory>();
             services.AddScoped<ISettingsFactory, SettingsFactory>();

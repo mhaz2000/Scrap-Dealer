@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScrapDealer.Infrastructure.EF.Contexts;
 
@@ -11,9 +12,11 @@ using ScrapDealer.Infrastructure.EF.Contexts;
 namespace ScrapDealer.Infrastructure.EF.Migrations
 {
     [DbContext(typeof(ReadDbContext))]
-    partial class ReadDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260614142253_invoice-added")]
+    partial class invoiceadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,33 +206,6 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.HasIndex("SaleOrderId");
 
                     b.ToTable("Contracts", (string)null);
-                });
-
-            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.InvoiceItemReadModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("InvoiceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("SaleType")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("SubCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InvoiceId");
-
-                    b.HasIndex("SubCategoryId");
-
-                    b.ToTable("InvoiceItems", (string)null);
                 });
 
             modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.InvoiceReadModel", b =>
@@ -839,24 +815,6 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Navigation("SaleOrder");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.InvoiceItemReadModel", b =>
-                {
-                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.InvoiceReadModel", "Invoice")
-                        .WithMany("Items")
-                        .HasForeignKey("InvoiceId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.SubCategoryReadModel", "SubCategory")
-                        .WithMany()
-                        .HasForeignKey("SubCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Invoice");
-
-                    b.Navigation("SubCategory");
-                });
-
             modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.InvoiceReadModel", b =>
                 {
                     b.HasOne("ScrapDealer.Infrastructure.EF.Models.ContractReadModel", "Contract")
@@ -896,6 +854,12 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
 
             modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.SaleOrderItemReadModel", b =>
                 {
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.InvoiceReadModel", null)
+                        .WithMany("Items")
+                        .HasForeignKey("SaleOrderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("ScrapDealer.Infrastructure.EF.Models.SaleOrderReadModel", "SaleOrder")
                         .WithMany("Items")
                         .HasForeignKey("SaleOrderId")

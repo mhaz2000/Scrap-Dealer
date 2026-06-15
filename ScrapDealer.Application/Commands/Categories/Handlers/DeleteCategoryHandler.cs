@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using ScrapDealer.Domain.Events.CategoryPriceHistories;
 using ScrapDealer.Domain.Repositories;
 using ScrapDealer.Shared.Abstractions.Commands;
@@ -17,7 +18,7 @@ namespace ScrapDealer.Application.Commands.Categories.Handlers
         }
         public async Task Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            var category = await _repository.GetAsync(c => c.Id == request.Id, c => c.SubCategories);
+            var category = await _repository.GetAsync(c => c.Id == request.Id, c => c.Include(s => s.SubCategories));
             if (category is null)
                 throw new BusinessException("دسته بندی یافت نشد.");
 

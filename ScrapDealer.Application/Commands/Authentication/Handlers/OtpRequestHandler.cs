@@ -9,11 +9,13 @@ namespace ScrapDealer.Application.Commands.Authentication.Handlers
     {
         private readonly IMemoryCacheService _cacheService;
         private readonly IGreenParsSmsService _greenParsSmsService;
+        private readonly IMelliPayamakSmsService _melliPayamakSmsService;
 
-        public OtpRequestHandler(IMemoryCacheService cacheService, IGreenParsSmsService greenParsSmsService)
+        public OtpRequestHandler(IMemoryCacheService cacheService, IGreenParsSmsService greenParsSmsService, IMelliPayamakSmsService melliPayamakSmsService)
         {
             _cacheService = cacheService;
             _greenParsSmsService = greenParsSmsService;
+            _melliPayamakSmsService = melliPayamakSmsService;
         }
         public async Task Handle(OtpRequestCommand request, CancellationToken cancellationToken)
         {
@@ -24,7 +26,8 @@ namespace ScrapDealer.Application.Commands.Authentication.Handlers
             _cacheService.Set(phone, otpCode.ToString(), TimeSpan.FromMinutes(2));
 
             //Sms
-            await _greenParsSmsService.SendOtpAsync(otpCode.ToString(), phone);
+            //await _greenParsSmsService.SendOtpAsync(otpCode.ToString(), phone);
+            await _melliPayamakSmsService.SendOtpAsync(otpCode.ToString(), phone);
 
             await Task.CompletedTask;
         }

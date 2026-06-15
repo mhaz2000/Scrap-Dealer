@@ -4,6 +4,7 @@ using ScrapDealer.Infrastructure.EF.Config.Buyers;
 using ScrapDealer.Infrastructure.EF.Config.Categories;
 using ScrapDealer.Infrastructure.EF.Config.CategoryPriceHistories;
 using ScrapDealer.Infrastructure.EF.Config.Contracts;
+using ScrapDealer.Infrastructure.EF.Config.Invoices;
 using ScrapDealer.Infrastructure.EF.Config.NewsConfig;
 using ScrapDealer.Infrastructure.EF.Config.NotificationConfig;
 using ScrapDealer.Infrastructure.EF.Config.Rewards;
@@ -23,10 +24,12 @@ namespace ScrapDealer.Infrastructure.EF.Config
         {
             modelBuilder.ApplyConfiguration<UserReadModel>(new UserReadEntityConfiguration());
             modelBuilder.ApplyConfiguration<RoleReadModel>(new UserReadEntityConfiguration());
-            modelBuilder.ApplyConfiguration<UserRoleReadModel>(new UserReadEntityConfiguration());
-            modelBuilder.ApplyConfiguration<CategoryReadModel>(new CategoryReadEntityConfiguration());
-            modelBuilder.ApplyConfiguration<SubCategoryReadModel>(new CategoryReadEntityConfiguration());
             modelBuilder.ApplyConfiguration<TicketReadModel>(new TicketReadEntityConfiguration());
+            modelBuilder.ApplyConfiguration<UserRoleReadModel>(new UserReadEntityConfiguration());
+            modelBuilder.ApplyConfiguration<InvoiceReadModel>(new InvoiceReadEntityConfiguration());
+            modelBuilder.ApplyConfiguration<CategoryReadModel>(new CategoryReadEntityConfiguration());
+            modelBuilder.ApplyConfiguration<InvoiceItemReadModel>(new InvoiceReadEntityConfiguration());
+            modelBuilder.ApplyConfiguration<SubCategoryReadModel>(new CategoryReadEntityConfiguration());
             modelBuilder.ApplyConfiguration<TicketMessageReadModel>(new TicketReadEntityConfiguration());
 
             modelBuilder.ApplyConfiguration(new NewsReadEntityConfiguration());
@@ -51,7 +54,9 @@ namespace ScrapDealer.Infrastructure.EF.Config
             modelBuilder.ApplyConfiguration<Role>(new UserWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration<UserRole>(new UserWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration<Ticket>(new TicketWriteEntityConfiguration());
+            modelBuilder.ApplyConfiguration<Invoice>(new InvoiceWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration<Category>(new CategoryWriteEntityConfiguration());
+            modelBuilder.ApplyConfiguration<InvoiceItem>(new InvoiceWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration<SubCategory>(new CategoryWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration<TicketMessage>(new TicketWriteEntityConfiguration());
 

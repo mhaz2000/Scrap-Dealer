@@ -7,7 +7,7 @@ namespace ScrapDealer.Domain.Repositories.Base
     {
         Task AddAsync(T entity);
         Task DeleteAsync(Guid id);
-        Task<T?> GetAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, object>>? include = null);
+        Task<T?> GetAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IQueryable<T>>? include = null);
         Task UpdateAsync(T entity);
         Task CommitAsync();
     }

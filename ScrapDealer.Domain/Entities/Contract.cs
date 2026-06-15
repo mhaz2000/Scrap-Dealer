@@ -24,5 +24,8 @@ namespace ScrapDealer.Domain.Entities
         }
 
         public void SetStatus(ContractStatus status) => Status = status;
+
+        public void SetAmount(decimal amount)
+            => Amount = Amount.Create(amount);
     }
 }

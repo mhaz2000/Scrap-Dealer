@@ -9,6 +9,7 @@ using ScrapDealer.Shared.Models;
 
 namespace ScrapDealer.Api.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class ContractsController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : BaseController
@@ -45,7 +46,7 @@ namespace ScrapDealer.Api.Controllers
             return OkOrNotFound(result);
         }
 
-        [Authorize(Roles ="Seller,Buyer")]
+        [Authorize(Roles = "Seller,Buyer")]
         [HttpPut]
         public async Task<IActionResult> CancelContract()
         {

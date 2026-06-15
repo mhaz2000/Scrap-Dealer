@@ -5,9 +5,9 @@ using ScrapDealer.Infrastructure.EF.Repositories.Base;
 
 namespace ScrapDealer.Infrastructure.EF.Repositories;
 
-internal class BuyerRepository : GenericRepository<Buyer>, IBuyerRepository
+internal class InvoiceRepository : GenericRepository<Invoice>, IInvoiceRepository
 {
-    public BuyerRepository(WriteDbContext context) : base(context)
+    public InvoiceRepository(WriteDbContext context) : base(context)
     {
     }
 }

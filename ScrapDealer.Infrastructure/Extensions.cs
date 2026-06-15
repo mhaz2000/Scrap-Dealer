@@ -64,6 +64,7 @@ namespace ScrapDealer.Infrastructure
             services.AddSingleton<IFileStorageService, MinioFileStorageService>();
 
             services.AddHttpClient<IGreenParsSmsService, GreenParsSmsService>();
+            services.AddHttpClient<IMelliPayamakSmsService, MelliPayamakSmsService>();
 
 
             services.AddTransient<DatabaseSeeder>();

@@ -1,4 +1,5 @@
-﻿using ScrapDealer.Domain.Factories.interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using ScrapDealer.Domain.Factories.interfaces;
 using ScrapDealer.Domain.Repositories;
 using ScrapDealer.Shared.Abstractions.Commands;
 using ScrapDealer.Shared.Abstractions.Exceptions;
@@ -20,7 +21,7 @@ namespace ScrapDealer.Application.Commands.SaleOrders.Handlers
 
         public async Task Handle(UpdateSaleOrderCommand request, CancellationToken cancellationToken)
         {
-            var saleOrder = await _saleOrderRepository.GetAsync(t => t.Id == request.Id, t => t.Items);
+            var saleOrder = await _saleOrderRepository.GetAsync(t => t.Id == request.Id, t => t.Include(s => s.Items));
             if (saleOrder is null)
                 throw new BusinessException("دستور فروش یافت نشد.");
 

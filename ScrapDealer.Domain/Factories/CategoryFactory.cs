@@ -4,6 +4,7 @@ using ScrapDealer.Domain.ValueObjects.Category;
 
 namespace ScrapDealer.Domain.Factories
 {
+
     public class CategoryFactory : ICategoryFactory
     {
         public Category Create(string name, decimal minPrice, decimal maxPrice, ICollection<Guid> images)
