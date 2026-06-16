@@ -13,6 +13,10 @@ namespace ScrapDealer.Domain.ValueObjects.Profiles
             if (value < 0)
                 throw new BusinessException("امتیاز نمی تواند کمتر از 0 باشد.");
 
+            if (value > 5)
+                throw new BusinessException("امتیاز نمی تواند بیشتر از 5 باشد.");
+
+
             Value = value;
         }
 

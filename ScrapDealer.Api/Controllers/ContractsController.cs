@@ -53,5 +53,15 @@ namespace ScrapDealer.Api.Controllers
             await commandDispatcher.DispatchAsync(new CancelContractCommand(UserId));
             return BaseOk();
         }
+
+        [Authorize(Roles = "Seller,Buyer")]
+        [HttpPut("Vote")]
+        public async Task<IActionResult> VoteForContract([FromBody] VoteForContractCommand command)
+        {
+            await commandDispatcher.DispatchAsync(command with { UserId = UserId });
+            return BaseOk();
+        }
+
+
     }
 }

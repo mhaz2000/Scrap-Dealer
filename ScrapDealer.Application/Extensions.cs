@@ -24,6 +24,7 @@ namespace ScrapDealer.Application
             services.AddScoped<ISettingsFactory, SettingsFactory>();
             services.AddScoped<ISaleOrderFactory, SaleOrderFactory>();
             services.AddScoped<ISubCategoryFactory, SubCategoryFactory>();
+            services.AddScoped<IScoreHistoryFactory, ScoreHistoryFactory>();
             services.AddScoped<INotificationFactory, NotificationFactory>();
             services.AddScoped<IRolePermissionFactory, RolePermissionFactory>();
             services.AddScoped<ISaleOrderRequestFactory, SaleOrderRequestFactory>();
