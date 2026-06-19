@@ -1,14 +1,11 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScrapDealer.Application.Commands.SaleOrders;
 using ScrapDealer.Application.DTO;
 using ScrapDealer.Application.Queries.SaleOrders;
-using ScrapDealer.Infrastructure;
 using ScrapDealer.Shared.Abstractions.Commands;
 using ScrapDealer.Shared.Abstractions.Queries;
 using ScrapDealer.Shared.Models;
-using ScrapDealer.Shared.SystemPermissions;
 
 namespace ScrapDealer.Api.Controllers
 {
@@ -97,6 +94,14 @@ namespace ScrapDealer.Api.Controllers
         public async Task<ActionResult<List<NearbyBuyerDto>>> GetNearbyBuyers([FromRoute] Guid saleOrderId)
         {
             var result = await _queryDispatcher.QueryAsync(new GetNearbyBuyersQuery(UserId, saleOrderId));
+            return OkOrNotFound(result);
+        }
+
+        [Authorize(Roles = "Buyer")]
+        [HttpGet("GetRequests")]
+        public async Task<ActionResult<List<SaleOrderRequestDto>>> GetRequests()
+        {
+            var result = await _queryDispatcher.QueryAsync(new GetSaleOrderRequestsQuery(UserId));
             return OkOrNotFound(result);
         }
 

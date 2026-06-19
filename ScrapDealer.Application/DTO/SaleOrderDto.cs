@@ -16,5 +16,7 @@ namespace ScrapDealer.Application.DTO
         public bool ModifiedByAdmin { get; set; }
         public SaleOrderStatus Status { get; set; }
         public IEnumerable<SaleOrderItemDto> Items { get; set; } = [];
+        public bool? HasFinishedOrOngoingContract { get; set; }
+        public Guid? ContractId { get; set; }
     }
 }
