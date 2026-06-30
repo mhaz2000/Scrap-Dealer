@@ -10,8 +10,9 @@ internal class CancelContractCommandHandler(IContractRepository contractReposito
 {
     public async Task Handle(CancelContractCommand request, CancellationToken cancellationToken)
     {
-        var contractByBuyer = await contractRepository.GetAsync(t => t.BuyerId == request.UserId);
-        var contractBySeller = await contractRepository.GetAsync(t => t.SaleOrder.SellerId == request.UserId, t => t.Include(s => s.SaleOrder));
+        var contractByBuyer = await contractRepository.GetAsync(t => t.Buyer.UserId == request.UserId && t.Id == request.ContractId, t => t.Include(s => s.Buyer));
+        var contractBySeller = await contractRepository.GetAsync(t => t.SaleOrder.Seller.UserId == request.UserId && t.Id == request.ContractId,
+            t => t.Include(s => s.SaleOrder).ThenInclude(t=> t.Seller));
 
         if (contractByBuyer is not null)
         {

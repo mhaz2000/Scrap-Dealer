@@ -1,5 +1,6 @@
 ﻿using ScrapDealer.Domain.Consts;
 using ScrapDealer.Domain.ValueObjects.Profiles;
+using ScrapDealer.Domain.ValueObjects.SaleOrders;
 using ScrapDealer.Shared.Abstractions.Domain;
 
 namespace ScrapDealer.Domain.Entities
@@ -24,6 +25,7 @@ namespace ScrapDealer.Domain.Entities
         public bool IsWholeSaleBuyer { get; private set; }
         public bool IsFixedLocation { get; private set; }
         public Score Score { get; set; }
+        public Location? Location { get; private set; }
 
         public Buyer()
         {
@@ -32,7 +34,7 @@ namespace ScrapDealer.Domain.Entities
 
         public Buyer(PersonName personName, NationalCode nationalCode,
             ProfileAddress address, CompanyName? companyName, NumberPlate? numberPlate, Gender gender,
-            Guid? businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, Guid? carCardFileId, bool isWholeSaleBuyer, bool isFixedLocation, Guid userId)
+            Guid? businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, Guid? carCardFileId, bool isWholeSaleBuyer, bool isFixedLocation, Guid userId, Location? location)
         {
             Id = Guid.NewGuid();
             PersonName = personName;
@@ -51,11 +53,12 @@ namespace ScrapDealer.Domain.Entities
             IsWholeSaleBuyer = isWholeSaleBuyer;
             IsActive = true;
             Score = 0;
+            Location = location;
         }
 
         public void Update(PersonName personName, NationalCode nationalCode,
             ProfileAddress address, CompanyName? companyName, NumberPlate? numberPlate, Gender gender,
-            Guid? businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, Guid? carCardFileId)
+            Guid? businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, Guid? carCardFileId, Location? location)
         {
             PersonName = personName;
             NationalCode = nationalCode;
@@ -67,6 +70,7 @@ namespace ScrapDealer.Domain.Entities
             NationalCardFileId = nationalCardFileId;
             ProfileFormFileId = profileFormFileId;
             CarCardFileId = carCardFileId;
+            Location = location;
         }
 
         public void SetAsVerified() => Verified = true;

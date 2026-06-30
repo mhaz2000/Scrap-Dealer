@@ -47,10 +47,10 @@ namespace ScrapDealer.Api.Controllers
         }
 
         [Authorize(Roles = "Seller,Buyer")]
-        [HttpPut]
-        public async Task<IActionResult> CancelContract()
+        [HttpPut("Cancel/{id:guid}")]
+        public async Task<IActionResult> CancelContract([FromRoute] Guid id)
         {
-            await commandDispatcher.DispatchAsync(new CancelContractCommand(UserId));
+            await commandDispatcher.DispatchAsync(new CancelContractCommand(id, UserId));
             return BaseOk();
         }
 

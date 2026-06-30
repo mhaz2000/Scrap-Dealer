@@ -31,19 +31,26 @@ internal class GetNearbyBuyersHandler : IQueryHandler<GetNearbyBuyersQuery, List
         if (saleOrder is null || !saleOrder.SaleAtBuyersLocation)
             throw new BusinessException("دستور فروشی برای ارسال به خریداران یافت نشد.");
 
-        if(saleOrder.Status != SaleOrderStatus.ConfirmedBySystem)
+        if (saleOrder.Status != SaleOrderStatus.ConfirmedBySystem)
             throw new BusinessException("دستور فروش در انتظار تایید سیستم است.");
 
-        if (_contracts.Any(t=> t.SaleOrderId == request.saleOrderId && (t.Status == ContractStatus.CancelledByBuyer || t.Status == ContractStatus.CancelledBySeller)))
+        if (_contracts.Any(t => t.SaleOrderId == request.saleOrderId && (t.Status == ContractStatus.CancelledByBuyer || t.Status == ContractStatus.CancelledBySeller)))
             throw new BusinessException("برای این دستور فروش قرارداد جاری وجود دارد.");
 
-        ActivityArea activityArea = ActivityArea.Whole;
-        if (saleOrder.Latitude is not null && saleOrder.Longitude is not null)
-            activityArea = TehranPolygonsAreaHelper.GetActivityAreaFromPolygons(saleOrder.Latitude.Value, saleOrder.Longitude.Value);
+        if (saleOrder.Latitude is null || saleOrder.Longitude is null)
+            throw new BusinessException("موقعیت جغرافیایی دستور فروش مشخص نشده است.");
 
-        var inBoundryBuyers = _buyers.Where(t => t.Verified && (t.ActivityArea == activityArea || t.ActivityArea == ActivityArea.Whole)).Skip(request.skip).Take(request.take);
+        var allVerifiedBuyers = _buyers.Where(t => t.Verified && t.Latitude != null && t.Longitude != null).ToList();
 
-        return _mapper.Map<List<NearbyBuyerDto>>(inBoundryBuyers.ToList());
+        var nearbyBuyers = allVerifiedBuyers
+            .Where(b => GeoUtils.GetDistanceKm(
+                saleOrder.Latitude.Value, saleOrder.Longitude.Value,
+                b.Latitude.Value, b.Longitude.Value) <= request.distance)
+            .Skip(request.skip)
+            .Take(request.take)
+            .ToList();
+
+        return _mapper.Map<List<NearbyBuyerDto>>(nearbyBuyers);
     }
 }
 

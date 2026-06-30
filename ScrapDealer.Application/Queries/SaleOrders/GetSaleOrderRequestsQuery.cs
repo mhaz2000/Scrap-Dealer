@@ -3,5 +3,5 @@ using ScrapDealer.Shared.Abstractions.Queries;
 
 namespace ScrapDealer.Application.Queries.SaleOrders
 {
-    public record GetNearbyOrdersForBuyersQuery(Guid buyerId, double distance, int take = 10, int skip = 0) : IQuery<List<SaleOrderDto>>;
+    public record GetSaleOrderRequestsQuery(Guid UserId, int take = 10, int skip = 0) : IQuery<List<SaleOrderRequestDto>>;
 }

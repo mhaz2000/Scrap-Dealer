@@ -16,6 +16,7 @@ namespace ScrapDealer.Infrastructure.Profiles
                     SellerName = t.SaleOrder.Seller.FirstName + " " + t.SaleOrder.Seller.LastName,
                     IsIndustrial = t.SaleOrder.IsIndustrial,
                     SellerScore = t.SaleOrder.Seller.Score,
+                    SaleOrderId = t.SaleOrder.Id,
                     Items = t.SaleOrder.Items.Select(s => new SaleOrderItemDto()
                     {
                         Id = s.Id,

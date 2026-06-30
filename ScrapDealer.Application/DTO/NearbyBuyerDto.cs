@@ -16,6 +16,7 @@ namespace ScrapDealer.Application.DTO
         public required string LastName { get; set; }
         public bool IsWholeSaleBuyer { get; set; }
         public float Score { get; set; }
-
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
     }
 }

@@ -29,5 +29,7 @@ namespace ScrapDealer.Infrastructure.EF.Models
         public required UserReadModel User { get; set; }
         public Guid UserId { get; set; }
         public float Score { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ScrapDealer.Domain.ValueObjects.Profiles;
+using ScrapDealer.Domain.ValueObjects.SaleOrders;
 
 namespace ScrapDealer.Infrastructure.EF.Config.Buyers
 {
@@ -21,12 +22,15 @@ namespace ScrapDealer.Infrastructure.EF.Config.Buyers
                 .IsRequired();
 
             builder.Property(u => u.CompanyName)
-                .HasConversion(companyName => companyName == null ? string.Empty : companyName.Value, companyName => CompanyName.Create(companyName))
-                .IsRequired();
+                .HasConversion(companyName => companyName == null ? null : companyName.Value,
+                value => string.IsNullOrWhiteSpace(value) ? null : CompanyName.Create(value))
+                .IsRequired(false);
 
             builder.Property(u => u.NumberPlate)
-                .HasConversion(numberPlate => numberPlate == null ? string.Empty : numberPlate.Value, numberPlate => NumberPlate.Create(numberPlate))
-                .IsRequired();
+                .HasConversion(
+                    numberPlate => numberPlate == null ? null : numberPlate.Value,
+                    value => string.IsNullOrWhiteSpace(value) ? null : NumberPlate.Create(value))
+                .IsRequired(false);
 
             builder.HasOne(u => u.User)
                 .WithMany()
@@ -67,6 +71,14 @@ namespace ScrapDealer.Infrastructure.EF.Config.Buyers
                     .HasColumnName("LastName");
             });
 
+            builder.OwnsOne(x => x.Location, location =>
+            {
+                location.Property(l => l.Latitude)
+                    .HasColumnName("Latitude");
+
+                location.Property(l => l.Longitude)
+                    .HasColumnName("Longitude");
+            });
 
             builder.HasQueryFilter(p => !p.IsDeleted);
         }

@@ -1,7 +1,7 @@
-﻿using MediatR;
-using ScrapDealer.Domain.Consts;
+﻿using ScrapDealer.Domain.Consts;
 using ScrapDealer.Domain.Entities;
 using ScrapDealer.Domain.ValueObjects.Profiles;
+using ScrapDealer.Domain.ValueObjects.SaleOrders;
 
 namespace ScrapDealer.Domain.Factories.interfaces
 {
@@ -9,10 +9,12 @@ namespace ScrapDealer.Domain.Factories.interfaces
     {
         Buyer Create(string fisrtName, string lastName, NationalCode nationalCode, string city, string province,
             string? companyName, string? numberPlate, string addressDescription, Gender gender, ActivityArea ActivityArea,
-            Guid? businessLicenseFileId, Guid NationalCardFileId, Guid ProfileFormFileId, Guid? CarCardFileId, bool isWholeSaleBuyer, bool isFixedLocation, Guid userId);
+            Guid? businessLicenseFileId, Guid NationalCardFileId, Guid ProfileFormFileId, Guid? CarCardFileId, bool isWholeSaleBuyer, bool isFixedLocation, Guid userId,
+            double? latitude, double? longitude);
 
         Buyer Update(string fisrtName, string lastName, NationalCode nationalCode, string city, string province,
             string? companyName, string? numberPlate, string addressDescription, Gender gender, ActivityArea ActivityArea,
-            Guid? businessLicenseFileId, Guid NationalCardFileId, Guid ProfileFormFileId, Guid? CarCardFileId, Buyer buyer);
+            Guid? businessLicenseFileId, Guid NationalCardFileId, Guid ProfileFormFileId, Guid? CarCardFileId, Buyer buyer,
+            double? latitude, double? longitude);
     }
 }

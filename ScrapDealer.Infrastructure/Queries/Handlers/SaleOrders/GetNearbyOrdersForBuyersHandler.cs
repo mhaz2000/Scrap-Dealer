@@ -5,6 +5,7 @@ using ScrapDealer.Application.Queries.SaleOrders;
 using ScrapDealer.Domain.Consts;
 using ScrapDealer.Infrastructure.EF.Contexts;
 using ScrapDealer.Infrastructure.EF.Models;
+using ScrapDealer.Shared.Abstractions.Exceptions;
 using ScrapDealer.Shared.Abstractions.Queries;
 
 namespace ScrapDealer.Infrastructure.Queries.Handlers.SaleOrders;
@@ -26,21 +27,28 @@ internal class GetNearbyOrdersForBuyersHandler : IQueryHandler<GetNearbyOrdersFo
     public async Task<List<SaleOrderDto>> Handle(GetNearbyOrdersForBuyersQuery request, CancellationToken cancellationToken)
     {
         var buyer = await _buyers.FirstOrDefaultAsync(b => b.UserId == request.buyerId);
+        if (buyer is null || buyer.Latitude is null || buyer.Longitude is null)
+            throw new BusinessException("موقعیت جغرافیایی خریدار مشخص نشده است.");
+
         var saleOrders = await _saleOrders
             .Include(s => s.Seller)
             .Include(s => s.Items).ThenInclude(s => s.SubCategory)
-            .Where(s => s.Status == SaleOrderStatus.ConfirmedBySystem && !s.SaleAtBuyersLocation).ToListAsync();
-
-        var inBoundryOrders = (buyer.ActivityArea == ActivityArea.Whole ?
-            saleOrders :
-            saleOrders.Where(s => buyer.ActivityArea == TehranPolygonsAreaHelper.GetActivityAreaFromPolygons(s.Latitude.Value, s.Longitude.Value))).Skip(request.skip).Take(request.take);
+            .Where(s => s.Status == SaleOrderStatus.ConfirmedBySystem && !s.SaleAtBuyersLocation && s.Latitude != null && s.Longitude != null)
+            .ToListAsync();
 
         var saleOrdersWithContract = _contracts.Where(c => c.Status != ContractStatus.CancelledByBuyer && c.Status != ContractStatus.CancelledBySeller)
             .Select(t => t.SaleOrderId);
 
-        inBoundryOrders = inBoundryOrders.Where(t => !saleOrdersWithContract.Contains(t.Id));
+        var nearbyOrders = saleOrders
+            .Where(s => GeoUtils.GetDistanceKm(
+                buyer.Latitude.Value, buyer.Longitude.Value,
+                s.Latitude!.Value, s.Longitude!.Value) <= request.distance)
+            .Where(s => !saleOrdersWithContract.Contains(s.Id))
+            .Skip(request.skip)
+            .Take(request.take)
+            .ToList();
 
-        return _mapper.Map<List<SaleOrderDto>>(inBoundryOrders.ToList());
+        return _mapper.Map<List<SaleOrderDto>>(nearbyOrders);
     }
 }
 

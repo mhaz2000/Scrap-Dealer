@@ -9,5 +9,6 @@ namespace ScrapDealer.Application.DTO
         public required string SellerName { get; set; }
         public float SellerScore { get; set; }
         public IEnumerable<SaleOrderItemDto> Items { get; set; } = [];
+        public Guid SaleOrderId { get; set; }
     }
 }
