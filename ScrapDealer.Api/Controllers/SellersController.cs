@@ -62,9 +62,9 @@ namespace ScrapDealer.Api.Controllers
 
         //[HasPermission(Permissions.Sellers.ToggleActivation)]
         [HttpPut("Admin/Activation/{id}/{status}")]
-        public async Task<IActionResult> ToggleActivation(Guid id, bool status)
+        public async Task<IActionResult> ToggleActivation(Guid id, bool status, [FromBody] string? reason)
         {
-            await _commandDispatcher.DispatchAsync(new SellerToggleActivationCommand(id, status));
+            await _commandDispatcher.DispatchAsync(new SellerToggleActivationCommand(id, status, reason));
             return BaseOk();
         }
     }

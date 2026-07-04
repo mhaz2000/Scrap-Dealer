@@ -13,6 +13,7 @@ namespace ScrapDealer.Domain.Entities
         public CompanyName? CompanyName { get; private set; }
         public NumberPlate? NumberPlate { get; private set; }
         public Gender Gender { get; private set; }
+        public string? InactiveReason { get; set; }
 
         public User User { get; private set; }
         public Guid UserId { get; private set; }
@@ -76,6 +77,10 @@ namespace ScrapDealer.Domain.Entities
         }
 
         public void SetAsVerified() => Verified = true;
-        public void SetActivationStatus(bool status) => IsActive = status;
+        public void SetActivationStatus(bool status, string? reason)
+        {
+            IsActive = status;
+            InactiveReason = reason;
+        }
     }
 }

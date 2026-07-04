@@ -17,7 +17,7 @@ namespace ScrapDealer.Application.Commands.Buyers.Handlers
             if (buyer is null)
                 throw new BusinessException("خریدار یافت نشد.");
 
-            buyer.SetActivationStatus(request.Status);
+            buyer.SetActivationStatus(request.Status, request.reason);
 
             await _repository.UpdateAsync(buyer);
         }

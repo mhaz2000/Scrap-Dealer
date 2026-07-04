@@ -2,6 +2,6 @@
 
 namespace ScrapDealer.Application.Commands.Buyers
 {
-    public record BuyerToggleActivationCommand(Guid Id, bool Status) : ICommand;
+    public record BuyerToggleActivationCommand(Guid Id, bool Status, string reason) : ICommand;
 
 }

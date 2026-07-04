@@ -12,6 +12,7 @@ namespace ScrapDealer.Application.DTO
         public required string City { get; set; }
         public required string AddressDescription { get; set; }
         public required string Phone { get; set; }
+        public string? InactiveReason { get; set; }
         public Gender Gender { get; set; }
         public ActivityArea ActivityArea { get; set; }
         public string? CompanyName { get; set; }

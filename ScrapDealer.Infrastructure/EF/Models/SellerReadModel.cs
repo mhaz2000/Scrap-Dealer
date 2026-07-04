@@ -13,6 +13,7 @@ namespace ScrapDealer.Infrastructure.EF.Models
         public required string NationalCode { get; set; }
         public required string Province { get; set; }
         public required string City { get; set; }
+        public string? InactiveReason { get; set; }
         public string? PostalCode { get; set; }
         public required string AddressDescription { get; set; }
         public string? Email { get; set; }
