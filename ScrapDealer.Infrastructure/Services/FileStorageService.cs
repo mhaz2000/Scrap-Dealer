@@ -5,6 +5,7 @@ using ScrapDealer.Application.Services;
 public class MinioFileStorageService : IFileStorageService
 {
     private readonly IMinioClient _client;
+    private const string bucketName = "scrap-dealer";
 
     public MinioFileStorageService(IMinioClient client)
     {
@@ -20,7 +21,7 @@ public class MinioFileStorageService : IFileStorageService
         }
     }
 
-    public async Task<Guid> UploadAsync(MemoryStream fileStream, string originalFileName, string contentType, string bucketName)
+    public async Task<Guid> UploadAsync(MemoryStream fileStream, string originalFileName, string contentType)
     {
         await EnsureBucketExists(bucketName);
 
@@ -43,7 +44,7 @@ public class MinioFileStorageService : IFileStorageService
         return fileId;
     }
 
-    public async Task<(Stream Stream, string originalFileName, string ContentType)> DownloadAsync(Guid fileId, string bucketName)
+    public async Task<(Stream Stream, string originalFileName, string ContentType)> DownloadAsync(Guid fileId)
     {
         var fileName = $"{fileId}.dat";
         var memoryStream = new MemoryStream();

@@ -16,7 +16,7 @@ namespace ScrapDealer.Application.Commands.Files.Handlers
         public async Task<Guid> Handle(UploadFileCommand request, CancellationToken cancellationToken)
         {
             request.File.Position = 0;
-            return await _fileStorage.UploadAsync(request.File, request.FileName, "application/octet-stream", request.bucketName);
+            return await _fileStorage.UploadAsync(request.File, request.FileName, "application/octet-stream");
         }
     }
 }

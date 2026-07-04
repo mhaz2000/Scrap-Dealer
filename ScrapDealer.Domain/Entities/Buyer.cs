@@ -34,14 +34,14 @@ namespace ScrapDealer.Domain.Entities
 
         public Buyer(PersonName personName, NationalCode nationalCode,
             ProfileAddress address, CompanyName? companyName, NumberPlate? numberPlate, Gender gender,
-            Guid? businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, Guid? carCardFileId, bool isWholeSaleBuyer, bool isFixedLocation, Guid userId, Location? location)
+            Guid? businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, Guid? carCardFileId, bool isWholeSaleBuyer, bool isFixedLocation, User user, Location? location)
         {
             Id = Guid.NewGuid();
             PersonName = personName;
             NationalCode = nationalCode;
             Address = address;
             Gender = gender;
-            UserId = userId;
+            UserId = user.Id;
             CompanyName = companyName;
             NumberPlate = numberPlate;
             BusinessLicenseFileId = businessLicenseFileId;
@@ -54,6 +54,7 @@ namespace ScrapDealer.Domain.Entities
             IsActive = true;
             Score = 0;
             Location = location;
+            user.PersonName = personName;
         }
 
         public void Update(PersonName personName, NationalCode nationalCode,
@@ -71,6 +72,7 @@ namespace ScrapDealer.Domain.Entities
             ProfileFormFileId = profileFormFileId;
             CarCardFileId = carCardFileId;
             Location = location;
+            User.PersonName = personName;
         }
 
         public void SetAsVerified() => Verified = true;

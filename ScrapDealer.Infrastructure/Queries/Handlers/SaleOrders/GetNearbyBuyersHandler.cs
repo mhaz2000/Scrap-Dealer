@@ -32,7 +32,7 @@ internal class GetNearbyBuyersHandler : IQueryHandler<GetNearbyBuyersQuery, List
             throw new BusinessException("دستور فروشی برای ارسال به خریداران یافت نشد.");
 
         if (saleOrder.Status != SaleOrderStatus.ConfirmedBySystem)
-            throw new BusinessException("دستور فروش در انتظار تایید سیستم است.");
+            throw new BusinessException("دستور فروش در انتظار تایید پشتیبان است.");
 
         if (_contracts.Any(t => t.SaleOrderId == request.saleOrderId && (t.Status == ContractStatus.CancelledByBuyer || t.Status == ContractStatus.CancelledBySeller)))
             throw new BusinessException("برای این دستور فروش قرارداد جاری وجود دارد.");

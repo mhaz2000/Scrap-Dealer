@@ -13,7 +13,7 @@ namespace ScrapDealer.Infrastructure.EF.Config.Buyers
             builder.HasKey(x => x.Id);
 
             builder.Property(u => u.Email)
-                .HasConversion(email => email.Value, email => Email.Create(email))
+                .HasConversion(email => email == null ? null : email.Value, email => Email.Create(email))
                 .IsRequired();
 
             builder.Property(u => u.Score)

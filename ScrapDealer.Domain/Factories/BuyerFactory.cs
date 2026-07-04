@@ -11,7 +11,7 @@ namespace ScrapDealer.Domain.Factories
 
         public Buyer Create(string fisrtName, string lastName, NationalCode nationalCode, string city, string province,
             string? companyName, string? numberPlate, string addressDescription, Gender gender,
-            ActivityArea activityArea, Guid? businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, Guid? carCardFileId, bool isWholeSaleBuyer, bool isFixedLocation, Guid userId,
+            ActivityArea activityArea, Guid? businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, Guid? carCardFileId, bool isWholeSaleBuyer, bool isFixedLocation, User user,
             double? latitude, double? longitude)
         {
             var personNameValue = PersonName.Create(fisrtName, lastName);
@@ -22,7 +22,7 @@ namespace ScrapDealer.Domain.Factories
             var locationValue = latitude.HasValue && longitude.HasValue ? Location.Create(latitude.Value, longitude.Value) : null;
 
             return new Buyer(personNameValue, nationalCodeValue, addressValue, companyNameValue,
-                numberPlateValue, gender, businessLicenseFileId, nationalCardFileId, profileFormFileId, carCardFileId, isWholeSaleBuyer, isFixedLocation, userId, locationValue);
+                numberPlateValue, gender, businessLicenseFileId, nationalCardFileId, profileFormFileId, carCardFileId, isWholeSaleBuyer, isFixedLocation, user, locationValue);
         }
 
         public Buyer Update(string fisrtName, string lastName, NationalCode nationalCode, string city, string province,

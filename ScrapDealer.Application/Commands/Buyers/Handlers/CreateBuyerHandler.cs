@@ -51,7 +51,7 @@ namespace ScrapDealer.Application.Commands.Buyers.Handlers
             var buyer = _factory.Create(request.FirstName, request.LastName, request.NationalCode, request.City, request.Province,
                 request.CompanyName, request.NumberPlate, request.AddressDescription, request.Gender, request.ActivityArea,
                 request.BusinessLicenseFileId, request.NationalCardFileId, request.ProfileFormFileId, request.CarCardFileId,
-                request.IsWholeSaleBuyer, request.IsFixedLocation, request.UserId,
+                request.IsWholeSaleBuyer, request.IsFixedLocation, user,
                 request.Latitude, request.Longitude);
 
             var buyerUserRole = user.AddRole(buyerRole!);

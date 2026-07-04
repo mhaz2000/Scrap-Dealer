@@ -10,7 +10,7 @@ namespace ScrapDealer.Domain.Entities
         public Username Username { get; private set; }
         public Phone Phone { get; private set; }
         public PasswordHash? PasswordHash { get; private set; }
-        public PersonName? PersonName { get; private set; }
+        public PersonName? PersonName { get; internal set; }
 
         public bool IsActive { get; private set; }
 

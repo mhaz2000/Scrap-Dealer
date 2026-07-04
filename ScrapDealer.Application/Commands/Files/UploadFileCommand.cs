@@ -2,5 +2,5 @@
 
 namespace ScrapDealer.Application.Commands.Files
 {
-    public record UploadFileCommand(MemoryStream File, string FileName, string bucketName) : ICommand<Guid>;
+    public record UploadFileCommand(MemoryStream File, string FileName) : ICommand<Guid>;
 }

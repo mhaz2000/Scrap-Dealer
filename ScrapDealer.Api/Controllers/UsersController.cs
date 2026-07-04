@@ -26,7 +26,7 @@ namespace ScrapDealer.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<IActionResult> Post([FromBody] CreateUserCommand command)
         {
             await _commandDispatcher.DispatchAsync(command);
@@ -41,10 +41,17 @@ namespace ScrapDealer.Api.Controllers
             return OkOrNotFound(result);
         }
 
-        [HttpGet("profile")]
+        [HttpGet("Profile")]
         public async Task<ActionResult<UserDto>> GetProfile()
         {
             var result = await _queryDispatcher.QueryAsync(new GetUserProfileQuery(UserId));
+            return OkOrNotFound(result);
+        }
+
+        [HttpGet("State")]
+        public async Task<ActionResult<UserStateDto>> GetUserState()
+        {
+            var result = await _queryDispatcher.QueryAsync(new GetUserStateQuery(UserId));
             return OkOrNotFound(result);
         }
 

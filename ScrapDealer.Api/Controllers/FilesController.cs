@@ -21,23 +21,23 @@ namespace ScrapDealer.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Upload([FromForm] IFormFile file, [FromForm] string category)
+        public async Task<ActionResult<Guid>> Upload([FromForm] IFormFile file)
         {
             using var stream = new MemoryStream();
             file.CopyTo(stream);
 
             var fileId = await _commandDispatcher.DispatchAsync<UploadFileCommand, Guid>(
-                new UploadFileCommand(stream, file.FileName, category));
+                new UploadFileCommand(stream, file.FileName));
 
             return Ok(fileId);
         }
 
-        [HttpGet("{category}/{id}")]
+        [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Download(string category, Guid id)
+        public async Task<IActionResult> Download(Guid id)
         {
             var (fileStream, originalFileName, contentType) = await _commandDispatcher
-                .DispatchAsync<DownloadFileCommand, (Stream, string, string)>(new DownloadFileCommand(id, category));
+                .DispatchAsync<DownloadFileCommand, (Stream, string, string)>(new DownloadFileCommand(id));
 
             var fileName = $"{id}.dat";
 

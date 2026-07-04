@@ -14,7 +14,7 @@ namespace ScrapDealer.Application.Commands.Files.Handlers
 
         public async Task<(Stream stream, string originalFileName, string contentType)> Handle(DownloadFileCommand request, CancellationToken cancellationToken)
         {
-            return await _fileStorage.DownloadAsync(request.Id, request.bucketName);
+            return await _fileStorage.DownloadAsync(request.Id);
         }
     }
 

@@ -10,14 +10,13 @@ namespace ScrapDealer.Domain.ValueObjects.Profiles
         private Email() { }
         private Email(string value)
         {
-            if (string.IsNullOrWhiteSpace(value))
-                throw new BusinessException("ایمیل اجباری است.");
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                value = value.Trim().ToLowerInvariant();
 
-            value = value.Trim().ToLowerInvariant();
-
-            if (!IsValidEmail(value))
-                throw new BusinessException("فرمت ایمیل معتبر نیست.");
-
+                if (!IsValidEmail(value))
+                    throw new BusinessException("فرمت ایمیل معتبر نیست.");
+            }
             Value = value;
         }
 
