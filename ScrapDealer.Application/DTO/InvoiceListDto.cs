@@ -11,4 +11,5 @@ public record InvoiceListDto
     public string DateTimeText => DateTime.ToShortPersianDateTimeString();
 
     public Guid Id { get; set; }
+    public int Code { get; set; }
 }

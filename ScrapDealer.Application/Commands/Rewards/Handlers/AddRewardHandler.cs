@@ -5,7 +5,8 @@ using ScrapDealer.Shared.Abstractions.Exceptions;
 
 namespace ScrapDealer.Application.Commands.Rewards.Handlers
 {
-    internal class AddRewardHandler(IRewardFactory factory, IUserRepository userRepository, IRewardRepository rewardRepository) 
+    internal class AddRewardHandler(IRewardFactory factory, IUserRepository userRepository, IRewardRepository rewardRepository, IWalletRepository walletRepository,
+        IBuyerRepository buyerRepository, ISellerRepository sellerRepository)
         : ICommandHandler<AddRewardCommand>
     {
         public async Task Handle(AddRewardCommand request, CancellationToken cancellationToken)
@@ -15,6 +16,21 @@ namespace ScrapDealer.Application.Commands.Rewards.Handlers
                 throw new BusinessException("کاربر یافت نشد.");
 
             var reward = factory.Create(request.Amount, request.Description, user);
+
+            var buyer = await buyerRepository.GetAsync(t => t.UserId == user.Id);
+            var seller = await sellerRepository.GetAsync(t => t.UserId == user.Id);
+
+            if (buyer is not null)
+            {
+                var wallet = await walletRepository.GetAsync(t => t.BuyerId == buyer.Id);
+                wallet!.Balance += request.Amount;
+            }
+
+            if (seller is not null)
+            {
+                var wallet = await walletRepository.GetAsync(t => t.SellerId == seller.Id);
+                wallet!.Balance += request.Amount;
+            }
 
             await rewardRepository.AddAsync(reward);
             await rewardRepository.CommitAsync();

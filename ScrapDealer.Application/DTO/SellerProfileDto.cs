@@ -6,5 +6,6 @@ namespace ScrapDealer.Application.DTO
     {
         public PersonType PersonType { get; set; }
         public Guid UserId { get; set; }
+        public string? Email { get; set; }
     }
 }

@@ -45,7 +45,6 @@ namespace ScrapDealer.Infrastructure.EF.Config.Buyers
                     .HasColumnName("City");
 
                 address.Property(a => a.PostalCode)
-                    .IsRequired()
                     .HasColumnName("PostalCode");
 
                 address.Property(a => a.Description)

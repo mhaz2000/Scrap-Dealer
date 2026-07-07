@@ -8,6 +8,7 @@ namespace ScrapDealer.Application.Commands.Rewards.Handlers
     {
         public async Task Handle(RemoveRewardCommand request, CancellationToken cancellationToken)
         {
+            //To Do .......
             var reward = await rewardRepository.GetAsync(t => t.Id == request.Id);
             if (reward is null)
                 throw new BusinessException("پاداش یافت نشد.");

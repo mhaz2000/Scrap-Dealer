@@ -4,5 +4,5 @@ using ScrapDealer.Shared.Models;
 
 namespace ScrapDealer.Application.Queries.Users
 {
-    public record GetUsersQuery : PaginationQuery, IQuery<PaginatedResult<UserDto>>;
+    public record GetUsersQuery(bool IsActive = false) : PaginationQuery, IQuery<PaginatedResult<UserDto>>;
 }

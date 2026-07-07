@@ -21,12 +21,12 @@ namespace ScrapDealer.Api.Controllers
             return BaseOk();
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> RemoveReward([FromRoute] Guid id)
-        {
-            await commandDispatcher.DispatchAsync(new RemoveRewardCommand(id));
-            return BaseOk();
-        }
+        //[HttpDelete("{id:guid}")]
+        //public async Task<IActionResult> RemoveReward([FromRoute] Guid id)
+        //{
+        //    await commandDispatcher.DispatchAsync(new RemoveRewardCommand(id));
+        //    return BaseOk();
+        //}
 
         [HttpGet]
         public async Task<ActionResult<PaginatedResult<RewardDto>>> GetAll([FromQuery] GetRewardsQuery query)
