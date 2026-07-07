@@ -8,7 +8,7 @@ namespace ScrapDealer.Application.Commands.Notifications.Handlers
     {
         public async Task Handle(AddNotificationCommand request, CancellationToken cancellationToken)
         {
-            var notification = factory.Create(request.Title, request.Content);
+            var notification = factory.Create(request.Title, request.Content, request.targets);
 
             await repository.AddAsync(notification);
             await repository.CommitAsync();

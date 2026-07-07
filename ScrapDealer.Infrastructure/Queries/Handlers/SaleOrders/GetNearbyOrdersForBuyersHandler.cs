@@ -33,7 +33,7 @@ internal class GetNearbyOrdersForBuyersHandler : IQueryHandler<GetNearbyOrdersFo
         var saleOrders = await _saleOrders
             .Include(s => s.Seller)
             .Include(s => s.Items).ThenInclude(s => s.SubCategory)
-            .Where(s => s.Status == SaleOrderStatus.ConfirmedBySystem && !s.SaleAtBuyersLocation && s.Latitude != null && s.Longitude != null)
+            .Where(s => s.Status == SaleOrderStatus.ConfirmedBySystem && !s.SaleAtBuyersLocation && s.Latitude != null && s.Longitude != null && !s.Seller.IsDeleted)
             .ToListAsync();
 
         var saleOrdersWithContract = _contracts.Where(c => c.Status != ContractStatus.CancelledByBuyer && c.Status != ContractStatus.CancelledBySeller)

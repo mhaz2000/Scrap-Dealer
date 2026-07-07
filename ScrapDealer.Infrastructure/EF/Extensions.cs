@@ -35,8 +35,10 @@ namespace ScrapDealer.Infrastructure.EF
             services.AddScoped<ISellerReadService, SellerReadService>();
             services.AddScoped<ICategoryReadService, CategoryReadService>();
             services.AddScoped<ISaleOrderReadService, SaleOrderReadService>();
+            services.AddScoped<ISaleOrderRequestReadService, SaleOrderRequestReadService>();
             services.AddScoped<IRolePermissionService, RolePermissionService>();
             services.AddScoped<ISubCategoryReadService, SubCategoryReadService>();
+            services.AddScoped<IContractReadService, ContractReadService>();
 
 
             services.Scan(scan => scan

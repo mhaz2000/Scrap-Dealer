@@ -6,6 +6,7 @@ namespace ScrapDealer.Infrastructure.EF.Models
     internal class SaleOrderReadModel
     {
         public Guid Id { get; set; }
+        public int Code { get; set; }
         public required string Address { get; set; }
         public string? Telephone { get; set; }
         public double? Latitude { get; set; }

@@ -1,6 +1,7 @@
 ﻿using ScrapDealer.Application.Services.DbReadServices;
 using ScrapDealer.Domain.Factories.interfaces;
 using ScrapDealer.Domain.Repositories;
+using ScrapDealer.Domain.ValueObjects.Base;
 using ScrapDealer.Shared.Abstractions.Commands;
 using ScrapDealer.Shared.Abstractions.Exceptions;
 
@@ -9,6 +10,7 @@ namespace ScrapDealer.Application.Commands.Sellers.Handlers
     internal class CreateSellerHandler : ICommandHandler<CreateSellerCommand>
     {
         private const string sellerRoleName = "Seller";
+        private const int sellerCodeBase = 600000;
 
         private readonly ISellerFactory _factory;
         private readonly ISellerRepository _repository;
@@ -48,9 +50,12 @@ namespace ScrapDealer.Application.Commands.Sellers.Handlers
 
             var sellerRole = await _roleRepository.GetAsync(r => r.Name == sellerRoleName);
 
+            var lastCode = await _readService.GetLastCodeAsync();
+            var nextCode = Code.Create(lastCode is null || lastCode < sellerCodeBase ? sellerCodeBase + 1 : lastCode.Value + 1);
+
             var seller = _factory.Create(request.FirstName, request.LastName, request.NationalCode, request.City, request.Province,
                 request.PostalCode, request.AddressDescription, request.Email, request.Gender, request.PersonType, user,
-                request.NationalCardFileId, request.ProfileFormFileId);
+                request.NationalCardFileId, request.ProfileFormFileId, nextCode);
 
             var sellerUserRole = user.AddRole(sellerRole!);
 

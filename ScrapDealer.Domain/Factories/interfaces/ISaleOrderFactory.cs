@@ -7,7 +7,7 @@ namespace ScrapDealer.Domain.Factories.interfaces
 {
     public interface ISaleOrderFactory
     {
-        SaleOrder Create(bool isIndustrial, Seller seller, SaleOrderAddress address, double? latitude, double? longitude, bool saleAtBuyersLocation, Telephone? telephone);
+        SaleOrder Create(bool isIndustrial, Seller seller, SaleOrderAddress address, double? latitude, double? longitude, bool saleAtBuyersLocation, Telephone? telephone, Code code);
         SaleOrder Update(SaleOrderAddress address, double latitude, double longitude, Telephone? telephone, bool saleAtBuyersLocation, SaleOrder saleOrder);
 
         SaleOrderItem CreateItem(ICollection<Guid> images, SubCategory? subCategory,

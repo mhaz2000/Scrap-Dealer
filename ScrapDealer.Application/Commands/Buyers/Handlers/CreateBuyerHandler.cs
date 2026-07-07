@@ -1,6 +1,7 @@
 ﻿using ScrapDealer.Application.Services.DbReadServices;
 using ScrapDealer.Domain.Factories.interfaces;
 using ScrapDealer.Domain.Repositories;
+using ScrapDealer.Domain.ValueObjects.Base;
 using ScrapDealer.Shared.Abstractions.Commands;
 using ScrapDealer.Shared.Abstractions.Exceptions;
 
@@ -9,6 +10,7 @@ namespace ScrapDealer.Application.Commands.Buyers.Handlers
     internal class CreateBuyerHandler : ICommandHandler<CreateBuyerCommand>
     {
         private const string buyerRoleName = "Buyer";
+        private const int buyerCodeBase = 400000;
 
         private readonly IBuyerFactory _factory;
         private readonly IWalletFactory _walletFactory;
@@ -48,11 +50,14 @@ namespace ScrapDealer.Application.Commands.Buyers.Handlers
 
             var buyerRole = await _roleRepository.GetAsync(r => r.Name == buyerRoleName);
 
+            var lastCode = await _readService.GetLastCodeAsync();
+            var nextCode = Code.Create(lastCode is null || lastCode < buyerCodeBase ? buyerCodeBase + 1 : lastCode.Value + 1);
+
             var buyer = _factory.Create(request.FirstName, request.LastName, request.NationalCode, request.City, request.Province,
                 request.CompanyName, request.NumberPlate, request.AddressDescription, request.Gender, request.ActivityArea,
                 request.BusinessLicenseFileId, request.NationalCardFileId, request.ProfileFormFileId, request.CarCardFileId,
                 request.IsWholeSaleBuyer, request.IsFixedLocation, user,
-                request.Latitude, request.Longitude);
+                request.Latitude, request.Longitude, nextCode);
 
             var buyerUserRole = user.AddRole(buyerRole!);
 

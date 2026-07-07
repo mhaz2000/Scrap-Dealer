@@ -5,6 +5,7 @@ namespace ScrapDealer.Infrastructure.EF.Models
     internal class SellerReadModel
     {
         public Guid Id { get; set; }
+        public int Code { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsActive { get; set; }
         public bool Verified { get; set; }

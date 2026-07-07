@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.AspNetCore.Mvc;
 using ScrapDealer.Application.Commands.Buyers;
 using ScrapDealer.Application.DTO;
 using ScrapDealer.Application.Queries.Buyers;
 using ScrapDealer.Shared.Abstractions.Commands;
 using ScrapDealer.Shared.Abstractions.Queries;
 using ScrapDealer.Shared.Models;
+using System.Net.NetworkInformation;
 
 namespace ScrapDealer.Api.Controllers
 {
@@ -62,10 +64,22 @@ namespace ScrapDealer.Api.Controllers
 
         //[HasPermission(Permissions.Buyers.ToggleActivation)]
         [HttpPut("Admin/Activation/{id}/{status}")]
-        public async Task<IActionResult> ToggleActivation(Guid id, bool status, [FromBody] string? reason)
+        public async Task<IActionResult> ToggleActivation(Guid id, bool status, [FromBody] ToggleActivationModel model)
         {
-            await _commandDispatcher.DispatchAsync(new BuyerToggleActivationCommand(id, status, reason));
+            await _commandDispatcher.DispatchAsync(new BuyerToggleActivationCommand(id, status, model.Reason));
             return BaseOk();
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> RemoveAccount()
+        {
+            await _commandDispatcher.DispatchAsync(new BuyerRemoveAccountCommand(UserId));
+            return BaseOk();
+        }
+    }
+
+    public record ToggleActivationModel
+    {
+        public string? Reason { get; set; }
     }
 }

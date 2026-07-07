@@ -1,4 +1,5 @@
 ﻿using ScrapDealer.Domain.Consts;
+using ScrapDealer.Domain.ValueObjects.Base;
 using ScrapDealer.Domain.ValueObjects.SaleOrders;
 using ScrapDealer.Shared.Abstractions.Domain;
 using System.Collections.ObjectModel;
@@ -18,16 +19,17 @@ namespace ScrapDealer.Domain.Entities
         public SaleOrderStatus Status { get; set; }
         public bool ModifiedByAdmin { get; set; } = false;
         public string? RejectionReason { get; set; }
+        public Code Code { get; private set; }
 
         private readonly List<SaleOrderItem> _items = new List<SaleOrderItem>();
         public IReadOnlyCollection<SaleOrderItem> Items => _items.AsReadOnly();
 
         public SaleOrder()
         {
-            
+
         }
 
-        public SaleOrder(bool isIndustrial, Seller seller, SaleOrderAddress address, Location? location, Telephone? telephone, bool saleAtBuyersLocation)
+        public SaleOrder(bool isIndustrial, Seller seller, SaleOrderAddress address, Location? location, Telephone? telephone, bool saleAtBuyersLocation, Code code)
         {
             Seller = seller;
             Address = address;
@@ -37,6 +39,7 @@ namespace ScrapDealer.Domain.Entities
             Status = SaleOrderStatus.CreatedOrUpdated;
             Telephone = telephone;
             SaleAtBuyersLocation = saleAtBuyersLocation;
+            Code = code;
         }
 
         public void AddItem(SaleOrderItem item) 

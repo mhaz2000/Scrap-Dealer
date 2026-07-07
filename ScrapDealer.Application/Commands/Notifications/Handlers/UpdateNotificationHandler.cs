@@ -13,7 +13,7 @@ namespace ScrapDealer.Application.Commands.Notifications.Handlers
             if (notification is null)
                 throw new BusinessException("اعلان یافت نشد.");
 
-            notification = factory.Update(request.Title, request.Content, notification);
+            notification = factory.Update(request.Title, request.Content, request.targets, notification);
             notification.SeenBy = [];
             await repository.UpdateAsync(notification);
         }

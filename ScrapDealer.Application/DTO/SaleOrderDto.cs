@@ -20,5 +20,6 @@ namespace ScrapDealer.Application.DTO
         public Guid? ContractId { get; set; }
         public Guid? RequestId { get; set; }
         public string? SendRequestTo { get; set; }
+        public int Code { get; set; }
     }
 }

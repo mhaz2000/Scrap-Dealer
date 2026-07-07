@@ -24,6 +24,7 @@ namespace ScrapDealer.Infrastructure.Profiles
                     Longitude = c.Longitude,
                     SaleAtBuyersLocation = c.SaleAtBuyersLocation,
                     Telephone = c.Telephone,
+                    Code = c.Code,
                     Items = c.Items.Select(s => new SaleOrderItemDto()
                     {
                         Id = s.Id,

@@ -1,6 +1,7 @@
 ﻿using ScrapDealer.Application.Services.DbReadServices;
 using ScrapDealer.Domain.Factories.interfaces;
 using ScrapDealer.Domain.Repositories;
+using ScrapDealer.Domain.ValueObjects.Base;
 using ScrapDealer.Shared.Abstractions.Commands;
 using ScrapDealer.Shared.Abstractions.Exceptions;
 
@@ -8,18 +9,23 @@ namespace ScrapDealer.Application.Commands.SaleOrders.Handlers
 {
     internal class CreateSaleOrderHandler : ICommandHandler<CreateSaleOrderCommand>
     {
+        private const int saleOrderCodeBase = 100000;
+
         private readonly ISaleOrderFactory _factory;
         private readonly ISaleOrderRepository _saleOrderRepository;
         private readonly ISubCategoryRepository _subCategoryRepository;
         private readonly ISellerRepository _sellerRepository;
+        private readonly ISaleOrderReadService _saleOrderReadService;
 
         public CreateSaleOrderHandler(ISaleOrderFactory factory, ISaleOrderRepository repository,
-            ISubCategoryRepository subCategoryRepository, ISellerRepository sellerRepository)
+            ISubCategoryRepository subCategoryRepository, ISellerRepository sellerRepository,
+            ISaleOrderReadService saleOrderReadService)
         {
             _factory = factory;
             _saleOrderRepository = repository;
             _sellerRepository = sellerRepository;
             _subCategoryRepository = subCategoryRepository;
+            _saleOrderReadService = saleOrderReadService;
         }
 
         public async Task Handle(CreateSaleOrderCommand request, CancellationToken cancellationToken)
@@ -34,7 +40,10 @@ namespace ScrapDealer.Application.Commands.SaleOrders.Handlers
             if (!seller.Verified)
                 throw new BusinessException("ابتدا فرایند احراز هویت خود را تکمیل کنید.");
 
-            var saleOrder = _factory.Create(request.IsIndustrial, seller, request.Address, request.Latitude, request.Longitude, request.SaleAtBuyersLocation, request.Telephone);
+            var lastCode = await _saleOrderReadService.GetLastCodeAsync();
+            var nextCode = Code.Create(lastCode is null || lastCode < saleOrderCodeBase ? saleOrderCodeBase + 1 : lastCode.Value + 1);
+
+            var saleOrder = _factory.Create(request.IsIndustrial, seller, request.Address, request.Latitude, request.Longitude, request.SaleAtBuyersLocation, request.Telephone, nextCode);
 
             foreach (var item in request.Items)
             {

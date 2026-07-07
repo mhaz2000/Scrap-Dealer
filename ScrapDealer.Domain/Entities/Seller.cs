@@ -1,4 +1,5 @@
 ﻿using ScrapDealer.Domain.Consts;
+using ScrapDealer.Domain.ValueObjects.Base;
 using ScrapDealer.Domain.ValueObjects.Profiles;
 using ScrapDealer.Shared.Abstractions.Domain;
 
@@ -17,6 +18,7 @@ namespace ScrapDealer.Domain.Entities
         public User User { get; private set; }
         public Guid UserId { get; private set; }
         public string? InactiveReason { get; private set; }
+        public Code Code { get; private set; }
 
         public bool Verified { get; private set; }
         public bool IsActive { get; private set; }
@@ -31,7 +33,7 @@ namespace ScrapDealer.Domain.Entities
         }
 
         public Seller(PersonName personName, NationalCode nationalCode,
-            ProfileAddress address, Email email, PersonType personType, Gender gender, User user, Guid? nationalCardFileId, Guid? profileFormFileId)
+            ProfileAddress address, Email email, PersonType personType, Gender gender, User user, Guid? nationalCardFileId, Guid? profileFormFileId, Code code)
         {
             Id = Guid.NewGuid();
             PersonName = personName;
@@ -47,6 +49,7 @@ namespace ScrapDealer.Domain.Entities
             Score = 0;
             NationalCardFileId = nationalCardFileId;
             ProfileFormFileId = profileFormFileId;
+            Code = code;
         }
 
         public void Update(PersonName personName, NationalCode nationalCode,

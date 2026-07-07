@@ -1,6 +1,7 @@
 ﻿using ScrapDealer.Domain.Consts;
 using ScrapDealer.Domain.Entities;
 using ScrapDealer.Domain.Factories.interfaces;
+using ScrapDealer.Domain.ValueObjects.Base;
 using ScrapDealer.Domain.ValueObjects.Profiles;
 using ScrapDealer.Domain.ValueObjects.SaleOrders;
 
@@ -12,7 +13,7 @@ namespace ScrapDealer.Domain.Factories
         public Buyer Create(string fisrtName, string lastName, NationalCode nationalCode, string city, string province,
             string? companyName, string? numberPlate, string addressDescription, Gender gender,
             ActivityArea activityArea, Guid? businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, Guid? carCardFileId, bool isWholeSaleBuyer, bool isFixedLocation, User user,
-            double? latitude, double? longitude)
+            double? latitude, double? longitude, Code code)
         {
             var personNameValue = PersonName.Create(fisrtName, lastName);
             var nationalCodeValue = NationalCode.Create(nationalCode);
@@ -22,7 +23,7 @@ namespace ScrapDealer.Domain.Factories
             var locationValue = latitude.HasValue && longitude.HasValue ? Location.Create(latitude.Value, longitude.Value) : null;
 
             return new Buyer(personNameValue, nationalCodeValue, addressValue, companyNameValue,
-                numberPlateValue, gender, businessLicenseFileId, nationalCardFileId, profileFormFileId, carCardFileId, isWholeSaleBuyer, isFixedLocation, user, locationValue);
+                numberPlateValue, gender, businessLicenseFileId, nationalCardFileId, profileFormFileId, carCardFileId, isWholeSaleBuyer, isFixedLocation, user, locationValue, code);
         }
 
         public Buyer Update(string fisrtName, string lastName, NationalCode nationalCode, string city, string province,

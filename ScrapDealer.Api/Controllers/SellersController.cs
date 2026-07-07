@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ScrapDealer.Application.Commands.Buyers;
 using ScrapDealer.Application.Commands.Sellers;
 using ScrapDealer.Application.DTO;
 using ScrapDealer.Application.Queries.Sellers;
@@ -62,9 +63,16 @@ namespace ScrapDealer.Api.Controllers
 
         //[HasPermission(Permissions.Sellers.ToggleActivation)]
         [HttpPut("Admin/Activation/{id}/{status}")]
-        public async Task<IActionResult> ToggleActivation(Guid id, bool status, [FromBody] string? reason)
+        public async Task<IActionResult> ToggleActivation(Guid id, bool status, [FromBody] ToggleActivationModel model)
         {
-            await _commandDispatcher.DispatchAsync(new SellerToggleActivationCommand(id, status, reason));
+            await _commandDispatcher.DispatchAsync(new SellerToggleActivationCommand(id, status, model.Reason));
+            return BaseOk();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> RemoveAccount()
+        {
+            await _commandDispatcher.DispatchAsync(new SellerRemoveAccountCommand(UserId));
             return BaseOk();
         }
     }

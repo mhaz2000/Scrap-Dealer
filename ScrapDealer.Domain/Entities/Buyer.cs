@@ -1,4 +1,5 @@
 ﻿using ScrapDealer.Domain.Consts;
+using ScrapDealer.Domain.ValueObjects.Base;
 using ScrapDealer.Domain.ValueObjects.Profiles;
 using ScrapDealer.Domain.ValueObjects.SaleOrders;
 using ScrapDealer.Shared.Abstractions.Domain;
@@ -14,6 +15,7 @@ namespace ScrapDealer.Domain.Entities
         public NumberPlate? NumberPlate { get; private set; }
         public Gender Gender { get; private set; }
         public string? InactiveReason { get; set; }
+        public Code Code { get; private set; }
 
         public User User { get; private set; }
         public Guid UserId { get; private set; }
@@ -35,7 +37,7 @@ namespace ScrapDealer.Domain.Entities
 
         public Buyer(PersonName personName, NationalCode nationalCode,
             ProfileAddress address, CompanyName? companyName, NumberPlate? numberPlate, Gender gender,
-            Guid? businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, Guid? carCardFileId, bool isWholeSaleBuyer, bool isFixedLocation, User user, Location? location)
+            Guid? businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, Guid? carCardFileId, bool isWholeSaleBuyer, bool isFixedLocation, User user, Location? location, Code code)
         {
             Id = Guid.NewGuid();
             PersonName = personName;
@@ -55,6 +57,7 @@ namespace ScrapDealer.Domain.Entities
             IsActive = true;
             Score = 0;
             Location = location;
+            Code = code;
             user.PersonName = personName;
         }
 

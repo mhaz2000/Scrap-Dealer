@@ -3,5 +3,6 @@
     public interface ISellerReadService
     {
         Task<bool> ExistsByUserIdAsync(Guid userId);
+        Task<int?> GetLastCodeAsync();
     }
 }

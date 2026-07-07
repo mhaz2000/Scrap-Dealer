@@ -1,11 +1,14 @@
-﻿namespace ScrapDealer.Application.DTO
+﻿using ScrapDealer.Domain.Consts;
+
+namespace ScrapDealer.Application.DTO
 {
-    public class NotificationDto
+    public class    NotificationDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public bool Seen { get; set; }
+        public List<NotificationTarget> targets { get; set; }
     }
 
 }

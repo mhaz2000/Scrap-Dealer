@@ -11,5 +11,6 @@ namespace ScrapDealer.Infrastructure.EF.Services
 
         public BuyerReadService(ReadDbContext context) => _buyers = context.Buyers;
         public async Task<bool> ExistsByUserIdAsync(Guid userId) => await _buyers.AnyAsync(b => b.UserId == userId);
+        public async Task<int?> GetLastCodeAsync() => await _buyers.MaxAsync(b => (int?)b.Code);
     }
 }

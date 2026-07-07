@@ -1,6 +1,7 @@
 ﻿using ScrapDealer.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ScrapDealer.Domain.ValueObjects.Base;
 using ScrapDealer.Domain.ValueObjects.Profiles;
 
 namespace ScrapDealer.Infrastructure.EF.Config.Buyers
@@ -11,6 +12,10 @@ namespace ScrapDealer.Infrastructure.EF.Config.Buyers
         {
             builder.ToTable("Sellers");
             builder.HasKey(x => x.Id);
+
+            builder.Property(u => u.Code)
+                .HasConversion(code => code.Value, code => Code.Create(code))
+                .IsRequired();
 
             builder.Property(u => u.Email)
                 .HasConversion(email => email == null ? null : email.Value, email => Email.Create(email))

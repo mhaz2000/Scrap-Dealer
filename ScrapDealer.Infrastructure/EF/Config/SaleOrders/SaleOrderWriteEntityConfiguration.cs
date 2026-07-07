@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ScrapDealer.Domain.Entities;
+using ScrapDealer.Domain.ValueObjects.Base;
 using ScrapDealer.Domain.ValueObjects.SaleOrders;
 
 namespace ScrapDealer.Infrastructure.EF.Config.SaleOrders
@@ -11,6 +12,10 @@ namespace ScrapDealer.Infrastructure.EF.Config.SaleOrders
         {
             builder.ToTable("SaleOrders");
             builder.HasKey(x => x.Id);
+
+            builder.Property(u => u.Code)
+                .HasConversion(code => code.Value, code => Code.Create(code))
+                .IsRequired();
 
             builder.Property(u => u.Address)
                 .HasConversion(address => address.Value, address => SaleOrderAddress.Create(address))
