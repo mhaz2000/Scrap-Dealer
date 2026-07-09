@@ -1,22 +1,24 @@
 ﻿using ScrapDealer.Application.DTO;
 using ScrapDealer.Application.Services;
 using ScrapDealer.Application.Services.DbReadServices;
-using ScrapDealer.Domain.Repositories;
 using ScrapDealer.Shared.Abstractions.Commands;
 using ScrapDealer.Shared.Abstractions.Exceptions;
 using System.Security.Claims;
 
 namespace ScrapDealer.Application.Commands.Authentication.Handlers
 {
+
+
     public class CredentialLoginHandler : ICommandHandler<CredentialLoginCommand, PanelAuthenticationDto>
     {
         private readonly ITokenService _tokenService;
         private readonly IUserReadService _readService;
         private readonly IRoleReadService _roleReadService;
         private readonly ICaptchaService _captchaService;
+        private readonly IRedisCacheService _redisCacheService;
         private readonly IRolePermissionService _rolePermissionService;
 
-        public CredentialLoginHandler(ITokenService tokenService, IUserReadService readService,
+        public CredentialLoginHandler(ITokenService tokenService, IUserReadService readService, IRedisCacheService redisCacheService,
             ICaptchaService captchaService, IRoleReadService roleReadService, IRolePermissionService rolePermissionService)
         {
             _readService = readService;
@@ -24,6 +26,7 @@ namespace ScrapDealer.Application.Commands.Authentication.Handlers
             _captchaService = captchaService;
             _roleReadService = roleReadService;
             _rolePermissionService = rolePermissionService;
+            _redisCacheService = redisCacheService;
         }
 
         public async Task<PanelAuthenticationDto> Handle(CredentialLoginCommand command, CancellationToken cancellationToken)
@@ -42,16 +45,29 @@ namespace ScrapDealer.Application.Commands.Authentication.Handlers
             if (string.IsNullOrEmpty(userRoleName))
                 throw new BusinessException("نقش کاربر یافت نشد.");
 
-            IEnumerable<string> permisssions = Enumerable.Empty<string>();
+            IEnumerable<string> permissions = Enumerable.Empty<string>();
             if (userRoleName == "Support")
-                permisssions = await _rolePermissionService.GetRolePermissionsAsync("Support");
+                permissions = await _rolePermissionService.GetRolePermissionsAsync("Support");
 
-            var token = _tokenService.GenerateToken(userId.Value.ToString(), new List<Claim> { new("role", userRoleName) }).token;
+            var tokens = _tokenService.GenerateToken(
+                           userId.Value.ToString(),
+                           new List<Claim> { new("role", userRoleName) }
+                       );
+
+            // Store refresh token in Redis
+            await _redisCacheService.SetAsync<Guid>(
+                $"adminRefreshToken:{tokens.refreshToken}",
+                userId.Value,
+                TimeSpan.FromDays(7)
+            );
+
+
             return new PanelAuthenticationDto()
             {
-                Permissions = permisssions,
+                Token = tokens.token,
+                RefreshToken = tokens.refreshToken,
                 Role = userRoleName,
-                Token = token
+                Permissions = permissions
             };
         }
     }

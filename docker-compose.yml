@@ -2,9 +2,7 @@ version: '3.9'
 
 services:
   scrapdealer-api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: scrapdealer-api:latest
     container_name: scrapdealer-api
     ports:
       - "8081:8080"
@@ -34,7 +32,7 @@ services:
       - sql_data:/var/opt/mssql
 
   redis:
-    image: redis:7.0
+    image: docker.arvancloud.ir/redis:7.0
     container_name: scrapdealer-redis
     command: ["redis-server", "--requirepass", "123456"]
     ports:
@@ -43,7 +41,7 @@ services:
       - redis_data:/data
 
   minio:
-    image: minio/minio
+    image: quay.io/minio/minio:RELEASE.2023-11-01T01-57-10Z-cpuv1
     container_name: scrapdealer-minio
     environment:
       MINIO_ROOT_USER: admin
@@ -54,7 +52,35 @@ services:
     volumes:
       - minio_data:/data
 
+  nginx:
+    image: docker.arvancloud.ir/nginx:alpine
+    container_name: scrapdealer-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - scrapdealer-api
+      - minio
+
+  sqlpad:
+    image: docker.arvancloud.ir/sqlpad/sqlpad:latest
+    container_name: scrapdealer-sqlpad
+    ports:
+      - "3030:3000"
+    environment:
+      SQLPAD_ADMIN: "admin"
+      SQLPAD_ADMIN_PASSWORD: "admin123"
+      PUBLIC_PATH: "/sqlpad"
+    depends_on:
+      - sqlserver
+    volumes:
+      - sqlpad_data:/var/lib/sqlpad
+
 volumes:
   sql_data:
   redis_data:
   minio_data:
+  sqlpad_data:

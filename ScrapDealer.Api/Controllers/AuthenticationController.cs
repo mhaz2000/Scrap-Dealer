@@ -29,6 +29,14 @@ namespace ScrapDealer.Api.Controllers
         }
 
         [AllowAnonymous]
+        [HttpPost("Admin/RefreshToken")]
+        public async Task<ActionResult<PanelAuthenticationDto>> AdminRefreshToken([FromBody] AdminRefreshTokenCommand command)
+        {
+            var response = await _commandDispatcher.DispatchAsync<AdminRefreshTokenCommand, PanelAuthenticationDto>(command);
+            return OkOrNotFound(response);
+        }
+
+        [AllowAnonymous]
         [HttpPost("OtpRequest")]
         public async Task<ActionResult<string>> OtpRequest([FromBody] OtpRequestCommand command)
         {
@@ -42,6 +50,14 @@ namespace ScrapDealer.Api.Controllers
         {
             var response = await _commandDispatcher.DispatchAsync<OtpLoginCommand, AuthenticationDto>(command);
             return BaseObjectOk(response);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("User/RefreshToken")]
+        public async Task<ActionResult<AuthenticationDto>> UserRefreshToken([FromBody] RefreshTokenCommand command)
+        {
+            var response = await _commandDispatcher.DispatchAsync<RefreshTokenCommand, AuthenticationDto>(command);
+            return OkOrNotFound(response);
         }
 
         //[HasPermission(Permissions.Users.State)]

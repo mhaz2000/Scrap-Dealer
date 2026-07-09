@@ -1,6 +1,4 @@
-﻿using DNTPersianUtils.Core;
-
-namespace ScrapDealer.Application.DTO
+﻿namespace ScrapDealer.Application.DTO
 {
     public class CategoryDto(Guid id, string name, decimal minPrice, decimal maxPrice, ICollection<SubCategoryDto> subCategories,
         ICollection<Guid> images)

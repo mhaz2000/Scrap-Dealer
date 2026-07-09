@@ -2,6 +2,7 @@
 using ScrapDealer.Domain.Consts;
 
 namespace ScrapDealer.Application.DTO;
+
 public record InvoiceDto
 {
     public string SellerName { get; set; }
