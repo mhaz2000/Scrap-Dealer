@@ -11,6 +11,7 @@ namespace ScrapDealer.Domain.Entities
         public Phone Phone { get; private set; }
         public PasswordHash? PasswordHash { get; private set; }
         public PersonName? PersonName { get; internal set; }
+        public ReferralCode? ReferralCode { get; private set; }
 
         public bool IsActive { get; private set; }
 
@@ -22,12 +23,13 @@ namespace ScrapDealer.Domain.Entities
             
         }
 
-        public User(Username username, Phone phone, PersonName? personName) : base()
+        public User(Username username, Phone phone, PersonName? personName, ReferralCode? referralCode) : base()
         {
             Id = Guid.NewGuid();
             Phone = phone;
             Username = username;
             PersonName = personName;
+            ReferralCode = referralCode;
             IsActive = true;
         }
 
@@ -40,6 +42,9 @@ namespace ScrapDealer.Domain.Entities
 
         public void SetPassword(PasswordHash passwordHash) 
             => PasswordHash = passwordHash;
+
+        public void SetReferralCode(ReferralCode referralCode)
+            => ReferralCode = referralCode;
 
         public UserRole AddRole(Role role)
         {

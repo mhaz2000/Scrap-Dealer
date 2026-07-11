@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ScrapDealer.Domain.Entities;
 using ScrapDealer.Domain.Factories.interfaces;
+using ScrapDealer.Domain.ValueObjects.Users;
 using ScrapDealer.Infrastructure.EF.Contexts;
 using ScrapDealer.Shared.SystemPermissions;
 
@@ -9,11 +10,13 @@ namespace ScrapDealer.Infrastructure.EF.SeedData
     internal class DatabaseSeeder
     {
         private readonly WriteDbContext _context;
+        private readonly ReadDbContext _readContext;
         private readonly IUserFactory _userFactory;
 
-        public DatabaseSeeder(WriteDbContext context, IUserFactory userFactory)
+        public DatabaseSeeder(WriteDbContext context, ReadDbContext readContext, IUserFactory userFactory)
         {
             _context = context;
+            _readContext = readContext;
             _userFactory = userFactory;
         }
 
@@ -48,6 +51,26 @@ namespace ScrapDealer.Infrastructure.EF.SeedData
             }
 
             await _context.SaveChangesAsync();
+
+            var nullCodeIds = await _context.Users
+                .Where(u => u.ReferralCode == null)
+                .Select(u => u.Id)
+                .ToListAsync();
+
+
+            if (nullCodeIds.Any())
+            {
+                var usersToFix = await _context.Users
+                    .Where(u => nullCodeIds.Contains(u.Id))
+                    .ToListAsync();
+
+                foreach (var user in usersToFix)
+                {
+                    user.SetReferralCode(ReferralCode.Generate());
+                }
+
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

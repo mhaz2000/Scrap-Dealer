@@ -36,7 +36,7 @@ namespace ScrapDealer.Domain.Factories
             var phoneValue = Phone.Create(phone);
             var personNameValue = string.IsNullOrEmpty(firstName) ? null : PersonName.Create(firstName, lastName!);
 
-            var user = new User(usernameValue, phoneValue, personNameValue);
+            var user = new User(usernameValue, phoneValue, personNameValue, ReferralCode.Generate());
             var passwordHash = PasswordHash.Create(password, _passwordHasher);
             user.SetPassword(passwordHash);
 
@@ -51,7 +51,7 @@ namespace ScrapDealer.Domain.Factories
             var random = new Random();
             var passwordHash = PasswordHash.Create(defaultPass + random.Next(1000000, 9999999), _passwordHasher);
 
-            var user = new User(usernameValue, phoneValue, null);
+            var user = new User(usernameValue, phoneValue, null, ReferralCode.Generate());
             user.SetPassword(passwordHash);
             return user;
         }

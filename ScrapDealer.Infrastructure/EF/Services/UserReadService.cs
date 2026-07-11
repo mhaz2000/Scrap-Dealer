@@ -48,5 +48,8 @@ namespace ScrapDealer.Infrastructure.EF.Services
 
         public async Task<Guid?> GetByPhoneAsync(string phone)
             => (await _users.FirstOrDefaultAsync(c => c.Phone == phone).ConfigureAwait(false))?.Id;
+
+        public Task<Guid?> GetIdByReferralCodeAsync(string code)
+            => _users.Where(u => u.ReferralCode == code).Select(u => (Guid?)u.Id).FirstOrDefaultAsync();
     }
 }

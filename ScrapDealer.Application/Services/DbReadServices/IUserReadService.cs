@@ -10,5 +10,6 @@ namespace ScrapDealer.Application.Services.DbReadServices
         Task<Guid?> ValidateUserCredentialByUsernameAsync(string username, string password);
         Task<bool> ValidateUserCredentialByUserIdAsync(Guid id, string password);
         Task<bool> CheckIfUserActiveAsync(Guid userId);
+        Task<Guid?> GetIdByReferralCodeAsync(string code);
     }
 }

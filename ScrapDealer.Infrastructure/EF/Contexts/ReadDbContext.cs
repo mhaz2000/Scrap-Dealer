@@ -29,6 +29,7 @@ namespace ScrapDealer.Infrastructure.EF.Contexts
         public DbSet<SaleOrderRequestReadModel> SaleOrderRequests  { get; set; }
         public DbSet<WalletTransactionReadModel> WalletTransactions { get; set; }
         public DbSet<CategoryPriceHistoryReadModel> CategoryPriceHistories { get; set; }
+        public DbSet<ReferralReadModel> Referrals { get; set; }
 
         public ReadDbContext(DbContextOptions<ReadDbContext> options) : base(options)
         {

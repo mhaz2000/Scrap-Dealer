@@ -31,6 +31,7 @@ namespace ScrapDealer.Infrastructure.EF.Contexts
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<SaleOrderRequest> SaleOrderRequests { get; set; }
         public DbSet<WalletTransaction> WalletTransactions { get; set; }
+        public DbSet<Referral> Referrals { get; set; }
         public DbSet<CategoryPriceHistory> CategoryPriceHistories { get; set; }
 
         public WriteDbContext(DbContextOptions<WriteDbContext> options) : base(options)

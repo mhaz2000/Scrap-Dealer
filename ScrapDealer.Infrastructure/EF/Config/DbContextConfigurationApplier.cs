@@ -9,6 +9,7 @@ using ScrapDealer.Infrastructure.EF.Config.NewsConfig;
 using ScrapDealer.Infrastructure.EF.Config.NotificationConfig;
 using ScrapDealer.Infrastructure.EF.Config.Rewards;
 using ScrapDealer.Infrastructure.EF.Config.RolePermissions;
+using ScrapDealer.Infrastructure.EF.Config.Referrals;
 using ScrapDealer.Infrastructure.EF.Config.SaleOrderRequests;
 using ScrapDealer.Infrastructure.EF.Config.SaleOrders;
 using ScrapDealer.Infrastructure.EF.Config.ScoreHistories;
@@ -48,6 +49,7 @@ namespace ScrapDealer.Infrastructure.EF.Config
             modelBuilder.ApplyConfiguration(new SaleOrderRequestReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new WalletTransactionReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryPriceHistoryReadEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ReferralReadEntityConfiguration());
         }
 
         public static void ApplyWriteConfigurations(ModelBuilder modelBuilder)
@@ -77,6 +79,7 @@ namespace ScrapDealer.Infrastructure.EF.Config
             modelBuilder.ApplyConfiguration(new SaleOrderRequestWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new WalletTransactionWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryPriceHistoryWriteEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ReferralWriteEntityConfiguration());
 
         }
     }

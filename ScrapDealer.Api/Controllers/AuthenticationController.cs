@@ -38,10 +38,10 @@ namespace ScrapDealer.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("OtpRequest")]
-        public async Task<ActionResult<string>> OtpRequest([FromBody] OtpRequestCommand command)
+        public async Task<ActionResult<bool>> OtpRequest([FromBody] OtpRequestCommand command)
         {
-            await _commandDispatcher.DispatchAsync(command);
-            return BaseOk();
+            var isNewUser = await _commandDispatcher.DispatchAsync<OtpRequestCommand, bool>(command);
+            return BaseObjectOk( isNewUser);
         }
 
         [AllowAnonymous]

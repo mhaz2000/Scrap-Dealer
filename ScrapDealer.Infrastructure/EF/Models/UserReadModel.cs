@@ -12,6 +12,7 @@ namespace ScrapDealer.Infrastructure.EF.Models
         public string? LastName { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
+        public string? ReferralCode { get; set; }
         public ICollection<UserRoleReadModel> UserRoles { get; set; }
 
         public string FullName => FirstName + " " + LastName;

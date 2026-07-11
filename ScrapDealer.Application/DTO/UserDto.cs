@@ -8,5 +8,6 @@
         public string Role { get; set; }
         public string? WalletNumber { get; set; }
         public decimal? WalletBalance { get; set; }
+        public string? ReferralCode { get; set; }
     }
 }

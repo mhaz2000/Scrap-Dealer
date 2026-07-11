@@ -30,6 +30,9 @@ namespace ScrapDealer.Infrastructure.EF.Config.Users
 
             builder.HasQueryFilter(p => !p.IsDeleted);
 
+            builder.HasIndex(u => u.ReferralCode)
+                .IsUnique();
+
             builder.HasMany(u => u.UserRoles)
             .WithOne(ur => ur.User)
             .HasForeignKey(ur => ur.UserId)

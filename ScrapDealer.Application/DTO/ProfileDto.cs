@@ -25,6 +25,7 @@ namespace ScrapDealer.Application.DTO
         public string? WalletNumber { get; set; }
         public decimal? WalletBalance { get; set; }
         public double? Latitude { get; set; }
+        public string ReferralCode { get; set; }
         public double? Longitude { get; set; }
     }
 }

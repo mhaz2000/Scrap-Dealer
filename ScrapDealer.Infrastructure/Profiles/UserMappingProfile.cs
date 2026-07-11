@@ -9,7 +9,8 @@ namespace ScrapDealer.Infrastructure.Profiles
         public UserMappingProfile()
         {
             CreateMap<UserReadModel, UserDto>()
-                .ForMember(dest=> dest.Role, src=> src.MapFrom(t=> t.UserRoles.FirstOrDefault() != null ? t.UserRoles.FirstOrDefault()!.Role.Name : ""));
+                .ForMember(dest=> dest.Role, src=> src.MapFrom(t=> t.UserRoles.FirstOrDefault() != null ? t.UserRoles.FirstOrDefault()!.Role.Name : ""))
+                .ForMember(dest=> dest.ReferralCode, src=> src.MapFrom(t=> t.ReferralCode));
         }
     }
 }

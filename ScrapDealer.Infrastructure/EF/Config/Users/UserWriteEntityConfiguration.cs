@@ -42,6 +42,15 @@ namespace ScrapDealer.Infrastructure.EF.Config.Users
             builder.Property(u => u.IsActive)
                 .IsRequired();
 
+            builder.Property(u => u.ReferralCode)
+                .HasConversion(
+                    code => code == null ? (string?)null : code.Value,
+                    value => value == null ? null : ReferralCode.Create(value))
+                .IsRequired(false);
+
+            builder.HasIndex(u => u.ReferralCode)
+                .IsUnique();
+
             builder.HasMany(u => u.Roles)
                 .WithOne()
                 .HasForeignKey(ur => ur.UserId)
