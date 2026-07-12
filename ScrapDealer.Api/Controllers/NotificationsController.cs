@@ -14,10 +14,10 @@ namespace ScrapDealer.Api.Controllers
     public class NotificationsController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : BaseController
     {
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Support")]
         public async Task<IActionResult> Post([FromBody] AddNotificationCommand command)
         {
-            await commandDispatcher.DispatchAsync(command);
+            await commandDispatcher.DispatchAsync(command with { UserRole = UserRole });
             return BaseOk();
         }
 
@@ -38,7 +38,7 @@ namespace ScrapDealer.Api.Controllers
         }
 
         [HttpPut("Seen/{id:guid}")]
-        [Authorize(Roles = "Admin,Support")]
+        [Authorize(Roles = "Admin,Support,Seller,Buyer")]
         public async Task<IActionResult> Seen([FromRoute] Guid id)
         {
             await commandDispatcher.DispatchAsync(new SeenNotificationCommand(id, UserId));
@@ -46,18 +46,18 @@ namespace ScrapDealer.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,Support")]
+        [Authorize(Roles = "Admin,Support,Seller,Buyer")]
         public async Task<ActionResult<PaginatedResult<NotificationDto>>> Get([FromQuery] GetNotificationsQuery query)
         {
-            var result = await queryDispatcher.QueryAsync(query with { UserId = UserId});
+            var result = await queryDispatcher.QueryAsync(query with { UserId = UserId, UserRole = UserRole });
             return OkOrNotFound(result);
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,Support")]
+        [Authorize(Roles = "Admin,Support,Seller,Buyer")]
         public async Task<ActionResult<NotificationDto>> GetNotification(Guid id)
         {
-            var result = await queryDispatcher.QueryAsync(new GetNotificationQuery(id, UserId));
+            var result = await queryDispatcher.QueryAsync(new GetNotificationQuery(id, UserId, UserRole));
             return OkOrNotFound(result);
         }
     }

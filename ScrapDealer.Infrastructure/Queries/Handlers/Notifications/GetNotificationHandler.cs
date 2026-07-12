@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ScrapDealer.Application.DTO;
 using ScrapDealer.Application.Queries.Notifications;
-using ScrapDealer.Domain.Entities;
+using ScrapDealer.Domain.Consts;
 using ScrapDealer.Infrastructure.EF.Contexts;
 using ScrapDealer.Infrastructure.EF.Models;
 using ScrapDealer.Shared.Abstractions.Exceptions;
@@ -24,6 +24,20 @@ internal class GetNotificationHandler : IQueryHandler<GetNotificationQuery, Noti
         var notification = await _notifications.FirstOrDefaultAsync(c => c.Id == request.Id);
         if (notification is null)
             throw new BusinessException("اعلان یافت نشد.");
+
+        if (request.UserRole != "Admin")
+        {
+            var allowed = request.UserRole switch
+            {
+                "Support" => notification.Targets.Any(t => t == NotificationTarget.Seller || t == NotificationTarget.Buyer),
+                "Seller" => notification.Targets.Contains(NotificationTarget.Seller),
+                "Buyer" => notification.Targets.Contains(NotificationTarget.Buyer),
+                _ => false
+            };
+
+            if (!allowed)
+                throw new BusinessException("شما مجوز مشاهده این اعلان را ندارید.");
+        }
 
         var notificationDto = _mapper.Map<NotificationDto>(notification);
 

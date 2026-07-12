@@ -13,6 +13,7 @@ namespace ScrapDealer.Api.Controllers
         protected string AccessToken => Request.GetAccessToken();
 
         protected virtual Guid UserId => ClaimHelper.GetClaim<Guid>(this.AccessToken, "UserId");
+        protected virtual string UserRole => ClaimHelper.GetClaim<string>(this.AccessToken, "role");
 
         protected ActionResult<TResult> OkOrNotFound<TResult>(TResult result)
             => result is null ? NotFound() : Ok(new { data = result });

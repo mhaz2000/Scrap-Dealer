@@ -4,6 +4,6 @@ namespace ScrapDealer.Domain.Consts
     {
         Seller = 1,
         Buyer = 2,
-        Supports = 3
+        Support = 3
     }
 }
