@@ -23,7 +23,7 @@ internal class GetInvoicesHandler : IQueryHandler<GetInvoicesQuery, PaginatedRes
 
     public async Task<PaginatedResult<InvoiceListDto>> Handle(GetInvoicesQuery query, CancellationToken cancellationToken)
     {
-        var dbQuery = _invoices
+        var dbQuery = _invoices.IgnoreQueryFilters()
             .Include(s=> s.Contract).ThenInclude(s=> s.SaleOrder).ThenInclude(s=> s.Seller)
             .Include(s=> s.Contract).ThenInclude(s=> s.Buyer)
             .AsQueryable();

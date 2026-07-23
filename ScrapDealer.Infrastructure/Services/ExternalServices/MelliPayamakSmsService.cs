@@ -30,6 +30,8 @@ namespace ScrapDealer.Infrastructure.Services.ExternalServices
 
             var response = await httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
+
+            var test = await response.Content.ReadAsStringAsync();
         }
     }
 }

@@ -65,6 +65,8 @@ namespace ScrapDealer.Infrastructure
 
             services.AddHttpClient<IGreenParsSmsService, GreenParsSmsService>();
             services.AddHttpClient<IMelliPayamakSmsService, MelliPayamakSmsService>();
+            services.AddHttpClient<INeshanRevertGeocodingService, NeshanRevertGeocodingService>();
+            services.AddHttpClient<IMapIRRevertGeocodingService, MapIRRevertGeocodingService>();
 
 
             services.AddTransient<DatabaseSeeder>();

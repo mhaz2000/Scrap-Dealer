@@ -1,0 +1,21 @@
+﻿public record AddressMapIRResponse(
+    string Address,
+    string PostalAddress,
+    string AddressCompact,
+    string Primary,
+    string Name,
+    string Poi,
+    string Penult,
+    string Country,
+    string Province,
+    string County,
+    string District,
+    string RuralDistrict,
+    string City,
+    string Village,
+    string Region,
+    string Neighbourhood,
+    string Last,
+    string Plaque,
+    string PostalCode
+);
