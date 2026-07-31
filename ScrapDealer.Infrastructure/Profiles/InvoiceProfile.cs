@@ -15,7 +15,8 @@ namespace ScrapDealer.Infrastructure.Profiles
                     Amount = t.Amount,
                     Category = t.SubCategory == null ? string.Empty : t.SubCategory.Category.Name,
                     Subcategory = t.SubCategory == null ? string.Empty : t.SubCategory.Name
-                });
+                })
+                .ForAllMembers(opt => opt.Ignore());
 
             CreateMap<InvoiceReadModel, InvoiceDto>()
                 .ConstructUsing(s => new InvoiceDto
@@ -33,7 +34,8 @@ namespace ScrapDealer.Infrastructure.Profiles
                         Category = t.SubCategory == null ? string.Empty : t.SubCategory.Category.Name,
                         Subcategory = t.SubCategory == null ? string.Empty : t.SubCategory.Name
                     })
-                });
+                })
+                .ForAllMembers(opt => opt.Ignore());
 
             CreateMap<InvoiceReadModel, InvoiceListDto>()
                 .ConstructUsing(s => new InvoiceListDto

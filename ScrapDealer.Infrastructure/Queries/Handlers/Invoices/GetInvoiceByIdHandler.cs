@@ -27,7 +27,7 @@ internal class GetInvoiceByIdHandler : IQueryHandler<GetInvoiceByIdQuery, Invoic
             .Include(s=> s.Items).ThenInclude(t=>t.SubCategory).ThenInclude(s=>s.Category)
             .AsQueryable();
 
-        var invoice = await dbQuery.FirstOrDefaultAsync(t => t.ContractId == query.Id);
+        var invoice = await dbQuery.FirstOrDefaultAsync(t => t.Id == query.Id);
 
         return _mapper.Map<InvoiceDto>(invoice);
     }
