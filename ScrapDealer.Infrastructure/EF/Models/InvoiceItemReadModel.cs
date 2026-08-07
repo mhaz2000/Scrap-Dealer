@@ -6,6 +6,7 @@ namespace ScrapDealer.Infrastructure.EF.Models
     {
         public Guid Id { get; set; }
         public decimal Amount { get; set; }
+        public double? Weight { get; set; }
         public SaleType SaleType { get; set; }
         public Guid? SubCategoryId { get; set; }
         public SubCategoryReadModel? SubCategory { get; set; }

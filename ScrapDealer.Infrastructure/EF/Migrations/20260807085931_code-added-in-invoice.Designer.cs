@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScrapDealer.Infrastructure.EF.Contexts;
 
 #nullable disable
 
-namespace ScrapDealer.Infrastructure.EF.Migrations
+namespace ScrapDealer.Infrastructure.Migrations.ReadDb
 {
     [DbContext(typeof(ReadDbContext))]
-    partial class ReadDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260807085931_code-added-in-invoice")]
+    partial class codeaddedininvoice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -10,6 +10,7 @@ namespace ScrapDealer.Domain.Entities
         public Contract Contract { get; set; }
         public Amount Amount { get; set; }
         public DateTime DateTime { get; set; }
+        public Code Code { get; private set; }
 
 
         private readonly List<InvoiceItem> _items = new List<InvoiceItem>();
@@ -20,16 +21,17 @@ namespace ScrapDealer.Domain.Entities
 
         private Invoice()
         {
-            
+
         }
 
-        public Invoice(Contract contract, Amount amount)
+        public Invoice(Contract contract, Amount amount, Code code)
         {
             Id = Guid.NewGuid();
             DateTime = DateTime.Now;
             Contract = contract;
             ContractId = contract.Id;
             Amount = amount;
+            Code = code;
         }
     }
 }

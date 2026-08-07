@@ -1,15 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ScrapDealer.Application.Services.DbReadServices;
+
 using ScrapDealer.Domain.Factories.interfaces;
 using ScrapDealer.Domain.Repositories;
+using ScrapDealer.Domain.ValueObjects.Base;
 using ScrapDealer.Shared.Abstractions.Commands;
 using ScrapDealer.Shared.Abstractions.Exceptions;
 
 namespace ScrapDealer.Application.Commands.Invoices;
 
 public class CreateInvoiceHandler(IInvoiceFactory factory, IInvoiceRepository invoiceRepository, IContractRepository contractRepository,
-    ISubCategoryRepository subCategoryRepository)
+    ISubCategoryRepository subCategoryRepository, IInvoiceReadService invoiceReadService)
     : ICommandHandler<CreateInvoiceCommand>
 {
+    private const int invoiceCodeBase = 500000;
     public async Task Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
     {
         var contract = await contractRepository.GetAsync(t => t.Id == request.ContractId && t.Buyer.UserId == request.UserId,
@@ -28,7 +32,10 @@ public class CreateInvoiceHandler(IInvoiceFactory factory, IInvoiceRepository in
         if (existingInvoice is not null)
             throw new BusinessException("قبلا برای این قرارداد فاکتور صادر شده است.");
 
-        var invoice = factory.Create(contract, request.Amount);
+        var lastCode = await invoiceReadService.GetLastCodeAsync();
+        var nextCode = Code.Create(lastCode is null || lastCode < invoiceCodeBase ? invoiceCodeBase + 1 : lastCode.Value + 1);
+
+        var invoice = factory.Create(contract, request.Amount, nextCode);
 
         foreach (var item in request.Items)
         {
@@ -36,7 +43,7 @@ public class CreateInvoiceHandler(IInvoiceFactory factory, IInvoiceRepository in
             if (item.SubCategoryId is not null && category is null)
                 throw new BusinessException("دسته بندی مورد نظر یافت نشد.");
 
-            var invoiceItem = factory.CreateItem(category, item.Type, item.amount);
+            var invoiceItem = factory.CreateItem(category, item.Type, item.amount, item.weight);
             invoice.AddItem(invoiceItem);
         }
 

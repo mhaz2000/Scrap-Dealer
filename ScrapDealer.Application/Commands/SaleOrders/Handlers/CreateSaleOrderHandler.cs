@@ -51,7 +51,7 @@ namespace ScrapDealer.Application.Commands.SaleOrders.Handlers
                 if (item.SubCategoryId is not null && category is null)
                     throw new BusinessException("دسته بندی مورد نظر یافت نشد.");
 
-                var saleItem = _factory.CreateItem(item.images, category, null, item.Description, item.Type);
+                var saleItem = _factory.CreateItem(item.images, category, null, item.Description, item.SaleType);
                 saleOrder.AddItem(saleItem);
             }
 

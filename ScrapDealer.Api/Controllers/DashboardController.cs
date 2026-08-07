@@ -30,6 +30,14 @@ public class DashboardController(IQueryDispatcher _queryDispatcher) : BaseContro
     }
 
 
+    [HttpGet("Statistics")]
+    public async Task<ActionResult<IEnumerable<TopSubCategoryDto>>> GetStatistics()
+    {
+        var result = await _queryDispatcher.QueryAsync(new GetAdminDashboardStatisticsQuery());
+        return Ok(result);
+    }
+
+
     [HttpGet("TopBuyers/ByInvoiceCount")]
     public async Task<ActionResult<IEnumerable<TopBuyerDto>>> GetTopBuyersByInvoiceCount(
             [FromQuery] int topN = 10,

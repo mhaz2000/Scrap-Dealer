@@ -7,6 +7,7 @@ namespace ScrapDealer.Domain.Entities
     public class InvoiceItem : Entity<Guid>
     {
         public Amount Amount { get; set; }
+        public Weight? Weight { get; set; }
 
         public SubCategory? SubCategory { get; private set; }
         public Guid? SubCategoryId { get; private set; }
@@ -17,9 +18,10 @@ namespace ScrapDealer.Domain.Entities
             
         }
 
-        public InvoiceItem(Amount amount, SubCategory subCategory, SaleType saleType)
+        public InvoiceItem(Amount amount, SubCategory? subCategory, SaleType saleType, Weight? weight)
         {
             Amount = amount;
+            Weight = weight;
             SubCategory = subCategory;
             SaleType = saleType;
         }

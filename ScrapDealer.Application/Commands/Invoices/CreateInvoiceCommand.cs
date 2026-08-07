@@ -14,4 +14,4 @@ public record CreateInvoiceCommand : ICommand
 }
 
 
-public record InvoiceItemCommand(Guid? SubCategoryId, SaleType Type, decimal amount);
+public record InvoiceItemCommand(Guid? SubCategoryId, SaleType Type, decimal amount, double weight);

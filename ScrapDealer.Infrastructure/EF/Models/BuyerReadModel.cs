@@ -27,6 +27,7 @@ namespace ScrapDealer.Infrastructure.EF.Models
         public Guid NationalCardFileId { get; set; }
         public Guid? BusinessLicenseFileId { get; set; }
         public Guid? CarCardFileId { get; set; }
+        public IEnumerable<Guid> LocationImages { get; set; } = [];
 
         public required UserReadModel User { get; set; }
         public Guid UserId { get; set; }

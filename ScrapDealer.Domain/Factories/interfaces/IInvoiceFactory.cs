@@ -6,7 +6,7 @@ namespace ScrapDealer.Domain.Factories.interfaces
 {
     public interface IInvoiceFactory
     {
-        Invoice Create(Contract contract, Amount amount);
-        InvoiceItem CreateItem(SubCategory? subCategory, SaleType saleType, Amount amount);
+        Invoice Create(Contract contract, Amount amount, Code code);
+        InvoiceItem CreateItem(SubCategory? subCategory, SaleType saleType, Amount amount, Weight? weight);
     }
 }

@@ -2,5 +2,5 @@
 
 namespace ScrapDealer.Application.Commands.SaleOrders
 {
-    public record SaleOrderItemCommand(Guid? SubCategoryId, string? Description, SaleType Type, ICollection<Guid> images);
+    public record SaleOrderItemCommand(Guid? SubCategoryId, string? Description, SaleType SaleType, ICollection<Guid> images);
 }

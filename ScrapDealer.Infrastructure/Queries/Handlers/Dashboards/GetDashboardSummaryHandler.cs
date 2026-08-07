@@ -6,7 +6,6 @@ using ScrapDealer.Infrastructure.EF.Models;
 using ScrapDealer.Shared.Abstractions.Queries;
 
 namespace ScrapDealer.Infrastructure.Queries.Handlers.Dashboards;
-
 internal class GetDashboardSummaryHandler : IQueryHandler<GetDashboardSummaryQuery, DashboardSummaryDto>
 {
     private readonly DbSet<InvoiceReadModel> _invoices;

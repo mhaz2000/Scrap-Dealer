@@ -85,6 +85,15 @@ namespace ScrapDealer.Infrastructure.EF.Config.Buyers
                     .HasColumnName("Longitude");
             });
 
+            builder.Property(s => s.LocationImages)
+                .HasConversion(
+                    v => string.Join(",", v),
+                    v => string.IsNullOrWhiteSpace(v)
+                        ? new List<Guid>()
+                        : v.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).ToList()
+                )
+                .HasColumnType("nvarchar(max)");
+
             builder.HasQueryFilter(p => !p.IsDeleted);
         }
     }

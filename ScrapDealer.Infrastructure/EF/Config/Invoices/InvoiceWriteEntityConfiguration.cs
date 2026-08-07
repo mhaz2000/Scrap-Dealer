@@ -16,6 +16,10 @@ internal class InvoiceWriteEntityConfiguration : IEntityTypeConfiguration<Invoic
            .HasConversion(amount => amount.Value, amount => Amount.Create(amount))
            .IsRequired();
 
+        builder.Property(u => u.Code)
+            .HasConversion(code => code.Value, code => Code.Create(code))
+            .IsRequired();
+
         builder.HasOne(x => x.Contract)
             .WithMany()
             .HasForeignKey(x => x.ContractId)
@@ -30,8 +34,12 @@ internal class InvoiceWriteEntityConfiguration : IEntityTypeConfiguration<Invoic
         builder.HasKey(x => x.Id);
 
         builder.Property(u => u.Amount)
-   .HasConversion(amount => amount.Value, amount => Amount.Create(amount))
-   .IsRequired();
+            .HasConversion(amount => amount.Value, amount => Amount.Create(amount))
+            .IsRequired();
+
+        builder.Property(u => u.Weight)
+            .HasConversion(weight => weight.Value, weight => Weight.Create(weight))
+            .IsRequired(false);
 
         builder.HasOne(u => u.SubCategory)
             .WithMany()

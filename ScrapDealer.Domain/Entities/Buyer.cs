@@ -23,6 +23,7 @@ namespace ScrapDealer.Domain.Entities
         public Guid NationalCardFileId { get; private set; }
         public Guid? BusinessLicenseFileId { get; private set; }
         public Guid? CarCardFileId { get; private set; }
+        public IEnumerable<Guid> LocationImages { get; private set; }
         public bool Verified { get; private set; }
         public bool IsActive { get; private set; }
         public bool IsWholeSaleBuyer { get; private set; }
@@ -35,9 +36,9 @@ namespace ScrapDealer.Domain.Entities
 
         }
 
-        public Buyer(PersonName personName, NationalCode nationalCode,
-            ProfileAddress address, CompanyName? companyName, NumberPlate? numberPlate, Gender gender,
-            Guid? businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, Guid? carCardFileId, bool isWholeSaleBuyer, bool isFixedLocation, User user, Location? location, Code code)
+        public Buyer(PersonName personName, NationalCode nationalCode, ProfileAddress address, CompanyName? companyName, NumberPlate? numberPlate,
+            Gender gender, Guid? businessLicenseFileId, Guid nationalCardFileId, Guid profileFormFileId, Guid? carCardFileId, bool isWholeSaleBuyer,
+            bool isFixedLocation, IEnumerable<Guid> locationImages, User user, Location? location, Code code)
         {
             Id = Guid.NewGuid();
             PersonName = personName;
@@ -59,6 +60,7 @@ namespace ScrapDealer.Domain.Entities
             Location = location;
             Code = code;
             user.PersonName = personName;
+            LocationImages = locationImages;
         }
 
         public void Update(PersonName personName, NationalCode nationalCode,

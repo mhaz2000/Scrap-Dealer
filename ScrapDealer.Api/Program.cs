@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSignalRConfig();
+builder.Services.AddSwaggerConfig();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers().AddJsonOptions(opt =>
@@ -20,14 +21,28 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowNextJsFrontend", policy =>
     {
-        //policy.WithOrigins("http://localhost:3000", "http://45.159.150.33:3000") 
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        policy.SetIsOriginAllowed(origin =>
+            {
+                if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+                    return false;
+
+                var host = uri.Host;
+                var port = uri.Port;
+
+                if (host == "zayron.ir" || host.EndsWith(".zayron.ir"))
+                    return true;
+
+                return (host == "localhost" || host == "127.0.0.1") &&
+                       (port == 3000 || port == 3001);
+            })
+            .AllowAnyMethod()
+            .AllowAnyHeader();
     });
 });
 
 var app = builder.Build();
+
+app.UseSwaggerConfig();
 
 app.UseCors("AllowNextJsFrontend");
 

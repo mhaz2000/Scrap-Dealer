@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScrapDealer.Infrastructure.EF.Contexts;
 
@@ -11,9 +12,11 @@ using ScrapDealer.Infrastructure.EF.Contexts;
 namespace ScrapDealer.Infrastructure.EF.Migrations
 {
     [DbContext(typeof(ReadDbContext))]
-    partial class ReadDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260805075043_weight-added-in-invoice-item")]
+    partial class weightaddedininvoiceitem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -261,9 +264,6 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Code")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("ContractId")
                         .HasColumnType("uniqueidentifier");
