@@ -27,5 +27,6 @@ namespace ScrapDealer.Application.DTO
         public double? Latitude { get; set; }
         public string ReferralCode { get; set; }
         public double? Longitude { get; set; }
+        public float Score { get; set; }
     }
 }

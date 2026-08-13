@@ -1,4 +1,5 @@
-﻿using ScrapDealer.Domain.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using ScrapDealer.Domain.Repositories;
 using ScrapDealer.Shared.Abstractions.Commands;
 using ScrapDealer.Shared.Abstractions.Exceptions;
 
@@ -13,7 +14,7 @@ namespace ScrapDealer.Application.Commands.Sellers.Handlers
 
         public async Task Handle(SellerToggleActivationCommand request, CancellationToken cancellationToken)
         {
-            var seller = await _repository.GetAsync(c => c.Id == request.Id);
+            var seller = await _repository.GetAsync(c => c.Id == request.Id, t => t.Include(s => s.User));
             if (seller is null)
                 throw new BusinessException("فروشنده یافت نشد.");
 

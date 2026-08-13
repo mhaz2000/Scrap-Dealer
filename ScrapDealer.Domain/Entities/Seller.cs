@@ -69,6 +69,7 @@ namespace ScrapDealer.Domain.Entities
         public void SetAsVerified() => Verified = true;
         public void SetActivationStatus(bool status, string? reason)
         {
+            User.IsActive = status;
             IsActive = status;
             InactiveReason = reason;
         }

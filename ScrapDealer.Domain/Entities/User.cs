@@ -13,7 +13,7 @@ namespace ScrapDealer.Domain.Entities
         public PersonName? PersonName { get; internal set; }
         public ReferralCode? ReferralCode { get; private set; }
 
-        public bool IsActive { get; private set; }
+        public bool IsActive { get; internal set; }
 
         private readonly List<UserRole> _roles = new List<UserRole>();
         public IReadOnlyCollection<UserRole> Roles => _roles.AsReadOnly();

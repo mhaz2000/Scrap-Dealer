@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ScrapDealer.Application.Commands.NewsCommand;
 using ScrapDealer.Application.DTO;
 using ScrapDealer.Application.Queries.NewsQueries;
@@ -51,6 +52,7 @@ namespace ScrapDealer.Api.Controllers
             return BaseOk();
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<PaginatedResult<NewsDto>>> Get([FromQuery] GetNewsListQuery query)
         {
@@ -58,8 +60,9 @@ namespace ScrapDealer.Api.Controllers
             return OkOrNotFound(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<ActionResult<NewsDto>> GetCategory(Guid id)
+        public async Task<ActionResult<NewsDto>> GetNew(Guid id)
         {
             var result = await _queryDispatcher.QueryAsync(new GetSingleNewsQuery(id));
             return OkOrNotFound(result);

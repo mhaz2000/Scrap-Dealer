@@ -1,4 +1,6 @@
-﻿namespace ScrapDealer.Application.DTO;
+﻿using ScrapDealer.Domain.Consts;
+
+namespace ScrapDealer.Application.DTO;
 
 public record BuyerContractDetailDto
 {
@@ -8,4 +10,6 @@ public record BuyerContractDetailDto
     public float SellerScore { get; set; }
     public string Address { get; set; }
     public string PhoneNumber { get; set; }
+    public ContractStatus Status { get; private set; }
+
 }

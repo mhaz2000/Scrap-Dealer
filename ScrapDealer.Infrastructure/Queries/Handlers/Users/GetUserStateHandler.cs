@@ -32,6 +32,7 @@ internal sealed class GetUserStateHandler : IQueryHandler<GetUserStateQuery, Use
 
         return new UserStateDto
         {
+            IsActive = user.IsActive,
             BuyerId = buyer?.Id,
             SellerId = seller?.Id,
             Verified = (buyer?.Verified ?? false) || (seller?.Verified ?? false)
