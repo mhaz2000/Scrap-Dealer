@@ -14,6 +14,7 @@ public record InvoiceDto
     public Guid Id { get; set; }
     public int InvoiceCode { get; set; }
     public int SaleOrderCode { get; set; }
+    public InvoiceStatus Status { get; set; }
 }
 
 public record InvoiceItemDto

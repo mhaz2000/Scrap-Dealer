@@ -15,8 +15,11 @@ namespace ScrapDealer.Infrastructure.Profiles
                     Id = t.Id,
                     SellerName = t.SaleOrder.Seller.FirstName + " " + t.SaleOrder.Seller.LastName,
                     IsIndustrial = t.SaleOrder.IsIndustrial,
+                    SaleOrderCode = t.SaleOrder.Code,
                     SellerScore = t.SaleOrder.Seller.Score,
                     SaleOrderId = t.SaleOrder.Id,
+                    Latitude = t.SaleOrder.Latitude,
+                    Longitude = t.SaleOrder.Longitude,
                     Items = t.SaleOrder.Items.Select(s => new SaleOrderItemDto()
                     {
                         Id = s.Id,
@@ -25,9 +28,9 @@ namespace ScrapDealer.Infrastructure.Profiles
                         SellerDescription = s.SellerDescription,
                         SystemDescription = s.SystemDescription,
                         SubCategory = s.SubCategory == null ? null :
-                            new SubCategoryDto(s.SubCategory.Id, s.SubCategory.Name, s.SubCategory.MinPrice, s.SubCategory.MaxPrice, s.SubCategory.LastUpdate.ToPersianDateTimeString("yyyy/MM/dd HH:mm", false), s.SubCategory.CategoryId, s.SubCategory.Images)
+                                        new SubCategoryDto(s.SubCategory.Id, s.SubCategory.Name, s.SubCategory.MinPrice, s.SubCategory.MaxPrice, s.SubCategory.LastUpdate.ToPersianDateTimeString("yyyy/MM/dd HH:mm", false), s.SubCategory.CategoryId, s.SubCategory.Images)
                     })
-                }).ForAllMembers(t=> t.Ignore());
+                }).ForAllMembers(t => t.Ignore());
         }
     }
 }

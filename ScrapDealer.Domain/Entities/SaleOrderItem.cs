@@ -8,7 +8,7 @@ namespace ScrapDealer.Domain.Entities
     {
         public SubCategory? SubCategory { get; private set; }
         public Guid? SubCategoryId { get; private set; }
-        public SaleType SaleType { get; private set; }
+        public SaleType? SaleType { get; private set; }
         public Description? SellerDescription { get; private set; }
         public Description? SystemDescription { get; private set; }
         public ICollection<Guid> Images { get; private set; } = [];
@@ -16,7 +16,7 @@ namespace ScrapDealer.Domain.Entities
         public SaleOrderItem() { }
 
         public SaleOrderItem(ICollection<Guid> images, SubCategory? subCategory,
-            Description? systemDescription, Description? sellerDescription, SaleType saleType)
+            Description? systemDescription, Description? sellerDescription, SaleType? saleType)
         {
             Images = images;
             SubCategory = subCategory;
@@ -26,7 +26,7 @@ namespace ScrapDealer.Domain.Entities
             SubCategoryId = subCategory?.Id;
         }
 
-        internal void AdminUpdate(SubCategory? subCategory, Description? systemDescription, SaleType saleType)
+        internal void AdminUpdate(SubCategory? subCategory, Description? systemDescription, SaleType? saleType)
         {
             SubCategory = subCategory;
             SystemDescription = systemDescription;

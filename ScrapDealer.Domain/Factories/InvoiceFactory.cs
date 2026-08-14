@@ -2,6 +2,7 @@
 using ScrapDealer.Domain.Entities;
 using ScrapDealer.Domain.Factories.interfaces;
 using ScrapDealer.Domain.ValueObjects.Base;
+using ScrapDealer.Shared.Abstractions.Exceptions;
 
 namespace ScrapDealer.Domain.Factories
 {
@@ -14,10 +15,16 @@ namespace ScrapDealer.Domain.Factories
             return new Invoice(contract, amountValue, code);
         }
 
-        public InvoiceItem CreateItem(SubCategory? subCategory, SaleType saleType, Amount amount, Weight? weight)
+        public InvoiceItem CreateItem(SubCategory? subCategory, SaleType saleType, Amount amount, double? weight)
         {
             var amountValue = Amount.Create(amount);
-            var weightValue = weight is null ? null : Weight.Create(weight);
+
+            if (saleType == SaleType.Kilogram && (!weight.HasValue || weight.Value <= 0))
+                throw new BusinessException("وزن برای کالاهای وزنی الزامی است.");
+
+            Weight? weightValue = null;
+            if (weight.HasValue)
+                weightValue = Weight.Create(weight.Value);
 
             return new InvoiceItem(amountValue, subCategory, saleType, weightValue);
         }

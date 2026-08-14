@@ -21,7 +21,7 @@ namespace ScrapDealer.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Upload([FromForm] IFormFile file)
+        public async Task<ActionResult<Guid>> Upload(IFormFile file)
         {
             using var stream = new MemoryStream();
             file.CopyTo(stream);

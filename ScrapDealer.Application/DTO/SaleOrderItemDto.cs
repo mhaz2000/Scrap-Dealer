@@ -8,7 +8,7 @@ namespace ScrapDealer.Application.DTO
         public string? SellerDescription { get; set; }
         public ICollection<Guid> Images { get; set; }
         public SubCategoryDto? SubCategory { get; set; }
-        public SaleType SaleType { get; set; }
+        public SaleType? SaleType { get; set; }
         public Guid Id { get; set; }
     }
 }

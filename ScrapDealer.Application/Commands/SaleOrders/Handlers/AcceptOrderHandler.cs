@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ScrapDealer.Domain.Consts;
 using ScrapDealer.Domain.Factories.interfaces;
 using ScrapDealer.Domain.Repositories;
 using ScrapDealer.Shared.Abstractions.Commands;
@@ -23,6 +24,10 @@ namespace ScrapDealer.Application.Commands.SaleOrders.Handlers
             var saleOrderRequest = await saleOrderRequestRepository.GetAsync(t => t.SaleOrderId == request.Id && t.BuyerId == buyer.Id);
             if (saleOrderRequest is not null)
                 await saleOrderRequestRepository.DeleteAsync(saleOrderRequest.Id);
+
+            var existingContract = await repository.GetAsync(t => t.SaleOrderId == saleOrder.Id);
+            if(existingContract is not null && !(existingContract.Status == ContractStatus.CancelledByBuyer || existingContract.Status == ContractStatus.CancelledBySeller))
+                throw new BusinessException("برای این سفارش فروش، قرارداد فعال وجود دارد.");
 
             var contract = factory.Create(saleOrder.Id, 0, 0, buyer.Id);
             await repository.AddAsync(contract);

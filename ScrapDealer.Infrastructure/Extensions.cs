@@ -19,7 +19,8 @@ namespace ScrapDealer.Infrastructure
 {
     public static class Extensions
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection 
+            AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddMemoryCache();
             services.AddStackExchangeRedisCache(options =>
@@ -67,6 +68,7 @@ namespace ScrapDealer.Infrastructure
             services.AddHttpClient<IMelliPayamakSmsService, MelliPayamakSmsService>();
             services.AddHttpClient<INeshanRevertGeocodingService, NeshanRevertGeocodingService>();
             services.AddHttpClient<IMapIRRevertGeocodingService, MapIRRevertGeocodingService>();
+            services.AddScoped<ILocationService, LocationService>();
 
 
             services.AddTransient<DatabaseSeeder>();

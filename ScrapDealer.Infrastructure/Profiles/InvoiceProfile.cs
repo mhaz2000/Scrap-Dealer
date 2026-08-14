@@ -26,6 +26,7 @@ namespace ScrapDealer.Infrastructure.Profiles
                     Amount = s.Amount,
                     InvoiceCode = s.Code,
                     SaleOrderCode = s.Contract.SaleOrder.Code,
+                    Status = s.Status,
                     BuyerName = s.Contract.Buyer.FirstName + " " + s.Contract.Buyer.LastName,
                     SellerName = s.Contract.SaleOrder.Seller.FirstName + " " + s.Contract.SaleOrder.Seller.LastName,
                     DateTime = s.DateTime,
@@ -47,6 +48,7 @@ namespace ScrapDealer.Infrastructure.Profiles
                     Amount = s.Amount,
                     InvoiceCode = s.Code,
                     SaleOrderCode = s.Contract.SaleOrder.Code,
+                    Status = s.Status,
                     BuyerName = s.Contract.Buyer.FirstName + " " + s.Contract.Buyer.LastName,
                     SellerName = s.Contract.SaleOrder.Seller.FirstName + " " + s.Contract.SaleOrder.Seller.LastName,
                     DateTime = s.DateTime

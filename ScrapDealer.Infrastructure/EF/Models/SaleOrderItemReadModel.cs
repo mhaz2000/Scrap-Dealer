@@ -6,7 +6,7 @@ namespace ScrapDealer.Infrastructure.EF.Models
     internal class SaleOrderItemReadModel
     {
         public Guid Id { get; set; }
-        public SaleType SaleType { get; set; }
+        public SaleType? SaleType { get; set; }
         public Guid? SubCategoryId { get; set; }
         public SubCategoryReadModel? SubCategory { get; set; }
         public ICollection<Guid> Images { get; set; } = [];

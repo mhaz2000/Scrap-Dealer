@@ -11,8 +11,8 @@ namespace ScrapDealer.Domain.Factories.interfaces
         SaleOrder Update(SaleOrderAddress address, double latitude, double longitude, Telephone? telephone, bool saleAtBuyersLocation, SaleOrder saleOrder);
 
         SaleOrderItem CreateItem(ICollection<Guid> images, SubCategory? subCategory,
-            Description? systemDescription, Description? sellerDescription, SaleType saleType);
+            Description? systemDescription, Description? sellerDescription, SaleType? saleType);
 
-        SaleOrderItem UpdateItem(SubCategory? subCategory, Description? systemDescription, SaleType saleType, SaleOrderItem item, SaleOrder saleOrder);
+        SaleOrderItem UpdateItem(SubCategory? subCategory, Description? systemDescription, SaleType? saleType, SaleOrderItem item, SaleOrder saleOrder);
     }
 }

@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScrapDealer.Infrastructure.EF.Contexts;
 
 #nullable disable
 
-namespace ScrapDealer.Infrastructure.EF.Migrations
+namespace ScrapDealer.Infrastructure.Migrations.ReadDb
 {
     [DbContext(typeof(ReadDbContext))]
-    partial class ReadDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260813185423_add-invoice-status")]
+    partial class addinvoicestatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -462,7 +465,7 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Property<Guid>("SaleOrderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("SaleType")
+                    b.Property<int>("SaleType")
                         .HasColumnType("int");
 
                     b.Property<string>("SellerDescription")

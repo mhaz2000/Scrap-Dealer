@@ -4,6 +4,7 @@ using System.Text.Json;
 
 namespace ScrapDealer.Infrastructure.Services.ExternalServices
 {
+
     public class GreenParsSmsService(HttpClient httpClient, IConfiguration configuration) : IGreenParsSmsService
     {
         private readonly string endPoint = configuration["GreenPars:Address"] ?? throw new Exception("Green Pars endpoint not found.");

@@ -54,31 +54,3 @@ internal class GetNearbyBuyersHandler : IQueryHandler<GetNearbyBuyersQuery, List
     }
 }
 
-internal class GetSaleOrderRequestHandler : IQueryHandler<GetSaleOrderRequestsQuery, List<SaleOrderRequestDto>>
-{
-    private readonly DbSet<SaleOrderRequestReadModel> _saleOrderRequests;
-    private readonly DbSet<ContractReadModel> _contracts;
-    private readonly IMapper _mapper;
-
-    public GetSaleOrderRequestHandler(ReadDbContext context, IMapper mapper)
-    {
-        _saleOrderRequests = context.SaleOrderRequests;
-        _contracts = context.Contracts;
-        _mapper = mapper;
-    }
-
-    public async Task<List<SaleOrderRequestDto>> Handle(GetSaleOrderRequestsQuery request, CancellationToken cancellationToken)
-    {
-        var requests = _saleOrderRequests.Where(t => t.Buyer.UserId == request.UserId && t.SaleOrder.Status == SaleOrderStatus.ConfirmedBySystem)
-            .Include(t=> t.Buyer)
-            .Include(t=>t.SaleOrder).ThenInclude(t=>t.Seller)
-            .Include(t=>t.SaleOrder).ThenInclude(t=>t.Items).ThenInclude(t=> t.SubCategory).AsQueryable();
-
-        var contracts = _contracts.Where(t=> !(t.Status == ContractStatus.CancelledBySeller || t.Status == ContractStatus.CancelledByBuyer));
-
-        requests = requests.Where(t => !contracts.Any(s => s.SaleOrderId == t.SaleOrderId));
-
-        return _mapper.Map<List<SaleOrderRequestDto>>(requests.ToList());
-    }
-}
-

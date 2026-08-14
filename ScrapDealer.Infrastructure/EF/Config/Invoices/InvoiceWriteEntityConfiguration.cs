@@ -20,6 +20,9 @@ internal class InvoiceWriteEntityConfiguration : IEntityTypeConfiguration<Invoic
             .HasConversion(code => code.Value, code => Code.Create(code))
             .IsRequired();
 
+        builder.Property(u => u.Status)
+            .IsRequired();
+
         builder.HasOne(x => x.Contract)
             .WithMany()
             .HasForeignKey(x => x.ContractId)

@@ -1,4 +1,5 @@
 ﻿using DNTPersianUtils.Core;
+using ScrapDealer.Domain.Consts;
 
 namespace ScrapDealer.Application.DTO;
 
@@ -13,4 +14,5 @@ public record InvoiceListDto
     public Guid Id { get; set; }
     public int InvoiceCode { get; set; }
     public int SaleOrderCode { get; set; }
+    public InvoiceStatus Status { get; set; }
 }

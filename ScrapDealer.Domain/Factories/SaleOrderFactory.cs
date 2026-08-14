@@ -19,7 +19,7 @@ namespace ScrapDealer.Domain.Factories
         }
 
         public SaleOrderItem CreateItem(ICollection<Guid> images, SubCategory? subCategory,
-            Description? systemDescription, Description? sellerDescription, SaleType saleType)
+            Description? systemDescription, Description? sellerDescription, SaleType? saleType)
         {
             var sellerDescriptionValue = Description.Create(sellerDescription);
             var systemDescriptionValue = Description.Create(systemDescription);
@@ -39,7 +39,7 @@ namespace ScrapDealer.Domain.Factories
 
         }
 
-        public SaleOrderItem UpdateItem(SubCategory? subCategory, Description? systemDescription, SaleType saleType, SaleOrderItem item, SaleOrder saleOrder)
+        public SaleOrderItem UpdateItem(SubCategory? subCategory, Description? systemDescription, SaleType? saleType, SaleOrderItem item, SaleOrder saleOrder)
         {
             var systemDescriptionValue = Description.Create(systemDescription);
 
