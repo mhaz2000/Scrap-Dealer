@@ -63,5 +63,14 @@ namespace ScrapDealer.Api.Controllers
         }
 
 
+        [Authorize(Roles = "Buyer")]
+        [HttpGet("SaleOrderByContractId/{id:guid}")]
+        public async Task<ActionResult<SaleOrderDto>> GetSaleOrderByContractId([FromRoute] Guid id)
+        {
+            var result = await queryDispatcher.QueryAsync(new GetSaleOrderByContractIdQuery(id));
+            return OkOrNotFound(result);
+        }
+
+
     }
 }

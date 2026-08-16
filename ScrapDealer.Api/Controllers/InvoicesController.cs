@@ -47,7 +47,7 @@ namespace ScrapDealer.Api.Controllers
         [HttpGet("GetByContract/{id:guid}")]
         public async Task<ActionResult<InvoiceDto>> GetDetialByContractId([FromRoute] Guid id)
         {
-            var result = await queryDispatcher.QueryAsync(new GetInvoiceByIdQuery(id));
+            var result = await queryDispatcher.QueryAsync(new GetInvoiceByContractIdQuery(id));
             return OkOrNotFound(result);
         }
 

@@ -4,40 +4,23 @@ namespace ScrapDealer.Domain.ValueObjects.News
 {
     public class NewsContent : ValueObject
     {
-        public string Value { get; }
+        public IReadOnlyCollection<NewsContentBlock> Blocks { get; }
 
         private NewsContent() { }
-        private NewsContent(string value)
+        private NewsContent(IEnumerable<NewsContentBlock> blocks)
         {
-            Value = value.Trim();
+            Blocks = blocks?.ToList() ?? new List<NewsContentBlock>();
         }
 
-        public static NewsContent Create(string value)
+        public static NewsContent Create(IEnumerable<NewsContentBlock> blocks)
         {
-            return new NewsContent(value);
+            return new NewsContent(blocks);
         }
-
-        public override string ToString() => Value;
-
-        public override bool Equals(object obj)
-        {
-            if (obj is NewsContent other)
-                return Value == other.Value;
-
-            return false;
-        }
-
-        public override int GetHashCode() => Value.GetHashCode();
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
-            yield return Value;
+            foreach (var block in Blocks)
+                yield return block;
         }
-
-        public static implicit operator string(NewsContent newsContent)
-            => newsContent.Value;
-
-        public static implicit operator NewsContent(string value)
-            => Create(value);
     }
 }

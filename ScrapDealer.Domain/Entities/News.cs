@@ -8,6 +8,8 @@ namespace ScrapDealer.Domain.Entities
         public NewsTitle Title { get; private set; }
         public NewsSummary Summary { get; private set; }
         public NewsContent Content { get; private set; }
+        public DateTime CreatedAt { get; private set; }
+        public DateTime UpdatedAt { get; private set; }
 
         public News()
         {
@@ -18,6 +20,8 @@ namespace ScrapDealer.Domain.Entities
             Title = newsTitle;
             Summary = newsSummary;
             Content = newsContent;
+            CreatedAt = DateTime.Now;
+            UpdatedAt = DateTime.Now;
         }
 
         public void Update(NewsTitle newsTitle, NewsSummary newsSummary, NewsContent newsContent)
@@ -25,6 +29,7 @@ namespace ScrapDealer.Domain.Entities
             Title = newsTitle;
             Summary = newsSummary;
             Content = newsContent;
+            UpdatedAt = DateTime.Now;
         }
     }
 }
