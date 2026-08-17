@@ -1,6 +1,7 @@
 ﻿using ScrapDealer.Domain.Consts;
 using ScrapDealer.Domain.ValueObjects.Base;
 using ScrapDealer.Domain.ValueObjects.Profiles;
+using ScrapDealer.Domain.ValueObjects.SaleOrders;
 using ScrapDealer.Shared.Abstractions.Domain;
 
 namespace ScrapDealer.Domain.Entities
@@ -26,6 +27,7 @@ namespace ScrapDealer.Domain.Entities
 
         public Guid? ProfileFormFileId { get; private set; }
         public Guid? NationalCardFileId { get; private set; }
+        public Location? Location { get; private set; }
 
         public Seller()
         {
@@ -33,7 +35,8 @@ namespace ScrapDealer.Domain.Entities
         }
 
         public Seller(PersonName personName, NationalCode nationalCode,
-            ProfileAddress address, Email email, PersonType personType, Gender gender, User user, Guid? nationalCardFileId, Guid? profileFormFileId, Code code)
+            ProfileAddress address, Email email, PersonType personType, Gender gender, User user, Guid? nationalCardFileId, Guid? profileFormFileId, Code code,
+            Location? location = null)
         {
             Id = Guid.NewGuid();
             PersonName = personName;
@@ -50,10 +53,12 @@ namespace ScrapDealer.Domain.Entities
             NationalCardFileId = nationalCardFileId;
             ProfileFormFileId = profileFormFileId;
             Code = code;
+            Location = location;
         }
 
         public void Update(PersonName personName, NationalCode nationalCode,
-            ProfileAddress address, Email email, PersonType personType, Gender gender, Guid? nationalCardFileId, Guid? profileFormFileId)
+            ProfileAddress address, Email email, PersonType personType, Gender gender, Guid? nationalCardFileId, Guid? profileFormFileId,
+            Location? location = null)
         {
             PersonName = personName;
             NationalCode = nationalCode;
@@ -63,6 +68,7 @@ namespace ScrapDealer.Domain.Entities
             PersonType = personType;
             NationalCardFileId = nationalCardFileId;
             ProfileFormFileId = profileFormFileId;
+            Location = location;
             User.PersonName = personName;
         }
 

@@ -14,7 +14,7 @@ namespace ScrapDealer.Application.Commands.SaleOrders.Handlers
         public async Task Handle(AcceptOrderCommand request, CancellationToken cancellationToken)
         {
             var saleOrder = await saleOrderRepository.GetAsync(s => s.Id == request.Id && !s.Seller.IsDeleted, t => t.Include(s => s.Seller));
-            if (saleOrder is null || saleOrder.Status != Domain.Consts.SaleOrderStatus.ConfirmedBySystem)
+            if (saleOrder is null || saleOrder.Status != SaleOrderStatus.ConfirmedBySystem)
                 throw new BusinessException("سفارش فروش یافت نشد.");
 
             var buyer = await buyerRepository.GetAsync(c => c.UserId == request.UserId && c.IsActive);
@@ -28,6 +28,8 @@ namespace ScrapDealer.Application.Commands.SaleOrders.Handlers
             var existingContract = await repository.GetAsync(t => t.SaleOrderId == saleOrder.Id);
             if(existingContract is not null && !(existingContract.Status == ContractStatus.CancelledByBuyer || existingContract.Status == ContractStatus.CancelledBySeller))
                 throw new BusinessException("برای این سفارش فروش، قرارداد فعال وجود دارد.");
+
+            saleOrder.Status = SaleOrderStatus.AcceptedByBuyer;
 
             var contract = factory.Create(saleOrder.Id, 0, 0, buyer.Id);
             await repository.AddAsync(contract);

@@ -4,6 +4,7 @@
     {
         CreatedOrUpdated,
         ConfirmedBySystem,
-        RejectedBySystem
+        RejectedBySystem,
+        AcceptedByBuyer
     }
 }

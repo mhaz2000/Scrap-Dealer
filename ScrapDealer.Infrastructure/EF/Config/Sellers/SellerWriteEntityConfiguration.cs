@@ -66,6 +66,14 @@ namespace ScrapDealer.Infrastructure.EF.Config.Buyers
                     .HasColumnName("LastName");
             });
 
+            builder.OwnsOne(x => x.Location, location =>
+            {
+                location.Property(l => l.Latitude)
+                    .HasColumnName("Latitude");
+
+                location.Property(l => l.Longitude)
+                    .HasColumnName("Longitude");
+            });
 
             builder.HasQueryFilter(p => !p.IsDeleted);
         }

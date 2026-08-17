@@ -28,6 +28,8 @@ namespace ScrapDealer.Infrastructure.EF.Models
         public Guid? ProfileFormFileId { get; set; }
         public Guid? NationalCardFileId { get; set; }
 
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
 
     }
 }

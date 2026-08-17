@@ -12,6 +12,9 @@ namespace ScrapDealer.Infrastructure.EF.Config.Buyers
 
             builder.HasQueryFilter(p => !p.IsDeleted);
 
+            builder.Property(x => x.Latitude).HasColumnName("Latitude");
+            builder.Property(x => x.Longitude).HasColumnName("Longitude");
+
             builder.HasOne(x => x.User)
                 .WithMany()
                 .HasForeignKey(x => x.UserId)

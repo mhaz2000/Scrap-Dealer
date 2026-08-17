@@ -55,7 +55,7 @@ namespace ScrapDealer.Application.Commands.Sellers.Handlers
 
             var seller = _factory.Create(request.FirstName, request.LastName, request.NationalCode, request.City, request.Province,
                 request.PostalCode, request.AddressDescription, request.Email, request.Gender, request.PersonType, user,
-                request.NationalCardFileId, request.ProfileFormFileId, nextCode);
+                request.NationalCardFileId, request.ProfileFormFileId, nextCode, request.Latitude, request.Longitude);
 
             var sellerUserRole = user.AddRole(sellerRole!);
 

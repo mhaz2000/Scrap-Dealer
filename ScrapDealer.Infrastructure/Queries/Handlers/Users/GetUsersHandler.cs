@@ -43,7 +43,8 @@ namespace ScrapDealer.Infrastructure.Queries.Handlers.Users
 
             if (!string.IsNullOrEmpty(query.Search))
                 dbQuery = dbQuery
-                    .Where(u => Microsoft.EntityFrameworkCore.EF.Functions.Like(u.Username, $"%{query.Search}%"));
+                    .Where(u => Microsoft.EntityFrameworkCore.EF.Functions.Like(u.Username, $"%{query.Search}%") ||
+                                Microsoft.EntityFrameworkCore.EF.Functions.Like(u.FirstName + " " + u.LastName, $"%{query.Search}%"));
 
             var users = dbQuery.AsNoTracking();
             var paginatedResult = await users.ToPaginatedResultAsync<UserReadModel, UserDto>(query.PageIndex, query.PageSize, query.SortBy ?? string.Empty, _mapper);
