@@ -11,5 +11,6 @@ public record BuyerContractDetailDto
     public string Address { get; set; }
     public string PhoneNumber { get; set; }
     public ContractStatus Status { get; private set; }
+    public float? ContractScore { get; set; }
 
 }

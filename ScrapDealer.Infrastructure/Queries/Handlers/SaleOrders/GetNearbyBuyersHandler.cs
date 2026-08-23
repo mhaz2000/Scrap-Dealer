@@ -40,7 +40,7 @@ internal class GetNearbyBuyersHandler : IQueryHandler<GetNearbyBuyersQuery, List
         if (saleOrder.Latitude is null || saleOrder.Longitude is null)
             throw new BusinessException("موقعیت جغرافیایی دستور فروش مشخص نشده است.");
 
-        var allVerifiedBuyers = _buyers.Where(t => t.Verified && t.Latitude != null && t.Longitude != null).ToList();
+        var allVerifiedBuyers = _buyers.Where(t => t.Verified && t.IsFixedLocation && t.Latitude != null && t.Longitude != null).ToList();
 
         var nearbyBuyers = allVerifiedBuyers
             .Where(b => GeoUtils.GetDistanceKm(

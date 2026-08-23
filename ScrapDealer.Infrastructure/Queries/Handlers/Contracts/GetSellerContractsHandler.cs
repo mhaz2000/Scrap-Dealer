@@ -22,7 +22,8 @@ internal class GetSellerContractsHandler : IQueryHandler<GetSellerContractsQuery
     }
     public async Task<PaginatedResult<SellerContractDto>> Handle(GetSellerContractsQuery query, CancellationToken cancellationToken)
     {
-        var dbQuery = _contracts.Include(c => c.Buyer).AsQueryable();
+        var dbQuery = _contracts.Include(c => c.Buyer).Include(t=> t.SaleOrder).ThenInclude(t=>t.Seller)
+            .Where(t=> t.SaleOrder.Seller.UserId == query.UserId).AsQueryable();
 
         if (query.IsOngoing is not null)
         {

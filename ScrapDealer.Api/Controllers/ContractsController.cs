@@ -18,7 +18,7 @@ namespace ScrapDealer.Api.Controllers
         [HttpGet("BuyerContracts")]
         public async Task<ActionResult<PaginatedResult<BuyerContractDto>>> GetBuyerContracts([FromQuery] GetBuyerContractsQuery query)
         {
-            var result = await queryDispatcher.QueryAsync(query);
+            var result = await queryDispatcher.QueryAsync(query with { UserId = UserId});
             return OkOrNotFound(result);
         }
 
@@ -26,7 +26,7 @@ namespace ScrapDealer.Api.Controllers
         [HttpGet("SellerContracts")]
         public async Task<ActionResult<PaginatedResult<SellerContractDto>>> GetSellerContracts([FromQuery] GetSellerContractsQuery query)
         {
-            var result = await queryDispatcher.QueryAsync(query);
+            var result = await queryDispatcher.QueryAsync(query with { UserId = UserId});
             return OkOrNotFound(result);
         }
 

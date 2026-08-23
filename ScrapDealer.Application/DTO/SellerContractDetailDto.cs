@@ -13,5 +13,5 @@ public record SellerContractDetailDto
     public string? Address { get; set; }
     public string? NumberPlate { get; set; }
     public ContractStatus Status { get; private set; }
-
+    public float? ContractScore { get; set; }
 }
