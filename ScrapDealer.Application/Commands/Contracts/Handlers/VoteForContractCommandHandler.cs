@@ -29,15 +29,27 @@ internal class VoteForContractCommandHandler(IMediator mediator,IContractReposit
         if(!isSeller && !isBuyer)
             throw new BusinessException("قرداد یافت نشد.");
 
-        var scoreHistory = scoreHistoryFactory.Create(request.Score, contract.Buyer, contract.SaleOrder.Seller, contract, isBuyer ? ScoreFor.Seller : ScoreFor.Buyer, request.Comment);
-        await scoreHistoryRepository.AddAsync(scoreHistory);
+        var scoreFor = isBuyer ? ScoreFor.Seller : ScoreFor.Buyer;
+
+        var existing = await scoreHistoryRepository.GetAsync(
+            sh => sh.ContractId == request.ContractId && sh.ScoreFor == scoreFor);
+
+        if (existing is not null)
+        {
+            existing.Update(request.Score, request.Comment);
+        }
+        else
+        {
+            var scoreHistory = scoreHistoryFactory.Create(request.Score, contract.Buyer, contract.SaleOrder.Seller, contract, scoreFor, request.Comment);
+            await scoreHistoryRepository.AddAsync(scoreHistory);
+        }
+
+        await scoreHistoryRepository.CommitAsync();
 
         if(isBuyer)
             await mediator.Publish(new UpdateSellerScoreEvent(contract.SaleOrder.SellerId, request.Score));
         else
             await mediator.Publish(new UpdateBuyerScoreEvent(contract.BuyerId, request.Score));
-
-        await scoreHistoryRepository.CommitAsync();
     }
 }
 

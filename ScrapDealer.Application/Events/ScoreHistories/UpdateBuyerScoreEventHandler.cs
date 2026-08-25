@@ -15,7 +15,9 @@ public class UpdateBuyerScoreEventHandler(IBuyerRepository buyerRepository, ISco
         if (buyer is null)
             return;
 
-        buyer.Score = ((scoreHistories?.Sum(s => s.Value) ?? 0) + @event.Score) / ((scoreHistories?.Count() ?? 0) + 1);
+        buyer.Score = scoreHistories.Count == 0
+            ? 0
+            : scoreHistories.Sum(s => s.Value) / scoreHistories.Count;
         await buyerRepository.CommitAsync();
 
     }

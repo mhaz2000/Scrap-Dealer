@@ -16,6 +16,9 @@ namespace ScrapDealer.Infrastructure.EF.Config.SaleOrders
                 .HasForeignKey(u => u.SubCategoryId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Property(u => u.ModifiedByAdmin)
+                .IsRequired();
+
             builder.Property(s => s.Images)
                 .HasConversion(
                     v => string.Join(",", v),

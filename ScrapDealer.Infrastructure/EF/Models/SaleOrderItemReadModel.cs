@@ -12,6 +12,7 @@ namespace ScrapDealer.Infrastructure.EF.Models
         public ICollection<Guid> Images { get; set; } = [];
         public string? SellerDescription { get; set; }
         public string? SystemDescription { get; set; }
+        public bool ModifiedByAdmin { get; set; }
         public SaleOrderReadModel SaleOrder { get; set; }
         public Guid SaleOrderId { get; set; }
     }

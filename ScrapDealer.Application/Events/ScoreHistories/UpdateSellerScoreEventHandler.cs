@@ -23,7 +23,9 @@ public class UpdateSellerScoreEventHandler(ISellerRepository sellerRepository, I
         if (seller is null )
             return;
 
-        seller.Score = ((scoreHistories?.Sum(s => s.Value) ?? 0) + @event.Score) / ((scoreHistories?.Count() ?? 0) + 1);
+        seller.Score = scoreHistories.Count == 0
+            ? 0
+            : scoreHistories.Sum(s => s.Value) / scoreHistories.Count;
         await sellerRepository.CommitAsync();
 
     }

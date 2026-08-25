@@ -29,5 +29,11 @@ namespace ScrapDealer.Domain.Entities
             ContractId = contract.Id;
             Comment = comment;
         }
+
+        public void Update(float score, string? comment)
+        {
+            Score = Score.Create(score);
+            Comment = comment;
+        }
     }
 }

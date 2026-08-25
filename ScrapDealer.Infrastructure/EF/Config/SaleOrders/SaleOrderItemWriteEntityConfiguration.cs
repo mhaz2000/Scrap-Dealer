@@ -22,6 +22,9 @@ namespace ScrapDealer.Infrastructure.EF.Config.SaleOrders
                     value => string.IsNullOrWhiteSpace(value) ? null : Description.Create(value))
                 .IsRequired(false);
 
+            builder.Property(u => u.ModifiedByAdmin)
+                .IsRequired();
+
             builder.HasOne(u => u.SubCategory)
                 .WithMany()
                 .HasForeignKey(u => u.SubCategoryId)

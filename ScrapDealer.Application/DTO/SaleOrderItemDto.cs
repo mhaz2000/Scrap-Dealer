@@ -10,5 +10,6 @@ namespace ScrapDealer.Application.DTO
         public SubCategoryDto? SubCategory { get; set; }
         public SaleType? SaleType { get; set; }
         public Guid Id { get; set; }
+        public bool ModifiedByAdmin { get; set; }
     }
 }

@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScrapDealer.Infrastructure.EF.Contexts;
 
 #nullable disable
 
-namespace ScrapDealer.Infrastructure.EF.Migrations
+namespace ScrapDealer.Infrastructure.Migrations.ReadDb
 {
-    [DbContext(typeof(WriteDbContext))]
-    partial class WriteDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ReadDbContext))]
+    [Migration("20260825055822_SaleOrderItemModifiedByAdminRead")]
+    partial class SaleOrderItemModifiedByAdminRead
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,11 +25,18 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Buyer", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.BuyerReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ActivityArea")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AddressDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("BusinessLicenseFileId")
                         .HasColumnType("uniqueidentifier");
@@ -34,10 +44,18 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Property<Guid?>("CarCardFileId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Code")
                         .HasColumnType("int");
 
                     b.Property<string>("CompanyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Gender")
@@ -58,9 +76,21 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Property<bool>("IsWholeSaleBuyer")
                         .HasColumnType("bit");
 
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("float")
+                        .HasColumnName("Latitude");
+
                     b.Property<string>("LocationImages")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("float")
+                        .HasColumnName("Longitude");
 
                     b.Property<Guid>("NationalCardFileId")
                         .HasColumnType("uniqueidentifier");
@@ -72,8 +102,16 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Property<string>("NumberPlate")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("ProfileFormFileId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Province")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("Score")
                         .HasColumnType("real");
@@ -91,7 +129,40 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("Buyers", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Category", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.CategoryPriceHistoryReadModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("MaxPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MinPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("SubCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.ToTable("CategoryPriceHistories", (string)null);
+                });
+
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.CategoryReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -107,6 +178,12 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Property<DateTime>("LastUpdate")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("MaxPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MinPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -116,34 +193,7 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("Categories", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.CategoryPriceHistory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("SubCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("SubCategoryId");
-
-                    b.ToTable("CategoryPriceHistories", (string)null);
-                });
-
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Contract", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.ContractReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -176,7 +226,37 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("Contracts", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Invoice", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.InvoiceItemReadModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("InvoiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SaleType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("SubCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double?>("Weight")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.ToTable("InvoiceItems", (string)null);
+                });
+
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.InvoiceReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -207,37 +287,7 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("Invoices", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.InvoiceItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid?>("InvoiceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("SaleType")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("SubCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double?>("Weight")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InvoiceId");
-
-                    b.HasIndex("SubCategoryId");
-
-                    b.ToTable("InvoiceItems", (string)null);
-                });
-
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.News", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.NewsReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -269,7 +319,7 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("News", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Notification", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.NotificationReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -299,7 +349,7 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("Notifications", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Referral", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.ReferralReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -326,14 +376,15 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RefereeUserId");
+                    b.HasIndex("RefereeUserId")
+                        .IsUnique();
 
                     b.HasIndex("ReferrerUserId");
 
                     b.ToTable("Referrals", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Reward", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.RewardReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -361,7 +412,35 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("Rewards", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Role", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.RolePermissionReadModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PermissionName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RoleReadModelId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("RoleReadModelId");
+
+                    b.ToTable("RolePermissions", (string)null);
+                });
+
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.RoleReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -379,75 +458,7 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("Roles", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.RolePermission", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PermissionName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("RolePermissions", (string)null);
-                });
-
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.SaleOrder", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Code")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsIndustrial")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("ModifiedByAdmin")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("RejectionReason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("SaleAtBuyersLocation")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("SellerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Telephone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SellerId");
-
-                    b.ToTable("SaleOrders", (string)null);
-                });
-
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.SaleOrderItem", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.SaleOrderItemReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -460,7 +471,7 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Property<bool>("ModifiedByAdmin")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("SaleOrderId")
+                    b.Property<Guid>("SaleOrderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("SaleType")
@@ -484,7 +495,57 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("SaleOrderItems", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.SaleOrderRequest", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.SaleOrderReadModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Code")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsIndustrial")
+                        .HasColumnType("bit");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("float");
+
+                    b.Property<bool>("ModifiedByAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RejectionReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("SaleAtBuyersLocation")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("SellerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Telephone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SellerId");
+
+                    b.ToTable("SaleOrders", (string)null);
+                });
+
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.SaleOrderRequestReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -508,7 +569,7 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("SaleOrderRequests", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.ScoreHistory", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.ScoreHistoryReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -546,16 +607,30 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("ScoreHistories", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Seller", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.SellerReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int?>("ActivityArea")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AddressDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Code")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -571,6 +646,18 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("float")
+                        .HasColumnName("Latitude");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("float")
+                        .HasColumnName("Longitude");
+
                     b.Property<Guid?>("NationalCardFileId")
                         .HasColumnType("uniqueidentifier");
 
@@ -581,8 +668,15 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Property<int>("PersonType")
                         .HasColumnType("int");
 
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("ProfileFormFileId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Province")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("Score")
                         .HasColumnType("real");
@@ -600,11 +694,17 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("Sellers", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Settings", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.SettingsReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("BuyerCommissionFixedAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<float?>("BuyerCommissionRate")
+                        .HasColumnType("real");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -614,7 +714,7 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("Settings", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.SubCategory", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.SubCategoryReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -633,6 +733,12 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Property<DateTime>("LastUpdate")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("MaxPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MinPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -644,31 +750,7 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("SubCategories", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Ticket", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("Number")
-                        .HasColumnType("decimal(20,0)");
-
-                    b.Property<bool>("Opened")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tickets", (string)null);
-                });
-
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.TicketMessage", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.TicketMessageReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -703,11 +785,38 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("TicketMessages", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.User", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.TicketReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Number")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.Property<bool>("Opened")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tickets", (string)null);
+                });
+
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.UserReadModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -715,7 +824,11 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
@@ -738,7 +851,7 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.UserRole", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.UserRoleReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -759,7 +872,7 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("UserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Wallet", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.WalletReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -790,14 +903,11 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("Wallets", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.WalletTransaction", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.WalletTransactionReadModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -822,181 +932,41 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("WalletTransactions", (string)null);
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Buyer", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.BuyerReadModel", b =>
                 {
-                    b.HasOne("ScrapDealer.Domain.Entities.User", "User")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.UserReadModel", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("ScrapDealer.Domain.ValueObjects.Profiles.ProfileAddress", "Address", b1 =>
-                        {
-                            b1.Property<Guid>("BuyerId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("ActivityArea")
-                                .HasColumnType("int")
-                                .HasColumnName("ActivityArea");
-
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("City");
-
-                            b1.Property<string>("Description")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("AddressDescription");
-
-                            b1.Property<string>("PostalCode")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PostalCode");
-
-                            b1.Property<string>("Province")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("Province");
-
-                            b1.HasKey("BuyerId");
-
-                            b1.ToTable("Buyers");
-
-                            b1.WithOwner()
-                                .HasForeignKey("BuyerId");
-                        });
-
-                    b.OwnsOne("ScrapDealer.Domain.ValueObjects.SaleOrders.Location", "Location", b1 =>
-                        {
-                            b1.Property<Guid>("BuyerId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<double>("Latitude")
-                                .HasColumnType("float")
-                                .HasColumnName("Latitude");
-
-                            b1.Property<double>("Longitude")
-                                .HasColumnType("float")
-                                .HasColumnName("Longitude");
-
-                            b1.HasKey("BuyerId");
-
-                            b1.ToTable("Buyers");
-
-                            b1.WithOwner()
-                                .HasForeignKey("BuyerId");
-                        });
-
-                    b.OwnsOne("ScrapDealer.Domain.ValueObjects.Profiles.PersonName", "PersonName", b1 =>
-                        {
-                            b1.Property<Guid>("BuyerId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("FirstName")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("FirstName");
-
-                            b1.Property<string>("LastName")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LastName");
-
-                            b1.HasKey("BuyerId");
-
-                            b1.ToTable("Buyers");
-
-                            b1.WithOwner()
-                                .HasForeignKey("BuyerId");
-                        });
-
-                    b.Navigation("Address")
-                        .IsRequired();
-
-                    b.Navigation("Location");
-
-                    b.Navigation("PersonName")
-                        .IsRequired();
-
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Category", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.CategoryPriceHistoryReadModel", b =>
                 {
-                    b.OwnsOne("ScrapDealer.Domain.ValueObjects.Category.CategoryPriceRange", "PriceRange", b1 =>
-                        {
-                            b1.Property<Guid>("CategoryId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<decimal>("MaxValue")
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("MaxPrice");
-
-                            b1.Property<decimal>("MinValue")
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("MinPrice");
-
-                            b1.HasKey("CategoryId");
-
-                            b1.ToTable("Categories");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CategoryId");
-                        });
-
-                    b.Navigation("PriceRange")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.CategoryPriceHistory", b =>
-                {
-                    b.HasOne("ScrapDealer.Domain.Entities.Category", "Category")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.CategoryReadModel", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId");
 
-                    b.HasOne("ScrapDealer.Domain.Entities.SubCategory", "SubCategory")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.SubCategoryReadModel", "SubCategory")
                         .WithMany()
                         .HasForeignKey("SubCategoryId");
 
-                    b.OwnsOne("ScrapDealer.Domain.ValueObjects.Category.CategoryPriceRange", "PriceRange", b1 =>
-                        {
-                            b1.Property<Guid>("CategoryPriceHistoryId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<decimal>("MaxValue")
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("MaxPrice");
-
-                            b1.Property<decimal>("MinValue")
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("MinPrice");
-
-                            b1.HasKey("CategoryPriceHistoryId");
-
-                            b1.ToTable("CategoryPriceHistories");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CategoryPriceHistoryId");
-                        });
-
                     b.Navigation("Category");
-
-                    b.Navigation("PriceRange")
-                        .IsRequired();
 
                     b.Navigation("SubCategory");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Contract", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.ContractReadModel", b =>
                 {
-                    b.HasOne("ScrapDealer.Domain.Entities.Buyer", "Buyer")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.BuyerReadModel", "Buyer")
                         .WithMany()
                         .HasForeignKey("BuyerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScrapDealer.Domain.Entities.SaleOrder", "SaleOrder")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.SaleOrderReadModel", "SaleOrder")
                         .WithMany()
                         .HasForeignKey("SaleOrderId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1007,9 +977,27 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Navigation("SaleOrder");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Invoice", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.InvoiceItemReadModel", b =>
                 {
-                    b.HasOne("ScrapDealer.Domain.Entities.Contract", "Contract")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.InvoiceReadModel", "Invoice")
+                        .WithMany("Items")
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.SubCategoryReadModel", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Invoice");
+
+                    b.Navigation("SubCategory");
+                });
+
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.InvoiceReadModel", b =>
+                {
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.ContractReadModel", "Contract")
                         .WithMany()
                         .HasForeignKey("ContractId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1018,38 +1006,28 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Navigation("Contract");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.InvoiceItem", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.ReferralReadModel", b =>
                 {
-                    b.HasOne("ScrapDealer.Domain.Entities.Invoice", null)
-                        .WithMany("Items")
-                        .HasForeignKey("InvoiceId");
-
-                    b.HasOne("ScrapDealer.Domain.Entities.SubCategory", "SubCategory")
-                        .WithMany()
-                        .HasForeignKey("SubCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("SubCategory");
-                });
-
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Referral", b =>
-                {
-                    b.HasOne("ScrapDealer.Domain.Entities.User", null)
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.UserReadModel", "RefereeUser")
                         .WithMany()
                         .HasForeignKey("RefereeUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ScrapDealer.Domain.Entities.User", null)
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.UserReadModel", "ReferrerUser")
                         .WithMany()
                         .HasForeignKey("ReferrerUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("RefereeUser");
+
+                    b.Navigation("ReferrerUser");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Reward", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.RewardReadModel", b =>
                 {
-                    b.HasOne("ScrapDealer.Domain.Entities.User", "User")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.UserReadModel", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1058,74 +1036,59 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.RolePermission", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.RolePermissionReadModel", b =>
                 {
-                    b.HasOne("ScrapDealer.Domain.Entities.Role", "Role")
-                        .WithMany("RolePermissions")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.RoleReadModel", "Role")
+                        .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.RoleReadModel", null)
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("RoleReadModelId");
+
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.SaleOrder", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.SaleOrderItemReadModel", b =>
                 {
-                    b.HasOne("ScrapDealer.Domain.Entities.Seller", "Seller")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.SaleOrderReadModel", "SaleOrder")
+                        .WithMany("Items")
+                        .HasForeignKey("SaleOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.SubCategoryReadModel", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("SaleOrder");
+
+                    b.Navigation("SubCategory");
+                });
+
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.SaleOrderReadModel", b =>
+                {
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.SellerReadModel", "Seller")
                         .WithMany()
                         .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("ScrapDealer.Domain.ValueObjects.SaleOrders.Location", "Location", b1 =>
-                        {
-                            b1.Property<Guid>("SaleOrderId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<double>("Latitude")
-                                .HasColumnType("float")
-                                .HasColumnName("Latitude");
-
-                            b1.Property<double>("Longitude")
-                                .HasColumnType("float")
-                                .HasColumnName("Longitude");
-
-                            b1.HasKey("SaleOrderId");
-
-                            b1.ToTable("SaleOrders");
-
-                            b1.WithOwner()
-                                .HasForeignKey("SaleOrderId");
-                        });
-
-                    b.Navigation("Location");
-
                     b.Navigation("Seller");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.SaleOrderItem", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.SaleOrderRequestReadModel", b =>
                 {
-                    b.HasOne("ScrapDealer.Domain.Entities.SaleOrder", null)
-                        .WithMany("Items")
-                        .HasForeignKey("SaleOrderId");
-
-                    b.HasOne("ScrapDealer.Domain.Entities.SubCategory", "SubCategory")
-                        .WithMany()
-                        .HasForeignKey("SubCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("SubCategory");
-                });
-
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.SaleOrderRequest", b =>
-                {
-                    b.HasOne("ScrapDealer.Domain.Entities.Buyer", "Buyer")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.BuyerReadModel", "Buyer")
                         .WithMany()
                         .HasForeignKey("BuyerId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("ScrapDealer.Domain.Entities.SaleOrder", "SaleOrder")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.SaleOrderReadModel", "SaleOrder")
                         .WithMany()
                         .HasForeignKey("SaleOrderId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1136,21 +1099,21 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Navigation("SaleOrder");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.ScoreHistory", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.ScoreHistoryReadModel", b =>
                 {
-                    b.HasOne("ScrapDealer.Domain.Entities.Buyer", "Buyer")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.BuyerReadModel", "Buyer")
                         .WithMany()
                         .HasForeignKey("BuyerId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("ScrapDealer.Domain.Entities.Contract", "Contract")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.ContractReadModel", "Contract")
                         .WithMany()
                         .HasForeignKey("ContractId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("ScrapDealer.Domain.Entities.Seller", "Seller")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.SellerReadModel", "Seller")
                         .WithMany()
                         .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1163,195 +1126,40 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Navigation("Seller");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Seller", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.SellerReadModel", b =>
                 {
-                    b.HasOne("ScrapDealer.Domain.Entities.User", "User")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.UserReadModel", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("ScrapDealer.Domain.ValueObjects.Profiles.ProfileAddress", "Address", b1 =>
-                        {
-                            b1.Property<Guid>("SellerId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int?>("ActivityArea")
-                                .HasColumnType("int")
-                                .HasColumnName("ActivityArea");
-
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("City");
-
-                            b1.Property<string>("Description")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("AddressDescription");
-
-                            b1.Property<string>("PostalCode")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PostalCode");
-
-                            b1.Property<string>("Province")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("Province");
-
-                            b1.HasKey("SellerId");
-
-                            b1.ToTable("Sellers");
-
-                            b1.WithOwner()
-                                .HasForeignKey("SellerId");
-                        });
-
-                    b.OwnsOne("ScrapDealer.Domain.ValueObjects.SaleOrders.Location", "Location", b1 =>
-                        {
-                            b1.Property<Guid>("SellerId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<double>("Latitude")
-                                .HasColumnType("float")
-                                .HasColumnName("Latitude");
-
-                            b1.Property<double>("Longitude")
-                                .HasColumnType("float")
-                                .HasColumnName("Longitude");
-
-                            b1.HasKey("SellerId");
-
-                            b1.ToTable("Sellers");
-
-                            b1.WithOwner()
-                                .HasForeignKey("SellerId");
-                        });
-
-                    b.OwnsOne("ScrapDealer.Domain.ValueObjects.Profiles.PersonName", "PersonName", b1 =>
-                        {
-                            b1.Property<Guid>("SellerId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("FirstName")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("FirstName");
-
-                            b1.Property<string>("LastName")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LastName");
-
-                            b1.HasKey("SellerId");
-
-                            b1.ToTable("Sellers");
-
-                            b1.WithOwner()
-                                .HasForeignKey("SellerId");
-                        });
-
-                    b.Navigation("Address")
-                        .IsRequired();
-
-                    b.Navigation("Location");
-
-                    b.Navigation("PersonName")
-                        .IsRequired();
-
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Settings", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.SubCategoryReadModel", b =>
                 {
-                    b.OwnsOne("ScrapDealer.Domain.ValueObjects.Base.Amount", "BuyerCommissionFixedAmount", b1 =>
-                        {
-                            b1.Property<Guid>("SettingsId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<decimal>("Value")
-                                .HasPrecision(18, 2)
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("BuyerCommissionFixedAmount");
-
-                            b1.HasKey("SettingsId");
-
-                            b1.ToTable("Settings");
-
-                            b1.WithOwner()
-                                .HasForeignKey("SettingsId");
-                        });
-
-                    b.OwnsOne("ScrapDealer.Domain.ValueObjects.Settings.CommissionRate", "BuyerCommissionRate", b1 =>
-                        {
-                            b1.Property<Guid>("SettingsId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<float>("Value")
-                                .HasPrecision(5, 2)
-                                .HasColumnType("real(5)")
-                                .HasColumnName("BuyerCommissionRate");
-
-                            b1.HasKey("SettingsId");
-
-                            b1.ToTable("Settings");
-
-                            b1.WithOwner()
-                                .HasForeignKey("SettingsId");
-                        });
-
-                    b.Navigation("BuyerCommissionFixedAmount");
-
-                    b.Navigation("BuyerCommissionRate");
-                });
-
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.SubCategory", b =>
-                {
-                    b.HasOne("ScrapDealer.Domain.Entities.Category", "Category")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.CategoryReadModel", "Category")
                         .WithMany("SubCategories")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("ScrapDealer.Domain.ValueObjects.Category.CategoryPriceRange", "PriceRange", b1 =>
-                        {
-                            b1.Property<Guid>("SubCategoryId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<decimal>("MaxValue")
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("MaxPrice");
-
-                            b1.Property<decimal>("MinValue")
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("MinPrice");
-
-                            b1.HasKey("SubCategoryId");
-
-                            b1.ToTable("SubCategories");
-
-                            b1.WithOwner()
-                                .HasForeignKey("SubCategoryId");
-                        });
-
                     b.Navigation("Category");
-
-                    b.Navigation("PriceRange")
-                        .IsRequired();
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.TicketMessage", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.TicketMessageReadModel", b =>
                 {
-                    b.HasOne("ScrapDealer.Domain.Entities.User", "Sender")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.UserReadModel", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScrapDealer.Domain.Entities.Ticket", "Ticket")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.TicketReadModel", "Ticket")
                         .WithMany("Messages")
                         .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Sender");
@@ -1359,44 +1167,16 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Navigation("Ticket");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.User", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.UserRoleReadModel", b =>
                 {
-                    b.OwnsOne("ScrapDealer.Domain.ValueObjects.Profiles.PersonName", "PersonName", b1 =>
-                        {
-                            b1.Property<Guid>("UserId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("FirstName")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("FirstName");
-
-                            b1.Property<string>("LastName")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LastName");
-
-                            b1.HasKey("UserId");
-
-                            b1.ToTable("Users");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserId");
-                        });
-
-                    b.Navigation("PersonName");
-                });
-
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.UserRole", b =>
-                {
-                    b.HasOne("ScrapDealer.Domain.Entities.Role", "Role")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.RoleReadModel", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ScrapDealer.Domain.Entities.User", "User")
-                        .WithMany("Roles")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.UserReadModel", "User")
+                        .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1406,64 +1186,64 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Wallet", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.WalletReadModel", b =>
                 {
-                    b.HasOne("ScrapDealer.Domain.Entities.Buyer", "Buyer")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.BuyerReadModel", "Buyer")
                         .WithMany()
                         .HasForeignKey("BuyerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("ScrapDealer.Domain.Entities.Seller", "Seller")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.SellerReadModel", "Seller")
                         .WithMany()
                         .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Buyer");
 
                     b.Navigation("Seller");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.WalletTransaction", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.WalletTransactionReadModel", b =>
                 {
-                    b.HasOne("ScrapDealer.Domain.Entities.Wallet", "Wallet")
+                    b.HasOne("ScrapDealer.Infrastructure.EF.Models.WalletReadModel", "Wallet")
                         .WithMany()
                         .HasForeignKey("WalletId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Wallet");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Category", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.CategoryReadModel", b =>
                 {
                     b.Navigation("SubCategories");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Invoice", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.InvoiceReadModel", b =>
                 {
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Role", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.RoleReadModel", b =>
                 {
                     b.Navigation("RolePermissions");
 
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.SaleOrder", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.SaleOrderReadModel", b =>
                 {
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.Ticket", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.TicketReadModel", b =>
                 {
                     b.Navigation("Messages");
                 });
 
-            modelBuilder.Entity("ScrapDealer.Domain.Entities.User", b =>
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.UserReadModel", b =>
                 {
-                    b.Navigation("Roles");
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

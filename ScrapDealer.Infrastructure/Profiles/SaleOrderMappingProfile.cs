@@ -33,7 +33,8 @@ namespace ScrapDealer.Infrastructure.Profiles
                         SellerDescription = s.SellerDescription,
                         SystemDescription = s.SystemDescription,
                         SubCategory = s.SubCategory == null ? null : 
-                            new SubCategoryDto(s.SubCategory.Id, s.SubCategory.Name, s.SubCategory.MinPrice, s.SubCategory.MaxPrice, s.SubCategory.LastUpdate.ToPersianDateTimeString("yyyy/MM/dd HH:mm", false), s.SubCategory.CategoryId, s.SubCategory.Images)
+                            new SubCategoryDto(s.SubCategory.Id, s.SubCategory.Name, s.SubCategory.MinPrice, s.SubCategory.MaxPrice, s.SubCategory.LastUpdate.ToPersianDateTimeString("yyyy/MM/dd HH:mm", false), s.SubCategory.CategoryId, s.SubCategory.Images),
+                        ModifiedByAdmin = s.ModifiedByAdmin
                     })
                 }).ForAllMembers(opt => opt.Ignore());
         }

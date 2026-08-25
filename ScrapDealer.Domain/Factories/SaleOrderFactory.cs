@@ -43,8 +43,10 @@ namespace ScrapDealer.Domain.Factories
         {
             var systemDescriptionValue = Description.Create(systemDescription);
 
-            saleOrder.SetAsUpdated();
-            item.AdminUpdate(subCategory, systemDescriptionValue, saleType);
+            var changed = item.AdminUpdate(subCategory, systemDescriptionValue, saleType);
+            if (changed)
+                saleOrder.SetAsUpdated();
+
             return item;
         }
     }

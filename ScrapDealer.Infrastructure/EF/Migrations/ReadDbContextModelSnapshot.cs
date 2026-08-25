@@ -465,6 +465,9 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("ModifiedByAdmin")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("SaleOrderId")
                         .HasColumnType("uniqueidentifier");
 

@@ -11,6 +11,7 @@ namespace ScrapDealer.Application.DTO
         public string? CompanyName { get; set; }
         public string? NumberPlate { get; set; }
         public required string AddressDescription { get; set; }
+        public IEnumerable<Guid> LocationImages { get; set; }
         public Gender Gender { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }

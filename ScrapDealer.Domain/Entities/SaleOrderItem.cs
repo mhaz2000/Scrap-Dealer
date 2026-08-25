@@ -12,6 +12,7 @@ namespace ScrapDealer.Domain.Entities
         public Description? SellerDescription { get; private set; }
         public Description? SystemDescription { get; private set; }
         public ICollection<Guid> Images { get; private set; } = [];
+        public bool ModifiedByAdmin { get; set; } = false;
 
         public SaleOrderItem() { }
 
@@ -26,11 +27,22 @@ namespace ScrapDealer.Domain.Entities
             SubCategoryId = subCategory?.Id;
         }
 
-        internal void AdminUpdate(SubCategory? subCategory, Description? systemDescription, SaleType? saleType)
+        internal bool AdminUpdate(SubCategory? subCategory, Description? systemDescription, SaleType? saleType)
         {
-            SubCategory = subCategory;
-            SystemDescription = systemDescription;
-            SaleType = saleType;
+            var changed = !Equals(SubCategoryId, subCategory?.Id)
+                || !Equals(SystemDescription?.Value, systemDescription?.Value)
+                || !Equals(SaleType, saleType);
+
+            if (changed)
+            {
+                ModifiedByAdmin = true;
+                SubCategory = subCategory;
+                SystemDescription = systemDescription;
+                SaleType = saleType;
+                SubCategoryId = subCategory?.Id;
+            }
+
+            return changed;
         }
     }
 }
