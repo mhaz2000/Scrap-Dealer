@@ -7,9 +7,10 @@ using ScrapDealer.Infrastructure.EF.Contexts;
 using ScrapDealer.Infrastructure.EF.Models;
 using ScrapDealer.Shared.Abstractions.Exceptions;
 using ScrapDealer.Shared.Abstractions.Queries;
+using ScrapDealer.Shared.Models;
 
 namespace ScrapDealer.Infrastructure.Queries.Handlers.SaleOrders;
-internal class GetNearbyOrdersForBuyersHandler : IQueryHandler<GetNearbyOrdersForBuyersQuery, List<SaleOrderDto>>
+internal class GetNearbyOrdersForBuyersHandler : IQueryHandler<GetNearbyOrdersForBuyersQuery, PaginatedResult<SaleOrderDto>>
 {
     private readonly DbSet<SaleOrderReadModel> _saleOrders;
     private readonly DbSet<ContractReadModel> _contracts;
@@ -24,7 +25,7 @@ internal class GetNearbyOrdersForBuyersHandler : IQueryHandler<GetNearbyOrdersFo
         _mapper = mapper;
     }
 
-    public async Task<List<SaleOrderDto>> Handle(GetNearbyOrdersForBuyersQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedResult<SaleOrderDto>> Handle(GetNearbyOrdersForBuyersQuery request, CancellationToken cancellationToken)
     {
         var buyer = await _buyers.FirstOrDefaultAsync(b => b.UserId == request.buyerId);
         if (buyer is null || buyer.Latitude is null || buyer.Longitude is null)
@@ -44,11 +45,15 @@ internal class GetNearbyOrdersForBuyersHandler : IQueryHandler<GetNearbyOrdersFo
                 buyer.Latitude.Value, buyer.Longitude.Value,
                 s.Latitude!.Value, s.Longitude!.Value) <= request.distance)
             .Where(s => !saleOrdersWithContract.Contains(s.Id))
-            .Skip(request.skip)
-            .Take(request.take)
             .ToList();
 
-        return _mapper.Map<List<SaleOrderDto>>(nearbyOrders);
+        var totalCount = nearbyOrders.Count;
+        var paged = nearbyOrders
+            .Skip(request.PageIndex * request.PageSize)
+            .Take(request.PageSize)
+            .ToList();
+
+        return new PaginatedResult<SaleOrderDto>(_mapper.Map<List<SaleOrderDto>>(paged), totalCount, request.PageSize, request.PageIndex);
     }
 }
 

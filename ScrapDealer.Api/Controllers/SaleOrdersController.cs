@@ -52,9 +52,9 @@ namespace ScrapDealer.Api.Controllers
         }
 
         [HttpGet("MySaleOrder")]
-        public async Task<ActionResult<PaginatedResult<SaleOrderDto>>> GetMySaleOrder()
+        public async Task<ActionResult<PaginatedResult<SaleOrderDto>>> GetMySaleOrder([FromQuery] GetMySaleOrdersQuery query)
         {
-            var result = await _queryDispatcher.QueryAsync(new GetMySaleOrdersQuery(UserId));
+            var result = await _queryDispatcher.QueryAsync(query with { userId = UserId });
             return OkOrNotFound(result);
         }
 
@@ -83,25 +83,25 @@ namespace ScrapDealer.Api.Controllers
 
         [Authorize(Roles = "Buyer")]
         [HttpGet("NearbyOrdersForBuyers")]
-        public async Task<ActionResult<List<SaleOrderDto>>> GetNearbyOrdersForBuyers([FromQuery] double distance)
+        public async Task<ActionResult<PaginatedResult<SaleOrderDto>>> GetNearbyOrdersForBuyers([FromQuery] GetNearbyOrdersForBuyersQuery query)
         {
-            var result = await _queryDispatcher.QueryAsync(new GetNearbyOrdersForBuyersQuery(UserId, distance));
+            var result = await _queryDispatcher.QueryAsync(query with { buyerId = UserId });
             return OkOrNotFound(result);
         }
 
         [Authorize(Roles = "Seller")]
         [HttpGet("GetNearbyBuyers/{saleOrderId:guid}")]
-        public async Task<ActionResult<List<NearbyBuyerDto>>> GetNearbyBuyers([FromRoute] Guid saleOrderId, [FromQuery] double distance)
+        public async Task<ActionResult<PaginatedResult<NearbyBuyerDto>>> GetNearbyBuyers([FromRoute] Guid saleOrderId, [FromQuery] GetNearbyBuyersQuery query)
         {
-            var result = await _queryDispatcher.QueryAsync(new GetNearbyBuyersQuery(UserId, saleOrderId, distance));
+            var result = await _queryDispatcher.QueryAsync(query with { sellerId = UserId, saleOrderId = saleOrderId });
             return OkOrNotFound(result);
         }
 
         [Authorize(Roles = "Buyer")]
         [HttpGet("GetRequests")]
-        public async Task<ActionResult<List<SaleOrderRequestDto>>> GetRequests()
+        public async Task<ActionResult<PaginatedResult<SaleOrderRequestDto>>> GetRequests([FromQuery] GetSaleOrderRequestsQuery query)
         {
-            var result = await _queryDispatcher.QueryAsync(new GetSaleOrderRequestsQuery(UserId));
+            var result = await _queryDispatcher.QueryAsync(query with { UserId = UserId });
             return OkOrNotFound(result);
         }
 

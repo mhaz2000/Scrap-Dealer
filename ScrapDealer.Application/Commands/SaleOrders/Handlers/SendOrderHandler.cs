@@ -12,7 +12,7 @@ namespace ScrapDealer.Application.Commands.SaleOrders.Handlers
         public async Task Handle(SendOrderCommand request, CancellationToken cancellationToken)
         {
             var saleOrder = await saleOrderRepository.GetAsync(s => s.Id == request.Id);
-            if (saleOrder is null || saleOrder.Status != Domain.Consts.SaleOrderStatus.ConfirmedBySystem || !saleOrder.SaleAtBuyersLocation)
+            if (saleOrder is null || !saleOrder.SaleAtBuyersLocation)
                 throw new BusinessException("سفارش فروش یافت نشد.");
 
             var saleOrderRequest = await saleOrderRequestRepository.GetAsync(t => t.SaleOrderId == request.Id);

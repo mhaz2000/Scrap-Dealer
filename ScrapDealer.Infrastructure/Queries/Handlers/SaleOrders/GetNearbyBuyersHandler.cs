@@ -7,10 +7,11 @@ using ScrapDealer.Infrastructure.EF.Contexts;
 using ScrapDealer.Infrastructure.EF.Models;
 using ScrapDealer.Shared.Abstractions.Exceptions;
 using ScrapDealer.Shared.Abstractions.Queries;
+using ScrapDealer.Shared.Models;
 
 namespace ScrapDealer.Infrastructure.Queries.Handlers.SaleOrders;
 
-internal class GetNearbyBuyersHandler : IQueryHandler<GetNearbyBuyersQuery, List<NearbyBuyerDto>>
+internal class GetNearbyBuyersHandler : IQueryHandler<GetNearbyBuyersQuery, PaginatedResult<NearbyBuyerDto>>
 {
     private readonly DbSet<SaleOrderReadModel> _saleOrders;
     private readonly DbSet<ContractReadModel> _contracts;
@@ -25,14 +26,14 @@ internal class GetNearbyBuyersHandler : IQueryHandler<GetNearbyBuyersQuery, List
         _mapper = mapper;
     }
 
-    public async Task<List<NearbyBuyerDto>> Handle(GetNearbyBuyersQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedResult<NearbyBuyerDto>> Handle(GetNearbyBuyersQuery request, CancellationToken cancellationToken)
     {
         var saleOrder = await _saleOrders.FirstOrDefaultAsync(s => s.Id == request.saleOrderId);
         if (saleOrder is null || !saleOrder.SaleAtBuyersLocation)
             throw new BusinessException("دستور فروشی برای ارسال به خریداران یافت نشد.");
 
-        if (saleOrder.Status != SaleOrderStatus.ConfirmedBySystem)
-            throw new BusinessException("دستور فروش در انتظار تایید پشتیبان است.");
+        //if (saleOrder.Status != SaleOrderStatus.ConfirmedBySystem)
+        //    throw new BusinessException("دستور فروش در انتظار تایید پشتیبان است.");
 
         if (_contracts.Any(t => t.SaleOrderId == request.saleOrderId && (t.Status == ContractStatus.CancelledByBuyer || t.Status == ContractStatus.CancelledBySeller)))
             throw new BusinessException("برای این دستور فروش قرارداد جاری وجود دارد.");
@@ -46,11 +47,15 @@ internal class GetNearbyBuyersHandler : IQueryHandler<GetNearbyBuyersQuery, List
             .Where(b => GeoUtils.GetDistanceKm(
                 saleOrder.Latitude.Value, saleOrder.Longitude.Value,
                 b.Latitude.Value, b.Longitude.Value) <= request.distance)
-            .Skip(request.skip)
-            .Take(request.take)
             .ToList();
 
-        return _mapper.Map<List<NearbyBuyerDto>>(nearbyBuyers);
+        var totalCount = nearbyBuyers.Count;
+        var paged = nearbyBuyers
+            .Skip(request.PageIndex * request.PageSize)
+            .Take(request.PageSize)
+            .ToList();
+
+        return new PaginatedResult<NearbyBuyerDto>(_mapper.Map<List<NearbyBuyerDto>>(paged), totalCount, request.PageSize, request.PageIndex);
     }
 }
 
