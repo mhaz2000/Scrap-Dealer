@@ -29,7 +29,7 @@ namespace ScrapDealer.Api.Controllers
             var fileId = await _commandDispatcher.DispatchAsync<UploadFileCommand, Guid>(
                 new UploadFileCommand(stream, file.FileName));
 
-            return Ok(fileId);
+            return BaseObjectOk(fileId);
         }
 
         [HttpGet("{id}")]

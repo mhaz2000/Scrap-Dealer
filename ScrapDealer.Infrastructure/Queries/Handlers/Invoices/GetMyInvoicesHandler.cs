@@ -24,13 +24,12 @@ internal class GetMyInvoicesHandler : IQueryHandler<GetMyInvoicesQuery, Paginate
     public async Task<PaginatedResult<InvoiceListDto>> Handle(GetMyInvoicesQuery query, CancellationToken cancellationToken)
     {
         var dbQuery = _invoices
-            .Include(s=> s.Contract).ThenInclude(s=> s.SaleOrder).ThenInclude(s=> s.Seller)
-            .Include(s=> s.Contract).ThenInclude(s=> s.Buyer)
+            .Include(s => s.Contract).ThenInclude(s => s.SaleOrder).ThenInclude(s => s.Seller)
+            .Include(s => s.Contract).ThenInclude(s => s.Buyer)
             .AsQueryable();
 
-        if (!string.IsNullOrEmpty(query.Search))
-            dbQuery = dbQuery
-                .Where(u => u.Contract.Buyer.UserId == query.UserId);
+        dbQuery = dbQuery
+            .Where(u => u.Contract.Buyer.UserId == query.UserId);
 
         var invoices = dbQuery.AsNoTracking();
         var paginatedResult = await invoices.

@@ -26,7 +26,7 @@ public class DashboardController(IQueryDispatcher _queryDispatcher) : BaseContro
         };
 
         var result = await _queryDispatcher.QueryAsync(query);
-        return Ok(result);
+        return OkOrNotFound(result);
     }
 
 
@@ -34,7 +34,7 @@ public class DashboardController(IQueryDispatcher _queryDispatcher) : BaseContro
     public async Task<ActionResult<IEnumerable<TopSubCategoryDto>>> GetStatistics()
     {
         var result = await _queryDispatcher.QueryAsync(new GetAdminDashboardStatisticsQuery());
-        return Ok(result);
+        return OkOrNotFound(result);
     }
 
 
@@ -54,7 +54,7 @@ public class DashboardController(IQueryDispatcher _queryDispatcher) : BaseContro
         };
 
         var result = await _queryDispatcher.QueryAsync(query);
-        return Ok(result);
+        return OkOrNotFound(result);
     }
 
     [HttpGet("TopSellers/ByInvoiceCount")]
@@ -73,7 +73,7 @@ public class DashboardController(IQueryDispatcher _queryDispatcher) : BaseContro
         };
 
         var result = await _queryDispatcher.QueryAsync(query);
-        return Ok(result);
+        return OkOrNotFound(result);
     }
 
     [HttpGet("TopBuyers/ByTotalAmount")]
@@ -92,7 +92,7 @@ public class DashboardController(IQueryDispatcher _queryDispatcher) : BaseContro
         };
 
         var result = await _queryDispatcher.QueryAsync(query);
-        return Ok(result);
+        return OkOrNotFound(result);
     }
 
     [HttpGet("TopSellers/ByTotalAmount")]
@@ -111,7 +111,7 @@ public class DashboardController(IQueryDispatcher _queryDispatcher) : BaseContro
         };
 
         var result = await _queryDispatcher.QueryAsync(query);
-        return Ok(result);
+        return OkOrNotFound(result);
     }
 
     // Combined dashboard summary endpoint
@@ -132,6 +132,6 @@ public class DashboardController(IQueryDispatcher _queryDispatcher) : BaseContro
         };
 
         var result = await _queryDispatcher.QueryAsync(query);
-        return Ok(result);
+        return OkOrNotFound(result);
     }
 }
