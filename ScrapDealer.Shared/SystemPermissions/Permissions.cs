@@ -4,21 +4,43 @@
     {
         public static class Menu
         {
-            public const string Dashboard = "Permissions.Menu.Dashboard";
-            public const string Sellers = "Permissions.Menu.Sellers";
-            public const string SellersVerification = "Permissions.Menu.SellersVerification";
-            public const string RetailBuyer = "Permissions.Menu.RetailBuyer";
-            public const string WholeSaleBuyer = "Permissions.Menu.WholeSaleBuyer";
-            public const string BuyersVerification = "Permissions.Menu.BuyersVerification";
-            public const string Supports = "Permissions.Menu.Supports";
-            public const string Permissions = "Permissions.Menu.Permissions";
-            public const string Requests = "Permissions.Menu.Permissions";
-            public const string ReviewedRequests = "Permissions.Menu.ReviewedRequests";
-            public const string Invoices = "Permissions.Menu.Invoices";
-            public const string FAQ = "Permissions.Menu.FAQ";
-            public const string News = "Permissions.Menu.News";
-            public const string Settings = "Permissions.Menu.Settings";
-            public const string Rewards = "Permissions.Menu.Rewards";
+            public const string MainPage = "Permissions.Menu.MainPage";
+            public const string MainPage_Dashboard = "Permissions.Menu.MainPage.Dashboard";
+
+            public const string SellersManagement = "Permissions.Menu.SellersManagement";
+            public const string SellersManagement_Sellers = "Permissions.Menu.SellersManagement.Sellers";
+            public const string SellersManagement_SellersVerification = "Permissions.Menu.SellersManagement.SellersVerification";
+
+            public const string BuyersManagement = "Permissions.Menu.BuyersManagement";
+            public const string BuyersManagement_Buyers = "Permissions.Menu.BuyersManagement.Buyers";
+            public const string BuyersManagement_BuyersVerification = "Permissions.Menu.BuyersManagement.BuyersVerification";
+
+            public const string SaleOrdersManagement = "Permissions.Menu.SaleOrdersManagement";
+            public const string SaleOrdersManagement_SaleOrders = "Permissions.Menu.SaleOrdersManagement.SaleOrders";
+
+            public const string SupportsManagement = "Permissions.Menu.SupportsManagement";
+            public const string SupportsManagement_Supports = "Permissions.Menu.SupportsManagement.Supports";
+            public const string SupportsManagement_Accesses = "Permissions.Menu.SupportsManagement.Accesses";
+
+            public const string FinancialManagement = "Permissions.Menu.FinancialManagement";
+            public const string FinancialManagement_Rewards = "Permissions.Menu.FinancialManagement.Rewards";
+            public const string FinancialManagement_Invoices = "Permissions.Menu.FinancialManagement.Invoices";
+
+            public const string ReferralCodesManagement = "Permissions.Menu.ReferralCodesManagement";
+            public const string ReferralCodesManagement_ReferralCodes = "Permissions.Menu.ReferralCodesManagement.ReferralCodes";
+
+            public const string TicketsManagement = "Permissions.Menu.TicketsManagement";
+            public const string TicketsManagement_Tickets = "Permissions.Menu.TicketsManagement.Tickets";
+
+            public const string NotificationsManagement = "Permissions.Menu.NotificationsManagement";
+            public const string NotificationsManagement_NotificationsList = "Permissions.Menu.NotificationsManagement.NotificationsList";
+            public const string NotificationsManagement_NotificationsManagement = "Permissions.Menu.NotificationsManagement.NotificationsManagement";
+
+            public const string NewsManagement = "Permissions.Menu.NewsManagement";
+            public const string NewsManagement_News = "Permissions.Menu.NewsManagement.News";
+
+            public const string SettingsManagement = "Permissions.Menu.SettingsManagement";
+            public const string SettingsManagement_Settings = "Permissions.Menu.SettingsManagement.Settings";
         }
 
         //public static class SaleOrders

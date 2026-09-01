@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ScrapDealer.Application.Services.DbReadServices;
-
+using ScrapDealer.Domain.Consts;
 using ScrapDealer.Domain.Factories.interfaces;
 using ScrapDealer.Domain.Repositories;
 using ScrapDealer.Domain.ValueObjects.Base;
@@ -47,8 +47,9 @@ public class CreateInvoiceHandler(IInvoiceFactory factory, IInvoiceRepository in
             invoice.AddItem(invoiceItem);
         }
 
+        contract.SaleOrder.Status = SaleOrderStatus.Done;
         contract.SetAmount(request.Amount);
-        contract.SetStatus(Domain.Consts.ContractStatus.Done);
+        contract.SetStatus(ContractStatus.Done);
 
         await invoiceRepository.AddAsync(invoice);
         await invoiceRepository.CommitAsync();

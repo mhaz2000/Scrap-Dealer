@@ -5,6 +5,7 @@
         CreatedOrUpdated,
         ConfirmedBySystem,
         RejectedBySystem,
-        AcceptedByBuyer
+        AcceptedByBuyer,
+        Done
     }
 }
