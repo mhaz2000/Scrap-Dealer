@@ -29,7 +29,7 @@ internal class GetMyInvoicesHandler : IQueryHandler<GetMyInvoicesQuery, Paginate
             .AsQueryable();
 
         dbQuery = dbQuery
-            .Where(u => u.Contract.Buyer.UserId == query.UserId);
+            .Where(u => u.Contract.Buyer.UserId == query.UserId || u.Contract.SaleOrder.Seller.UserId == query.UserId);
 
         var invoices = dbQuery.AsNoTracking();
         var paginatedResult = await invoices.

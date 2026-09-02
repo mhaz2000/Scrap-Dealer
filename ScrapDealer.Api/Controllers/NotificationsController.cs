@@ -38,6 +38,7 @@ namespace ScrapDealer.Api.Controllers
         }
 
         [HttpPut("Seen/{id:guid}")]
+        [AllowAnonymous]
         //[Authorize(Roles = "Admin,Support,Seller,Buyer")]
         public async Task<IActionResult> Seen([FromRoute] Guid id)
         {
@@ -46,14 +47,25 @@ namespace ScrapDealer.Api.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Admin,Support,Seller,Buyer")]
+        [Authorize(Roles = "Admin,Support,Seller,Buyer")]
         public async Task<ActionResult<PaginatedResult<NotificationDto>>> Get([FromQuery] GetNotificationsQuery query)
         {
             var result = await queryDispatcher.QueryAsync(query with { UserId = UserId, UserRole = UserRole });
             return OkOrNotFound(result);
         }
 
+
+        [HttpGet("GetAll")]
+        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<PaginatedResult<NotificationDto>>> GetAll([FromQuery] GetNotificationsQuery query)
+        {
+            var result = await queryDispatcher.QueryAsync(query with { UserId = UserId, UserRole = UserRole });
+            return OkOrNotFound(result);
+        }
+
         [HttpGet("{id}")]
+        [AllowAnonymous]
         //[Authorize(Roles = "Admin,Support,Seller,Buyer")]
         public async Task<ActionResult<NotificationDto>> GetNotification(Guid id)
         {

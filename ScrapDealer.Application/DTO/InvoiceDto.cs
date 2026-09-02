@@ -15,6 +15,10 @@ public record InvoiceDto
     public int InvoiceCode { get; set; }
     public int SaleOrderCode { get; set; }
     public InvoiceStatus Status { get; set; }
+    public double? SellerLatitude { get; set; }
+    public double? SellerLongitude { get; set; }
+    public double? BuyerLatitude { get; set; }
+    public double? BuyerLongitude { get; set; }
 }
 
 public record InvoiceItemDto

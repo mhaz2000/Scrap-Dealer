@@ -29,7 +29,6 @@ namespace ScrapDealer.Api.Controllers
             return OkOrNotFound(result);
         }
 
-        [Authorize(Roles = "Buyer")]
         [HttpGet("MyInvoices")]
         public async Task<ActionResult<PaginatedResult<InvoiceListDto>>> GetMyInvoices([FromQuery] GetMyInvoicesQuery query)
         {
