@@ -28,7 +28,7 @@ internal class GetNewsListHandler : IQueryHandler<GetNewsListQuery, PaginatedRes
             dbQuery = dbQuery
                 .Where(u => Microsoft.EntityFrameworkCore.EF.Functions.Like(u.Title, $"%{query.Search}%"));
 
-        var news = dbQuery.AsNoTracking();
+        var news = dbQuery.OrderByDescending(t => t.CreatedAt).AsNoTracking();
         var paginatedResult = await news.
             ToPaginatedResultAsync<NewsReadModel, NewsDto>(query.PageIndex, query.PageSize, query.SortBy ?? string.Empty, _mapper);
 
