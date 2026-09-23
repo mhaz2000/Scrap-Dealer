@@ -4,6 +4,7 @@ using ScrapDealer.Infrastructure.EF.Config.Buyers;
 using ScrapDealer.Infrastructure.EF.Config.Categories;
 using ScrapDealer.Infrastructure.EF.Config.CategoryPriceHistories;
 using ScrapDealer.Infrastructure.EF.Config.Contracts;
+using ScrapDealer.Infrastructure.EF.Config.Devices;
 using ScrapDealer.Infrastructure.EF.Config.Invoices;
 using ScrapDealer.Infrastructure.EF.Config.NewsConfig;
 using ScrapDealer.Infrastructure.EF.Config.NotificationConfig;
@@ -44,6 +45,7 @@ namespace ScrapDealer.Infrastructure.EF.Config
             modelBuilder.ApplyConfiguration(new SaleOrderReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ScoreHistoryReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationReadEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new DeviceReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SaleOrderItemReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new RolePermissionReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SaleOrderRequestReadEntityConfiguration());
@@ -74,6 +76,7 @@ namespace ScrapDealer.Infrastructure.EF.Config
             modelBuilder.ApplyConfiguration(new SaleOrderWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ScoreHistoryWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationWriteEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new DeviceWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SaleOrderItemWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new RolePermissionWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SaleOrderRequestWriteEntityConfiguration());

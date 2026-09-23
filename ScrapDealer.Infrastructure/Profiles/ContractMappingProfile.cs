@@ -26,6 +26,10 @@ namespace ScrapDealer.Infrastructure.Profiles
                 .ForMember(dest => dest.NumberPlate, opt => opt.MapFrom(b => b.Buyer.NumberPlate));
 
             CreateMap<ContractReadModel, BuyerContractDetailDto>()
+                .ForMember(dest => dest.SellerLatitude, opt => opt.MapFrom(b => b.SaleOrder.Seller.Latitude))
+                .ForMember(dest => dest.SellerLongitude, opt => opt.MapFrom(b => b.SaleOrder.Seller.Longitude))
+                .ForMember(dest => dest.BuyerLatitude, opt => opt.MapFrom(b => b.Buyer.Latitude))
+                .ForMember(dest => dest.BuyerLongitude, opt => opt.MapFrom(b => b.Buyer.Longitude))
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(b => b.SaleOrder.Seller.AddressDescription))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(b => b.SaleOrder.Seller.User.Phone))
                 .ForMember(dest => dest.SellerName, opt => opt.MapFrom(b => $"{b.SaleOrder.Seller.FirstName} {b.SaleOrder.Seller.LastName}"))

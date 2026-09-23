@@ -11,19 +11,22 @@ namespace ScrapDealer.Domain.Entities
         public NotificationContent Content { get; set; }
         public List<NotificationTarget> Targets { get; set; } = [];
         public List<Guid> SeenBy { get; set; } = [];
+        public bool IsPushEnabled { get; set; }
 
-        public Notification(Title title, NotificationContent content, List<NotificationTarget> targets)
+        public Notification(Title title, NotificationContent content, List<NotificationTarget> targets, bool isPushEnabled)
         {
             Title = title;
             Content = content;
             Targets = targets ?? [];
+            IsPushEnabled = isPushEnabled;
         }
 
-        public void Update(Title title, NotificationContent content, List<NotificationTarget> targets)
+        public void Update(Title title, NotificationContent content, List<NotificationTarget> targets, bool isPushEnabled)
         {
             Title = title;
             Content = content;
             Targets = targets ?? [];
+            IsPushEnabled = isPushEnabled;
         }
     }
 }

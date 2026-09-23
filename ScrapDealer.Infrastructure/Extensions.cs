@@ -14,6 +14,7 @@ using ScrapDealer.Infrastructure.Options;
 using ScrapDealer.Infrastructure.Profiles;
 using ScrapDealer.Infrastructure.Services;
 using ScrapDealer.Infrastructure.Services.ExternalServices;
+using ScrapDealer.Infrastructure.Services.PushNotifications;
 
 namespace ScrapDealer.Infrastructure
 {
@@ -69,6 +70,14 @@ namespace ScrapDealer.Infrastructure
             services.AddHttpClient<INeshanRevertGeocodingService, NeshanRevertGeocodingService>();
             services.AddHttpClient<IMapIRRevertGeocodingService, MapIRRevertGeocodingService>();
             services.AddScoped<ILocationService, LocationService>();
+
+            services.Configure<PushNotificationSettings>(configuration.GetSection("PushNotification"));
+            services.AddHttpClient<FcmPushNotificationProvider>();
+            services.AddHttpClient<PushePushNotificationProvider>();
+            services.AddScoped<IPushNotificationProvider, FcmPushNotificationProvider>();
+            services.AddScoped<IPushNotificationProvider, PushePushNotificationProvider>();
+            services.AddScoped<IPushNotificationService, PushNotificationService>();
+            services.AddScoped<IPushNotificationDispatcher, PushNotificationDispatcher>();
 
 
             services.AddTransient<DatabaseSeeder>();

@@ -12,5 +12,8 @@ public record BuyerContractDetailDto
     public string PhoneNumber { get; set; }
     public ContractStatus Status { get; private set; }
     public float? ContractScore { get; set; }
-
+    public double? SellerLatitude { get; set; }
+    public double? SellerLongitude { get; set; }
+    public double? BuyerLatitude { get; set; }
+    public double? BuyerLongitude { get; set; }
 }

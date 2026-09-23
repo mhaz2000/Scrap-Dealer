@@ -25,4 +25,10 @@
     <ProjectReference Include="..\ScrapDealer.Shared\ScrapDealer.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="firebase\scrap-dealer-ec967-firebase-adminsdk-fbsvc-e676fa2025.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

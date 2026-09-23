@@ -15,7 +15,10 @@ internal class GetBuyerContractHandler(ReadDbContext context, IMapper mapper) : 
     private readonly DbSet<ScoreHistoryReadModel> _scoreHistories = context.ScoreHistories;
     public async Task<BuyerContractDetailDto> Handle(GetBuyerContractQuery request, CancellationToken cancellationToken)
     {
-        var contract = await _contracts.Include(t => t.SaleOrder).ThenInclude(t=> t.Seller).ThenInclude(t => t.User).FirstOrDefaultAsync(t => t.Id == request.Id);
+        var contract = await _contracts.Include(t=>t.Buyer)
+            .Include(t => t.SaleOrder).ThenInclude(t=> t.Seller).ThenInclude(t => t.User)
+            .FirstOrDefaultAsync(t => t.Id == request.Id);
+
         if (context is null)
             throw new BusinessException("قرارداد یافت نشد.");
 
