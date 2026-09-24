@@ -27,6 +27,7 @@ namespace ScrapDealer.Domain.Entities
             SellerId = seller.Id;
             BuyerId = buyer.Id;
             ContractId = contract.Id;
+            ScoreFor = scoreFor;
             Comment = comment;
         }
 
