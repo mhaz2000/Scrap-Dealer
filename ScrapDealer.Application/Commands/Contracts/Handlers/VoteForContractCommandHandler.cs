@@ -1,8 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ScrapDealer.Domain.Consts;
-using ScrapDealer.Domain.Entities;
-using ScrapDealer.Domain.Events.CategoryPriceHistories;
 using ScrapDealer.Domain.Events.ScoreHistories;
 using ScrapDealer.Domain.Factories.interfaces;
 using ScrapDealer.Domain.Repositories;

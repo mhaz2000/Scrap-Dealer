@@ -8,7 +8,7 @@ public class UnregisterDeviceHandler(IUserDeviceTokenRepository repository)
 {
     public async Task Handle(UnregisterDeviceCommand request, CancellationToken cancellationToken)
     {
-        var existing = await repository.GetByTokenAsync(request.UserId, request.Token, cancellationToken);
+        var existing = await repository.GetByTokenAsync(request.Token, cancellationToken);
 
         if (existing is null)
             return;

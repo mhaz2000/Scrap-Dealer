@@ -9,7 +9,7 @@ public class RegisterDeviceHandler(IUserDeviceTokenFactory factory, IUserDeviceT
 {
     public async Task Handle(RegisterDeviceCommand request, CancellationToken cancellationToken)
     {
-        var existing = await repository.GetByTokenAsync(request.UserId, request.Token, cancellationToken);
+        var existing = await repository.GetByTokenAsync(request.Token, cancellationToken);
 
         if (existing is not null)
         {

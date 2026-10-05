@@ -12,9 +12,13 @@ namespace ScrapDealer.Infrastructure.EF.Repositories
         {
         }
 
-        public async Task<UserDeviceToken?> GetByTokenAsync(Guid userId, string token, CancellationToken cancellationToken)
+        public async Task<UserDeviceToken?> GetByTokenAsync(
+            string token,
+            CancellationToken cancellationToken)
             => await _context.UserDeviceTokens
-                .FirstOrDefaultAsync(d => d.UserId == userId && d.Token == token, cancellationToken);
+                .FirstOrDefaultAsync(
+                    d => d.Token == token,
+                    cancellationToken);
 
         public async Task<List<UserDeviceToken>> GetActiveByUserIdsAsync(IReadOnlyCollection<Guid> userIds, CancellationToken cancellationToken)
             => await _context.UserDeviceTokens
