@@ -24,6 +24,7 @@ namespace ScrapDealer.Application.Commands.SaleOrders.Handlers
             await commandDispatcher.DispatchAsync(new AddNotificationCommand(
                 title,
                 content,
+                IsPushEnabled: true,
                 UserIds: [saleOrder.Seller.UserId]));
         }
     }
