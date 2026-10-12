@@ -181,6 +181,11 @@ public class FcmPushNotificationProvider(
 
             return SendOutcome.TransientFailure;
         }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return SendOutcome.TransientFailure;
+        }
     }
 
     private static SendOutcome ClassifyError(

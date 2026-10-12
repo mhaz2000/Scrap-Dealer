@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ScrapDealer.Application.Services;
 using ScrapDealer.Application.Services.ExternalServices;
@@ -13,7 +14,7 @@ namespace ScrapDealer.Infrastructure.Services.PushNotifications
         IOptions<PushNotificationSettings> settings,
         ReadDbContext readDbContext,
         IUserDeviceTokenRepository deviceTokenRepository,
-        IPushNotificationService pushNotificationService) : IPushNotificationDispatcher
+        IServiceScopeFactory scopeFactory) : IPushNotificationDispatcher
     {
         public async Task DispatchAsync(string title, string body, IReadOnlyCollection<NotificationTarget> targets, CancellationToken cancellationToken)
         {
@@ -52,6 +53,10 @@ namespace ScrapDealer.Infrastructure.Services.PushNotifications
 
             _ = Task.Run(async () =>
             {
+                await using var scope = scopeFactory.CreateAsyncScope();
+                var pushNotificationService = scope.ServiceProvider
+                    .GetRequiredService<IPushNotificationService>();
+
                 try
                 {
                     await pushNotificationService.SendAsync(title, body, pushDevices, CancellationToken.None);
