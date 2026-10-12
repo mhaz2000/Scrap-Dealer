@@ -91,6 +91,10 @@ public class FcmPushNotificationProvider(
                         break;
                 }
             }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+            }
             finally
             {
                 SendGate.Release();
