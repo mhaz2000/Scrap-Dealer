@@ -8,20 +8,20 @@ namespace ScrapDealer.Domain.Factories
 {
     public class NotificationFactory : INotificationFactory
     {
-        public Notification Create(Title title, NotificationContent notificationContent, List<NotificationTarget> targets, bool isPushEnabled)
+        public Notification Create(Title title, NotificationContent notificationContent, List<NotificationTarget>? targets, bool isPushEnabled, List<Guid>? userIds = null)
         {
             var titleValue = Title.Create(title);
             var notificationContentValue = NotificationContent.Create(notificationContent);
 
-            return new Notification(titleValue, notificationContentValue, targets, isPushEnabled);
+            return new Notification(titleValue, notificationContentValue, targets, isPushEnabled, userIds);
         }
 
-        public Notification Update(Title title, NotificationContent notificationContent, List<NotificationTarget> targets, Notification notification, bool isPushEnabled)
+        public Notification Update(Title title, NotificationContent notificationContent, List<NotificationTarget>? targets, Notification notification, bool isPushEnabled, List<Guid>? userIds = null)
         {
             var titleValue = Title.Create(title);
             var notificationContentValue = NotificationContent.Create(notificationContent);
 
-            notification.Update(titleValue, notificationContentValue, targets, isPushEnabled);
+            notification.Update(titleValue, notificationContentValue, targets, isPushEnabled, userIds);
             return notification;
         }
     }

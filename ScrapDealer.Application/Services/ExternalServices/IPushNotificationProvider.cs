@@ -4,16 +4,27 @@ namespace ScrapDealer.Application.Services.ExternalServices
 {
     public record PushDevice(string Token, DevicePlatform Platform, PushProvider Provider);
 
+    public enum PushDeliveryStatus
+    {
+        Accepted,
+        InvalidToken,
+        TransientFailure,
+        PermanentFailure
+    }
+
+    public sealed record PushDeliveryOutcome(
+        PushDevice Device,
+        PushDeliveryStatus Status,
+        Exception? Exception = null);
+
     public interface IPushNotificationProvider
     {
         PushProvider Provider { get; }
 
         /// <summary>
-        /// Sends a push notification to the given devices. Returns the registration tokens the
-        /// provider reported as permanently invalid/unregistered (and therefore should be
-        /// deactivated by the caller). Delivery failures are surfaced as exceptions so the
-        /// composite can retry or fall back to another provider.
+        /// Sends to each device and reports provider acceptance, invalid tokens, or failures.
+        /// Accepted means the provider accepted the request; it does not confirm device delivery.
         /// </summary>
-        Task<IReadOnlyCollection<string>> SendAsync(string title, string body, IReadOnlyCollection<PushDevice> devices, CancellationToken cancellationToken);
+        Task<IReadOnlyCollection<PushDeliveryOutcome>> SendAsync(string title, string body, IReadOnlyCollection<PushDevice> devices, CancellationToken cancellationToken);
     }
 }

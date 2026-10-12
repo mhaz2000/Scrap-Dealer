@@ -23,7 +23,15 @@ namespace ScrapDealer.Infrastructure.EF.Config.NotificationConfig
                 .HasConversion(
                     targets => JsonSerializer.Serialize(targets, (JsonSerializerOptions?)null),
                     targets => string.IsNullOrWhiteSpace(targets) ? new() : JsonSerializer.Deserialize<List<NotificationTarget>>(targets, (JsonSerializerOptions?)null) ?? new())
-                .HasColumnType("nvarchar(max)");
+                .HasColumnType("nvarchar(max)")
+                .IsRequired(false);
+
+            builder.Property(x => x.UserIds)
+                .HasConversion(
+                    ids => JsonSerializer.Serialize(ids, (JsonSerializerOptions?)null),
+                    ids => string.IsNullOrWhiteSpace(ids) ? null : JsonSerializer.Deserialize<List<Guid>>(ids!, (JsonSerializerOptions?)null))
+                .HasColumnType("nvarchar(max)")
+                .IsRequired(false);
 
             builder.HasQueryFilter(p => !p.IsDeleted);
         }

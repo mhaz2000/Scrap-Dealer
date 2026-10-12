@@ -1,85 +1,61 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using System.Threading.Channels;
+using Microsoft.Extensions.Logging;
 using ScrapDealer.Application.Services;
-using ScrapDealer.Application.Services.ExternalServices;
 using ScrapDealer.Domain.Consts;
-using ScrapDealer.Domain.Repositories;
-using ScrapDealer.Infrastructure.EF.Contexts;
-using ScrapDealer.Infrastructure.Options;
 
-namespace ScrapDealer.Infrastructure.Services.PushNotifications
+namespace ScrapDealer.Infrastructure.Services.PushNotifications;
+
+internal sealed record PushNotificationJob(
+    string Title,
+    string Body,
+    IReadOnlyCollection<NotificationTarget>? Targets,
+    IReadOnlyCollection<Guid>? UserIds);
+
+internal interface IPushNotificationQueue
 {
-    internal sealed class PushNotificationDispatcher(
-        IOptions<PushNotificationSettings> settings,
-        ReadDbContext readDbContext,
-        IUserDeviceTokenRepository deviceTokenRepository,
-        IServiceScopeFactory scopeFactory) : IPushNotificationDispatcher
-    {
-        public async Task DispatchAsync(string title, string body, IReadOnlyCollection<NotificationTarget> targets, CancellationToken cancellationToken)
+    ValueTask EnqueueAsync(PushNotificationJob job, CancellationToken cancellationToken);
+    IAsyncEnumerable<PushNotificationJob> ReadAllAsync(CancellationToken cancellationToken);
+}
+
+internal sealed class PushNotificationQueue : IPushNotificationQueue
+{
+    private readonly Channel<PushNotificationJob> _channel =
+        Channel.CreateBounded<PushNotificationJob>(new BoundedChannelOptions(1024)
         {
-            var roleNames = targets
-                .Select(MapTargetToRole)
-                .Where(r => r is not null)
-                .Cast<string>()
-                .Distinct()
-                .ToList();
+            FullMode = BoundedChannelFullMode.Wait,
+            SingleReader = false,
+            SingleWriter = false,
+            AllowSynchronousContinuations = false
+        });
 
-            if (roleNames.Count == 0)
-                return;
+    public ValueTask EnqueueAsync(PushNotificationJob job, CancellationToken cancellationToken)
+        => _channel.Writer.WriteAsync(job, cancellationToken);
 
-            var userIds = await readDbContext.UserRoles
-                .Where(ur => roleNames.Contains(ur.Role.Name))
-                .Select(ur => ur.UserId)
-                .Distinct()
-                .ToListAsync(cancellationToken);
+    public IAsyncEnumerable<PushNotificationJob> ReadAllAsync(CancellationToken cancellationToken)
+        => _channel.Reader.ReadAllAsync(cancellationToken);
+}
 
-            if (userIds.Count == 0)
-                return;
+internal sealed class PushNotificationDispatcher(
+    IPushNotificationQueue queue,
+    ILogger<PushNotificationDispatcher> logger) : IPushNotificationDispatcher
+{
+    public async Task DispatchAsync(
+        string title,
+        string body,
+        IReadOnlyCollection<NotificationTarget>? targets,
+        IReadOnlyCollection<Guid>? userIds,
+        CancellationToken cancellationToken)
+    {
+        var job = new PushNotificationJob(
+            title,
+            body,
+            targets?.ToArray(),
+            userIds?.Distinct().ToArray());
 
-            var devices = await deviceTokenRepository.GetActiveByUserIdsAsync(userIds, cancellationToken);
-            if (devices.Count == 0)
-                return;
-
-            var activeProvider = ParseProvider(settings.Value.ActiveProvider);
-
-            var pushDevices = devices
-                .Where(d => d.Provider == activeProvider)
-                .Select(d => new PushDevice(d.Token, d.Platform, d.Provider))
-                .ToList();
-
-            if (pushDevices.Count == 0)
-                return;
-
-            _ = Task.Run(async () =>
-            {
-                await using var scope = scopeFactory.CreateAsyncScope();
-                var pushNotificationService = scope.ServiceProvider
-                    .GetRequiredService<IPushNotificationService>();
-
-                try
-                {
-                    await pushNotificationService.SendAsync(title, body, pushDevices, CancellationToken.None);
-                }
-                catch
-                {
-                    // Push delivery must never fail the notification creation request.
-                }
-            });
-        }
-
-        private static string? MapTargetToRole(NotificationTarget target)
-            => target switch
-            {
-                NotificationTarget.Seller => "Seller",
-                NotificationTarget.Buyer => "Buyer",
-                NotificationTarget.Support => "Support",
-                _ => null
-            };
-
-        private static PushProvider ParseProvider(string provider)
-            => provider.Equals("Pushe", StringComparison.OrdinalIgnoreCase)
-                ? PushProvider.Pushe
-                : PushProvider.Fcm;
+        await queue.EnqueueAsync(job, cancellationToken);
+        logger.LogInformation(
+            "Queued push notification for {TargetCount} role targets and {UserCount} users.",
+            job.Targets?.Count ?? 0,
+            job.UserIds?.Count ?? 0);
     }
 }

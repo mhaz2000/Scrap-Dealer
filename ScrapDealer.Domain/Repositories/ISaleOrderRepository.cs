@@ -6,5 +6,6 @@ namespace ScrapDealer.Domain.Repositories
     public interface ISaleOrderRepository : IGenericRepository<SaleOrder>
     {
         void ClearItems(SaleOrder saleOrder);
+        Task<SaleOrder?> GetWithSellerAsync(Guid id);
     }
 }

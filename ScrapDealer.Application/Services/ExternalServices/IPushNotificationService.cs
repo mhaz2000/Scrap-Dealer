@@ -3,10 +3,9 @@ namespace ScrapDealer.Application.Services.ExternalServices
     public interface IPushNotificationService
     {
         /// <summary>
-        /// Sends a push notification to the given devices, returning the registration tokens
-        /// that the active provider reported as invalid/unregistered so the caller can
-        /// deactivate them.
+        /// Sends to each device and reports provider acceptance and per-device failures.
+        /// Accepted means provider acceptance, not confirmed device delivery.
         /// </summary>
-        Task SendAsync(string title, string body, IReadOnlyCollection<PushDevice> devices, CancellationToken cancellationToken);
+        Task<IReadOnlyCollection<PushDeliveryOutcome>> SendAsync(string title, string body, IReadOnlyCollection<PushDevice> devices, CancellationToken cancellationToken);
     }
 }

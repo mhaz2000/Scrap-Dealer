@@ -257,6 +257,9 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId", "Token")
+                        .IsUnique();
+
                     b.ToTable("UserDeviceTokens", (string)null);
                 });
 
@@ -374,11 +377,13 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Targets")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserIds")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

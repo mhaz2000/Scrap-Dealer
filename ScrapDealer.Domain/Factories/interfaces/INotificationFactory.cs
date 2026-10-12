@@ -7,7 +7,7 @@ namespace ScrapDealer.Domain.Factories.interfaces
 {
     public interface INotificationFactory
     {
-        Notification Create(Title title, NotificationContent notificationContent, List<NotificationTarget> targets, bool isPushEnabled);
-        Notification Update(Title title, NotificationContent notificationContent, List<NotificationTarget> targets, Notification notification, bool isPushEnabled);
+        Notification Create(Title title, NotificationContent notificationContent, List<NotificationTarget>? targets, bool isPushEnabled, List<Guid>? userIds = null);
+        Notification Update(Title title, NotificationContent notificationContent, List<NotificationTarget>? targets, Notification notification, bool isPushEnabled, List<Guid>? userIds = null);
     }
 }

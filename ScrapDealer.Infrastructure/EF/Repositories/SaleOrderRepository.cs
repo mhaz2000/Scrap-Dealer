@@ -2,6 +2,7 @@
 using ScrapDealer.Domain.Repositories;
 using ScrapDealer.Infrastructure.EF.Contexts;
 using ScrapDealer.Infrastructure.EF.Repositories.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace ScrapDealer.Infrastructure.EF.Repositories;
 
@@ -15,4 +16,7 @@ internal class SaleOrderRepository : GenericRepository<SaleOrder>, ISaleOrderRep
     {
         _context.SaleOrderItems.RemoveRange(saleOrder.Items);
     }
+
+    public Task<SaleOrder?> GetWithSellerAsync(Guid id)
+        => _context.SaleOrders.Include(order => order.Seller).FirstOrDefaultAsync(order => order.Id == id);
 }

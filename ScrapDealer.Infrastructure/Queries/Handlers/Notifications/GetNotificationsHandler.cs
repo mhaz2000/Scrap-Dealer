@@ -31,7 +31,7 @@ internal class GetNotificationsHandler : IQueryHandler<GetNotificationsQuery, Pa
 
         var notifications = await dbQuery.AsNoTracking().ToListAsync(cancellationToken);
 
-        notifications = FilterByTarget(notifications, query.UserRole);
+        notifications = FilterByAudience(notifications, query.UserRole, query.UserId);
 
         if (!string.IsNullOrEmpty(query.SortBy))
         {
@@ -61,17 +61,21 @@ internal class GetNotificationsHandler : IQueryHandler<GetNotificationsQuery, Pa
         return new PaginatedResult<NotificationDto>(dtos, totalCount, query.PageSize, query.PageIndex);
     }
 
-    private static List<NotificationReadModel> FilterByTarget(List<NotificationReadModel> notifications, string userRole)
+    private static List<NotificationReadModel> FilterByAudience(List<NotificationReadModel> notifications, string? userRole, Guid userId)
     {
-        if (string.IsNullOrEmpty(userRole) || userRole == "Admin")
+        if (userRole == "Admin")
             return notifications;
 
-        return userRole switch
+        var roleTarget = userRole switch
         {
-            "Support" => notifications.Where(n => n.Targets.Any(t => t == NotificationTarget.Seller || t == NotificationTarget.Buyer)).ToList(),
-            "Seller" => notifications.Where(n => n.Targets.Contains(NotificationTarget.Seller)).ToList(),
-            "Buyer" => notifications.Where(n => n.Targets.Contains(NotificationTarget.Buyer)).ToList(),
-            _ => notifications
+            "Support" => (Func<NotificationTarget, bool>)(t => t is NotificationTarget.Seller or NotificationTarget.Buyer),
+            "Seller" => t => t == NotificationTarget.Seller,
+            "Buyer" => t => t == NotificationTarget.Buyer,
+            _ => _ => false
         };
+
+        return notifications.Where(n =>
+            n.UserIds?.Contains(userId) == true ||
+            n.Targets?.Any(roleTarget) == true).ToList();
     }
 }

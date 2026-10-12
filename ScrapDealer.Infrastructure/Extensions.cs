@@ -77,7 +77,10 @@ namespace ScrapDealer.Infrastructure
             services.AddScoped<IPushNotificationProvider, FcmPushNotificationProvider>();
             services.AddScoped<IPushNotificationProvider, PushePushNotificationProvider>();
             services.AddScoped<IPushNotificationService, PushNotificationService>();
+            services.AddSingleton<IPushNotificationQueue, PushNotificationQueue>();
+            services.AddScoped<IPushNotificationJobProcessor, PushNotificationJobProcessor>();
             services.AddScoped<IPushNotificationDispatcher, PushNotificationDispatcher>();
+            services.AddHostedService<PushNotificationBackgroundService>();
 
 
             services.AddTransient<DatabaseSeeder>();

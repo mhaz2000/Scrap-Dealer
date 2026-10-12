@@ -16,7 +16,8 @@ namespace ScrapDealer.Infrastructure.EF.Config.Devices
                 .IsRequired();
 
             builder.HasIndex(x => x.UserId);
-            builder.HasIndex(x => new { x.UserId, x.Token });
+            builder.HasIndex(x => new { x.UserId, x.Token })
+                .IsUnique();
 
             builder.HasQueryFilter(p => !p.IsDeleted);
         }

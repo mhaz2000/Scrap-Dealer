@@ -9,7 +9,8 @@ namespace ScrapDealer.Infrastructure.EF.Models
         public string Title { get; set; }
         public List<Guid> SeenBy { get; set; }
         public string Content { get; set; }
-        public List<NotificationTarget> Targets { get; set; }
+        public List<NotificationTarget>? Targets { get; set; }
+        public List<Guid>? UserIds { get; set; }
         public bool IsPushEnabled { get; set; }
     }
 }

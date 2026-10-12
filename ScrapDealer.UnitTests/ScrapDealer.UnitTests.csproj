@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ScrapDealer.Application\ScrapDealer.Application.csproj" />
     <ProjectReference Include="..\ScrapDealer.Domain\ScrapDealer.Domain.csproj" />
+    <ProjectReference Include="..\ScrapDealer.Infrastructure\ScrapDealer.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

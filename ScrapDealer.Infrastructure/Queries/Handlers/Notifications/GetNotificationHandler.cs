@@ -27,15 +27,16 @@ internal class GetNotificationHandler : IQueryHandler<GetNotificationQuery, Noti
 
         if (request.UserRole != "Admin")
         {
-            var allowed = request.UserRole switch
+            var allowedByTarget = request.UserRole switch
             {
-                "Support" => notification.Targets.Any(t => t == NotificationTarget.Seller || t == NotificationTarget.Buyer),
-                "Seller" => notification.Targets.Contains(NotificationTarget.Seller),
-                "Buyer" => notification.Targets.Contains(NotificationTarget.Buyer),
+                "Support" => notification.Targets?.Any(t => t == NotificationTarget.Seller || t == NotificationTarget.Buyer) == true,
+                "Seller" => notification.Targets?.Contains(NotificationTarget.Seller) == true,
+                "Buyer" => notification.Targets?.Contains(NotificationTarget.Buyer) == true,
                 _ => false
             };
 
-            if (!allowed)
+            var addressedToUser = notification.UserIds?.Contains(request.UserId) == true;
+            if (!allowedByTarget && !addressedToUser)
                 throw new BusinessException("شما مجوز مشاهده این اعلان را ندارید.");
         }
 

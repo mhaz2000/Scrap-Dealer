@@ -9,7 +9,7 @@ namespace ScrapDealer.Application.DTO
         public string Content { get; set; }
         public bool Seen { get; set; }
         public bool IsPushEnabled { get; set; }
-        public List<NotificationTarget> targets { get; set; }
+        public List<NotificationTarget>? targets { get; set; }
     }
 
 }

@@ -14,16 +14,22 @@ namespace ScrapDealer.Application.Commands.Notifications.Handlers
     {
         public async Task Handle(AddNotificationCommand request, CancellationToken cancellationToken)
         {
-            if (request.UserRole == "Support" && request.targets.Any(t => t == NotificationTarget.Support))
+            if (request.UserRole == "Support" && request.targets?.Any(t => t == NotificationTarget.Support) == true)
                 throw new BusinessException("پشتیبان نمی‌تواند برای پشتیبان‌ها اعلان ایجاد کند.");
 
-            var notification = factory.Create(request.Title, request.Content, request.targets, request.IsPushEnabled);
+            var hasTargets = request.targets is { Count: > 0 };
+            var hasUsers = request.UserIds is { Count: > 0 };
+            if (hasTargets == hasUsers)
+                throw new BusinessException("اعلان باید دقیقا یک گروه هدف یا فهرست کاربران داشته باشد.");
+
+            var userIds = request.UserIds?.Distinct().ToList();
+            var notification = factory.Create(request.Title, request.Content, request.targets, request.IsPushEnabled, userIds);
 
             await repository.AddAsync(notification);
             await repository.CommitAsync();
 
             if (notification.IsPushEnabled)
-                await pushNotificationDispatcher.DispatchAsync(request.Title, request.Content, notification.Targets, cancellationToken);
+                await pushNotificationDispatcher.DispatchAsync(request.Title, request.Content, notification.Targets, notification.UserIds, cancellationToken);
         }
     }
 }

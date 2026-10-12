@@ -16,6 +16,9 @@ namespace ScrapDealer.Infrastructure.EF.Config.Devices
                 .HasMaxLength(500)
                 .IsRequired();
 
+            builder.HasIndex(x => new { x.UserId, x.Token })
+                .IsUnique();
+
             builder.HasQueryFilter(p => !p.IsDeleted);
         }
     }

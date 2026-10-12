@@ -32,14 +32,14 @@ public class FcmPushNotificationProvider(
 
     public PushProvider Provider => PushProvider.Fcm;
 
-    public async Task<IReadOnlyCollection<string>> SendAsync(
+    public async Task<IReadOnlyCollection<PushDeliveryOutcome>> SendAsync(
         string title,
         string body,
         IReadOnlyCollection<PushDevice> devices,
         CancellationToken cancellationToken)
     {
         if (devices.Count == 0)
-            return Array.Empty<string>();
+            return Array.Empty<PushDeliveryOutcome>();
 
         var fcmSettings = settings.Value.Fcm;
 
@@ -53,60 +53,165 @@ public class FcmPushNotificationProvider(
 
         var tokenAccess = (ITokenAccess)credential;
 
-        var accessToken = await tokenAccess.GetAccessTokenForRequestAsync(
-            null,
-            cancellationToken);
+        var accessToken = await GetAccessTokenAsync(tokenAccess, cancellationToken);
 
-        var invalidTokens = new ConcurrentBag<string>();
+        var pendingDevices = devices.Select((device, index) => (device, index)).ToList();
+        var outcomes = new List<PushDeliveryOutcome>(devices.Count);
+        Exception? authorizationFailure = null;
 
-        var tasks = devices.Select(async device =>
+        for (var attempt = 1; pendingDevices.Count > 0 && attempt <= 3; attempt++)
         {
-            await SendGate.WaitAsync(cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
+            var attemptResults = new ConcurrentBag<(int Index, PushDevice Device, DeviceSendResult Result)>();
 
-            try
-            {
-                var outcome = await SendOneAsync(
-                    title,
-                    body,
-                    device.Token,
-                    fcmSettings.ProjectId,
-                    accessToken,
-                    cancellationToken);
-
-                switch (outcome)
+            await Parallel.ForEachAsync(
+                pendingDevices,
+                new ParallelOptions
                 {
-                    case SendOutcome.TokenInvalid:
-                        invalidTokens.Add(device.Token);
-                        break;
+                    CancellationToken = cancellationToken,
+                    MaxDegreeOfParallelism = 8
+                },
+                async (item, token) =>
+                {
+                    var existingAuthorizationFailure = Interlocked.CompareExchange(
+                        ref authorizationFailure,
+                        null,
+                        null);
+                    if (existingAuthorizationFailure is not null)
+                    {
+                        attemptResults.Add((
+                            item.index,
+                            item.device,
+                            new DeviceSendResult(
+                                PushDeliveryStatus.PermanentFailure,
+                                existingAuthorizationFailure,
+                                IsAuthorizationFailure: true)));
+                        return;
+                    }
 
-                    case SendOutcome.TransientFailure:
-                        throw new InvalidOperationException(
-                            "FCM returned a transient failure while sending a notification.");
+                    await SendGate.WaitAsync(token);
+                    try
+                    {
+                        var result = await SendOneAsync(
+                            title,
+                            body,
+                            item.device.Token,
+                            fcmSettings.ProjectId,
+                            accessToken,
+                            token);
+                        if (result.IsAuthorizationFailure)
+                        {
+                            Interlocked.CompareExchange(
+                                ref authorizationFailure,
+                                result.Exception,
+                                null);
+                        }
+                        attemptResults.Add((item.index, item.device, result));
+                    }
+                    finally
+                    {
+                        SendGate.Release();
+                    }
+                });
 
-                    case SendOutcome.PermanentFailure:
-                        throw new InvalidOperationException(
-                            "FCM rejected the notification request.");
+            var retryDevices = new List<(PushDevice device, int index)>();
+            var fatalAuthorizationFailure = Interlocked.CompareExchange(
+                ref authorizationFailure,
+                null,
+                null);
+            foreach (var result in attemptResults.OrderBy(result => result.Index))
+            {
+                if (result.Result.Status == PushDeliveryStatus.TransientFailure && attempt < 3)
+                {
+                    if (fatalAuthorizationFailure is not null)
+                    {
+                        outcomes.Add(new PushDeliveryOutcome(
+                            result.Device,
+                            PushDeliveryStatus.PermanentFailure,
+                            fatalAuthorizationFailure));
+                        continue;
+                    }
 
-                    case SendOutcome.Success:
-                        break;
+                    retryDevices.Add((result.Device, result.Index));
+                    continue;
                 }
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e.Message);
-            }
-            finally
-            {
-                SendGate.Release();
-            }
-        });
 
-        await Task.WhenAll(tasks);
+                outcomes.Add(new PushDeliveryOutcome(
+                    result.Device,
+                    result.Result.Status,
+                    result.Result.Exception));
+            }
 
-        return invalidTokens.ToArray();
+            pendingDevices = retryDevices;
+            if (pendingDevices.Count > 0 && attempt < 3)
+            {
+                await DelayBeforeRetryAsync(attempt, cancellationToken);
+            }
+        }
+
+        return outcomes;
     }
 
-    private async Task<SendOutcome> SendOneAsync(
+    private async Task<string> GetAccessTokenAsync(
+        ITokenAccess tokenAccess,
+        CancellationToken cancellationToken)
+    {
+        for (var attempt = 1; ; attempt++)
+        {
+            try
+            {
+                return await tokenAccess.GetAccessTokenForRequestAsync(null, cancellationToken);
+            }
+            catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+            {
+                if (attempt >= 3)
+                    throw;
+
+                logger.LogWarning(
+                    "Timed out while acquiring an FCM access token on attempt {Attempt}.",
+                    attempt);
+                await DelayBeforeRetryAsync(attempt, cancellationToken);
+            }
+            catch (HttpRequestException exception)
+            {
+                if (attempt >= 3)
+                    throw;
+
+                logger.LogWarning(
+                    exception,
+                    "Network error while acquiring an FCM access token on attempt {Attempt}.",
+                    attempt);
+                await DelayBeforeRetryAsync(attempt, cancellationToken);
+            }
+            catch (Google.GoogleApiException exception)
+                when (IsTransientStatusCode(exception.HttpStatusCode))
+            {
+                if (attempt >= 3)
+                    throw;
+
+                logger.LogWarning(
+                    exception,
+                    "FCM token service returned retryable status {StatusCode} on attempt {Attempt}.",
+                    (int)exception.HttpStatusCode,
+                    attempt);
+                await DelayBeforeRetryAsync(attempt, cancellationToken);
+            }
+        }
+    }
+
+    private static Task DelayBeforeRetryAsync(int attempt, CancellationToken cancellationToken)
+    {
+        var baseDelayMs = 250 * Math.Pow(2, attempt - 1);
+        var jitteredDelayMs = baseDelayMs + Random.Shared.NextDouble() * baseDelayMs * 0.5;
+        return Task.Delay(TimeSpan.FromMilliseconds(jitteredDelayMs), cancellationToken);
+    }
+
+    private static bool IsTransientStatusCode(HttpStatusCode statusCode)
+        => statusCode == HttpStatusCode.RequestTimeout ||
+           (int)statusCode == 429 ||
+           (int)statusCode >= 500;
+
+    private async Task<DeviceSendResult> SendOneAsync(
         string title,
         string body,
         string token,
@@ -153,7 +258,7 @@ public class FcmPushNotificationProvider(
                 cancellationToken);
 
             if (response.IsSuccessStatusCode)
-                return SendOutcome.Success;
+                return new DeviceSendResult(PushDeliveryStatus.Accepted);
 
             var error = ParseFcmError(responseBody);
 
@@ -167,7 +272,12 @@ public class FcmPushNotificationProvider(
                 error.ErrorCode,
                 error.Message);
 
-            return ClassifyError(response.StatusCode, error);
+            var status = ClassifyError(response.StatusCode, error);
+            return new DeviceSendResult(
+                status,
+                new HttpRequestException(
+                    $"FCM returned {(int)response.StatusCode} ({response.StatusCode}): {error.Message}"),
+                response.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden);
         }
         catch (OperationCanceledException)
             when (!cancellationToken.IsCancellationRequested)
@@ -175,7 +285,9 @@ public class FcmPushNotificationProvider(
             logger.LogWarning(
                 "FCM notification request timed out.");
 
-            return SendOutcome.TransientFailure;
+            return new DeviceSendResult(
+                PushDeliveryStatus.TransientFailure,
+                new TimeoutException("FCM notification request timed out."));
         }
         catch (HttpRequestException exception)
         {
@@ -183,16 +295,22 @@ public class FcmPushNotificationProvider(
                 exception,
                 "Network error occurred while sending FCM notification.");
 
-            return SendOutcome.TransientFailure;
+            return new DeviceSendResult(PushDeliveryStatus.TransientFailure, exception);
         }
-        catch (Exception e)
+        catch (OperationCanceledException)
         {
-            Console.WriteLine(e);
-            return SendOutcome.TransientFailure;
+            throw;
+        }
+        catch (Exception exception)
+        {
+            logger.LogError(
+                exception,
+                "Unexpected error occurred while sending an FCM notification.");
+            return new DeviceSendResult(PushDeliveryStatus.PermanentFailure, exception);
         }
     }
 
-    private static SendOutcome ClassifyError(
+    private static PushDeliveryStatus ClassifyError(
         HttpStatusCode statusCode,
         FcmError error)
     {
@@ -203,7 +321,7 @@ public class FcmPushNotificationProvider(
                 "UNREGISTERED",
                 StringComparison.OrdinalIgnoreCase))
         {
-            return SendOutcome.TokenInvalid;
+            return PushDeliveryStatus.InvalidToken;
         }
 
         if (string.Equals(
@@ -211,7 +329,7 @@ public class FcmPushNotificationProvider(
                 "UNREGISTERED",
                 StringComparison.OrdinalIgnoreCase))
         {
-            return SendOutcome.TokenInvalid;
+            return PushDeliveryStatus.InvalidToken;
         }
 
         // Authentication / authorization / configuration problems.
@@ -219,21 +337,18 @@ public class FcmPushNotificationProvider(
             HttpStatusCode.Unauthorized or
             HttpStatusCode.Forbidden)
         {
-            return SendOutcome.PermanentFailure;
+            return PushDeliveryStatus.PermanentFailure;
         }
 
         // Other 4xx responses indicate a rejected request.
-        if ((int)statusCode >= 400 &&
-            (int)statusCode < 500)
+        if (statusCode == HttpStatusCode.RequestTimeout ||
+            (int)statusCode == 429 ||
+            (int)statusCode >= 500)
         {
-            return SendOutcome.PermanentFailure;
+            return PushDeliveryStatus.TransientFailure;
         }
 
-        // Server-side errors should normally be retried later.
-        if ((int)statusCode >= 500)
-            return SendOutcome.TransientFailure;
-
-        return SendOutcome.TransientFailure;
+        return PushDeliveryStatus.PermanentFailure;
     }
 
     private static FcmError ParseFcmError(string responseBody)
@@ -382,11 +497,8 @@ public class FcmPushNotificationProvider(
             new(null, null, null, null);
     }
 
-    private enum SendOutcome
-    {
-        Success,
-        TokenInvalid,
-        TransientFailure,
-        PermanentFailure
-    }
+    private sealed record DeviceSendResult(
+        PushDeliveryStatus Status,
+        Exception? Exception = null,
+        bool IsAuthorizationFailure = false);
 }
