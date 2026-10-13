@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ScrapDealer.Application.Commands.Notifications;
 using ScrapDealer.Domain.Consts;
 using ScrapDealer.Domain.Factories.interfaces;
 using ScrapDealer.Domain.Repositories;
@@ -8,7 +9,7 @@ using ScrapDealer.Shared.Abstractions.Exceptions;
 namespace ScrapDealer.Application.Commands.SaleOrders.Handlers
 {
     public class AcceptOrderHandler(IContractFactory factory, IContractRepository repository, ISaleOrderRequestRepository saleOrderRequestRepository,
-        IBuyerRepository buyerRepository, ISaleOrderRepository saleOrderRepository)
+        IBuyerRepository buyerRepository, ISaleOrderRepository saleOrderRepository, ICommandDispatcher commandDispatcher)
         : ICommandHandler<AcceptOrderCommand>
     {
         public async Task Handle(AcceptOrderCommand request, CancellationToken cancellationToken)
@@ -38,6 +39,12 @@ namespace ScrapDealer.Application.Commands.SaleOrders.Handlers
             await repository.AddAsync(contract);
             await repository.CommitAsync();
 
+
+            await commandDispatcher.DispatchAsync(new AddNotificationCommand(
+                "سفارش فروش شما قبول شد.",
+                "خریداری سفارش فروش شما را قبول کرد، برای ادامه فرایند به ضایرون مراجعه کنید.",
+                IsPushEnabled: true,
+                UserIds: [saleOrder.Seller.UserId]));
         }
     }
 }

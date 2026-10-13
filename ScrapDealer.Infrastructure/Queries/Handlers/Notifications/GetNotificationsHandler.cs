@@ -23,7 +23,7 @@ internal class GetNotificationsHandler : IQueryHandler<GetNotificationsQuery, Pa
     }
     public async Task<PaginatedResult<NotificationDto>> Handle(GetNotificationsQuery query, CancellationToken cancellationToken)
     {
-        var dbQuery = _notifications.AsQueryable();
+        var dbQuery = _notifications.Where(t=> t.CreatedAt > DateTime.Now.AddDays(-7)).AsQueryable();
 
         if (!string.IsNullOrEmpty(query.Search))
             dbQuery = dbQuery

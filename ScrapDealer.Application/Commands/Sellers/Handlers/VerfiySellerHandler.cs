@@ -1,4 +1,6 @@
-﻿using ScrapDealer.Domain.Consts;
+﻿using ScrapDealer.Application.Commands.Notifications;
+using ScrapDealer.Domain.Consts;
+using ScrapDealer.Domain.Entities;
 using ScrapDealer.Domain.Repositories;
 using ScrapDealer.Shared.Abstractions.Commands;
 using ScrapDealer.Shared.Abstractions.Exceptions;
@@ -9,11 +11,13 @@ namespace ScrapDealer.Application.Commands.Sellers.Handlers
     {
         private readonly ISellerRepository _repository;
         private readonly IReferralRepository _referralRepository;
+        private readonly ICommandDispatcher _commandDispatcher;
 
-        public VerfiySellerHandler(ISellerRepository repository, IReferralRepository referralRepository)
+        public VerfiySellerHandler(ISellerRepository repository, IReferralRepository referralRepository, ICommandDispatcher commandDispatcher)
         {
             _repository = repository;
             _referralRepository = referralRepository;
+            _commandDispatcher = commandDispatcher;
         }
 
         public async Task Handle(VerifySellerCommand request, CancellationToken cancellationToken)
@@ -32,6 +36,13 @@ namespace ScrapDealer.Application.Commands.Sellers.Handlers
                 referral.Approve();
                 await _referralRepository.UpdateAsync(referral);
             }
+
+
+            await _commandDispatcher.DispatchAsync(new AddNotificationCommand(
+                "نتیجه احراز هویت",
+                "اطلاعات شما توسط مدیز سامانه تایید شد.",
+                IsPushEnabled: true,
+                UserIds: [seller.UserId]));
         }
     }
 }

@@ -13,6 +13,7 @@ namespace ScrapDealer.Domain.Entities
         public List<Guid>? UserIds { get; set; }
         public List<Guid> SeenBy { get; set; } = [];
         public bool IsPushEnabled { get; set; }
+        public DateTime CreatedAt { get; private set; }
 
         public Notification(Title title, NotificationContent content, List<NotificationTarget>? targets, bool isPushEnabled, List<Guid>? userIds = null)
         {
@@ -21,6 +22,7 @@ namespace ScrapDealer.Domain.Entities
             Targets = targets;
             UserIds = userIds;
             IsPushEnabled = isPushEnabled;
+            CreatedAt = DateTime.Now;
         }
 
         public void Update(Title title, NotificationContent content, List<NotificationTarget>? targets, bool isPushEnabled, List<Guid>? userIds = null)

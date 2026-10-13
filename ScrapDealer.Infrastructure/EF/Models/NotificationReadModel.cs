@@ -12,5 +12,6 @@ namespace ScrapDealer.Infrastructure.EF.Models
         public List<NotificationTarget>? Targets { get; set; }
         public List<Guid>? UserIds { get; set; }
         public bool IsPushEnabled { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }
