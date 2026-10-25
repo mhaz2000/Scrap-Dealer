@@ -33,7 +33,7 @@ builder.Services.AddCors(options =>
                     return true;
 
                 return (host == "localhost" || host == "127.0.0.1") &&
-                       (port == 3000 || port == 3001);
+                       (port == 3000 || port == 3001 || port == 3002);
             })
             .AllowAnyMethod()
             .AllowAnyHeader();
