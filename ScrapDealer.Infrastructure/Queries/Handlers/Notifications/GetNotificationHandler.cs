@@ -12,11 +12,13 @@ namespace ScrapDealer.Infrastructure.Queries.Handlers.Notifications;
 internal class GetNotificationHandler : IQueryHandler<GetNotificationQuery, NotificationDto>
 {
     private readonly DbSet<NotificationReadModel> _notifications;
+    private readonly DbSet<UserReadModel> _users;
     private readonly IMapper _mapper;
 
     public GetNotificationHandler(ReadDbContext context, IMapper mapper)
     {
         _notifications = context.Notifications;
+        _users = context.Users;
         _mapper = mapper;
     }
     public async Task<NotificationDto> Handle(GetNotificationQuery request, CancellationToken cancellationToken)
@@ -41,6 +43,13 @@ internal class GetNotificationHandler : IQueryHandler<GetNotificationQuery, Noti
         }
 
         var notificationDto = _mapper.Map<NotificationDto>(notification);
+
+        if (notification.UserIds is not null && notification.UserIds.Any())
+        {
+            var users = await _users.Where(t => notification.UserIds.Contains(t.Id)).ToListAsync();
+            notificationDto.Users = _mapper.Map<IReadOnlyList<UserDto>>(users);
+        }
+
 
         notificationDto.Seen = notification.SeenBy.Any(id => id == request.UserId);
 

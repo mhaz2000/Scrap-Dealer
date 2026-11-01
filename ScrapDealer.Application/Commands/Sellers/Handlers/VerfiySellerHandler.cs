@@ -40,7 +40,7 @@ namespace ScrapDealer.Application.Commands.Sellers.Handlers
 
             await _commandDispatcher.DispatchAsync(new AddNotificationCommand(
                 "نتیجه احراز هویت",
-                "اطلاعات شما توسط مدیز سامانه تایید شد.",
+                "اطلاعات شما توسط مدیر سامانه تایید شد.",
                 IsPushEnabled: true,
                 UserIds: [seller.UserId]));
         }
