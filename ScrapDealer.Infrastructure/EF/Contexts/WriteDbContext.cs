@@ -13,6 +13,7 @@ namespace ScrapDealer.Infrastructure.EF.Contexts
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Buyer> Buyers { get; set; }
+        public DbSet<InitialBuyer> InitialBuyers { get; set; }
         public DbSet<Reward> Rewards { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
         public DbSet<Ticket> Tickets { get; set; }

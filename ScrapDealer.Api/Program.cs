@@ -4,55 +4,85 @@ using ScrapDealer.Infrastructure.Logging;
 using ScrapDealer.Shared;
 using ScrapDealer.Shared.Helpers;
 using System.Text.Json.Serialization;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddSignalRConfig();
-builder.Services.AddSwaggerConfig();
-builder.Services.AddInfrastructure(builder.Configuration);
-
-builder.Services.AddControllers().AddJsonOptions(opt =>
+internal class Program
 {
-    opt.JsonSerializerOptions.Converters.Add(new PersianDateTimeConverter());
-    opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-});
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowNextJsFrontend", policy =>
+    private static void Main(string[] args)
     {
-        policy.SetIsOriginAllowed(origin =>
+        var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddSignalRConfig();
+        builder.Services.AddSwaggerConfig();
+        builder.Services.AddInfrastructure(builder.Configuration);
+
+        builder.Services.AddControllers().AddJsonOptions(opt =>
+        {
+            opt.JsonSerializerOptions.Converters.Add(new PersianDateTimeConverter());
+            opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
+
+        var initialBuyerRateLimit = builder.Configuration.GetSection("RateLimiting:InitialBuyerCreate");
+        var permitLimit = initialBuyerRateLimit.GetValue("PermitLimit", 50);
+        var windowSeconds = initialBuyerRateLimit.GetValue("WindowSeconds", 60);
+        var queueLimit = initialBuyerRateLimit.GetValue("QueueLimit", 0);
+
+        builder.Services.AddRateLimiter(options =>
+        {
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            options.AddPolicy("InitialBuyerCreate", context =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = permitLimit,
+                        Window = TimeSpan.FromSeconds(windowSeconds),
+                        QueueLimit = queueLimit,
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        AutoReplenishment = true
+                    }));
+        });
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowNextJsFrontend", policy =>
             {
-                if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri))
-                    return false;
+                policy.SetIsOriginAllowed(origin =>
+                    {
+                        if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+                            return false;
 
-                var host = uri.Host;
-                var port = uri.Port;
+                        var host = uri.Host;
+                        var port = uri.Port;
 
-                if (host == "zayron.ir" || host.EndsWith(".zayron.ir"))
-                    return true;
+                        if (host == "zayron.ir" || host.EndsWith(".zayron.ir"))
+                            return true;
 
-                return (host == "localhost" || host == "127.0.0.1") &&
-                       (port == 3000 || port == 3001 || port == 3002);
-            })
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-    });
-});
+                        return (host == "localhost" || host == "127.0.0.1") &&
+                               (port == 3000 || port == 3001 || port == 3002);
+                    })
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+        });
 
-var app = builder.Build();
+        var app = builder.Build();
 
-app.UseSwaggerConfig();
+        app.UseSwaggerConfig();
 
-app.UseCors("AllowNextJsFrontend");
+        app.UseCors("AllowNextJsFrontend");
 
-app.UseShared();
-app.UseMiddleware<LoggingMiddleware>();
-app.UseSignalR();
-app.UseAuthentication();
-app.UseAuthorization();
+        app.UseRateLimiter();
+        app.UseShared();
+        app.UseMiddleware<LoggingMiddleware>();
+        app.UseSignalR();
+        app.UseAuthentication();
+        app.UseAuthorization();
 
 
-app.MapControllers();
+        app.MapControllers();
 
-app.Run();
+        app.Run();
+    }
+}

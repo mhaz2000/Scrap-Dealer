@@ -263,6 +263,38 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.ToTable("UserDeviceTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.InitialBuyerReadModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Area")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HasVehicle")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Phone")
+                        .IsUnique();
+
+                    b.ToTable("InitialBuyers", (string)null);
+                });
+
             modelBuilder.Entity("ScrapDealer.Infrastructure.EF.Models.InvoiceItemReadModel", b =>
                 {
                     b.Property<Guid>("Id")

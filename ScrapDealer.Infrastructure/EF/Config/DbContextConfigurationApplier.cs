@@ -37,6 +37,7 @@ namespace ScrapDealer.Infrastructure.EF.Config
 
             modelBuilder.ApplyConfiguration(new NewsReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BuyerReadEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new InitialBuyerReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SellerReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new RewardReadEntityConfiguration());
             modelBuilder.ApplyConfiguration(new WalletReadEntityConfiguration());
@@ -68,6 +69,7 @@ namespace ScrapDealer.Infrastructure.EF.Config
 
             modelBuilder.ApplyConfiguration(new NewsWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BuyerWriteEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new InitialBuyerWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new RewardWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new WalletWriteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SellerWriteEntityConfiguration());
