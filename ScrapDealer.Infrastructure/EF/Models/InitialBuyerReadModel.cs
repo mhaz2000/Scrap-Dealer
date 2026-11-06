@@ -8,4 +8,5 @@ internal class InitialBuyerReadModel
     public required string Phone { get; set; }
     public string? Area { get; set; }
     public bool HasVehicle { get; set; }
+    public bool OwnsShop { get; set; }
 }

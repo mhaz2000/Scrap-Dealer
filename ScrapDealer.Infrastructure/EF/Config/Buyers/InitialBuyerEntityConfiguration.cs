@@ -23,6 +23,8 @@ internal sealed class InitialBuyerWriteEntityConfiguration : IEntityTypeConfigur
             .HasColumnName("Phone").IsRequired();
         builder.HasIndex(x => x.Phone).IsUnique();
         builder.Property(x => x.Area).IsRequired(false);
+        builder.Property(x => x.HasVehicle).IsRequired();
+        builder.Property(x => x.OwnsShop).IsRequired();
     }
 }
 
@@ -33,5 +35,7 @@ internal sealed class InitialBuyerReadEntityConfiguration : IEntityTypeConfigura
         builder.ToTable("InitialBuyers");
         builder.HasKey(x => x.Id);
         builder.HasIndex(x => x.Phone).IsUnique();
+        builder.Property(x => x.HasVehicle).IsRequired();
+        builder.Property(x => x.OwnsShop).IsRequired();
     }
 }

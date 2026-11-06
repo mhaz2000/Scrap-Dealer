@@ -279,6 +279,9 @@ namespace ScrapDealer.Infrastructure.EF.Migrations
                     b.Property<bool>("HasVehicle")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("OwnsShop")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

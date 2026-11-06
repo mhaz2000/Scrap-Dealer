@@ -19,7 +19,7 @@ internal sealed class CreateInitialBuyerHandler : ICommandHandler<CreateInitialB
         if (await _repository.GetAsync(b => b.Phone == phone) is not null)
             throw new BusinessException("این شماره تلفن قبلا ثبت شده است.");
 
-        var buyer = new InitialBuyer(PersonName.Create(request.FirstName, request.LastName), phone, request.Area, request.HasVehicle);
+        var buyer = new InitialBuyer(PersonName.Create(request.FirstName, request.LastName), phone, request.Area, request.HasVehicle, request.OwnsShop);
         await _repository.AddAsync(buyer);
         await _repository.CommitAsync();
     }

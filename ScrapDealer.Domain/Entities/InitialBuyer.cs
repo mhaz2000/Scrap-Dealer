@@ -10,15 +10,17 @@ public class InitialBuyer : AggregateRoot<Guid>
     public Phone Phone { get; private set; }
     public string? Area { get; private set; }
     public bool HasVehicle { get; private set; }
+    public bool OwnsShop { get; private set; }
 
     private InitialBuyer() { }
 
-    public InitialBuyer(PersonName personName, Phone phone, string? area, bool HasVehicle)
+    public InitialBuyer(PersonName personName, Phone phone, string? area, bool hasVehicle, bool ownsShop)
     {
         Id = Guid.NewGuid();
         PersonName = personName;
         Phone = phone;
         Area = area;
-        HasVehicle = HasVehicle;
+        HasVehicle = hasVehicle;
+        OwnsShop = ownsShop;
     }
 }
