@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ScrapDealer.Application.DTO;
 using ScrapDealer.Application.Queries.Contracts;
+using ScrapDealer.Domain.Consts;
 using ScrapDealer.Infrastructure.EF.Contexts;
 using ScrapDealer.Infrastructure.EF.Models;
 using ScrapDealer.Shared.Abstractions.Exceptions;
@@ -16,13 +17,13 @@ internal class GetSellerContractHandler(ReadDbContext context, IMapper mapper) :
 
     public async Task<SellerContractDetailDto> Handle(GetSellerContractQuery request, CancellationToken cancellationToken)
     {
-        var contract = await _contracts.Include(t => t.Buyer).ThenInclude(t=> t.User).FirstOrDefaultAsync(t => t.Id == request.Id);
+        var contract = await _contracts.Include(t => t.SaleOrder).Include(t => t.Buyer).ThenInclude(t=> t.User).FirstOrDefaultAsync(t => t.Id == request.Id);
         if (context is null)
             throw new BusinessException("قرارداد یافت نشد.");
 
         var data = mapper.Map<SellerContractDetailDto>(contract);
 
-        var scoreHistory = await _scoreHistories.FirstOrDefaultAsync(t => t.ContractId == contract!.Id);
+        var scoreHistory = await _scoreHistories.FirstOrDefaultAsync(t => t.ScoreFor == ScoreFor.Seller && t.SellerId == contract!.SaleOrder.SellerId && t.ContractId == contract!.Id);
         data.ContractScore = scoreHistory?.Score;
 
         return data;

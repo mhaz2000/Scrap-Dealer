@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ScrapDealer.Application.DTO;
 using ScrapDealer.Application.Queries.Contracts;
+using ScrapDealer.Domain.Consts;
 using ScrapDealer.Infrastructure.EF.Contexts;
 using ScrapDealer.Infrastructure.EF.Models;
 using ScrapDealer.Shared.Abstractions.Exceptions;
@@ -23,7 +24,7 @@ internal class GetBuyerContractHandler(ReadDbContext context, IMapper mapper) : 
             throw new BusinessException("قرارداد یافت نشد.");
 
         var data =  mapper.Map<BuyerContractDetailDto>(contract);
-         var scoreHistory = await _scoreHistories.FirstOrDefaultAsync(t => t.ContractId == contract!.Id);
+         var scoreHistory = await _scoreHistories.FirstOrDefaultAsync(t => t.ScoreFor == ScoreFor.Buyer && t.BuyerId == contract!.BuyerId && t.ContractId == contract!.Id);
 
         data.ContractScore = scoreHistory?.Score;
 
