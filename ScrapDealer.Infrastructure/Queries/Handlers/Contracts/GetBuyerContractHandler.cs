@@ -20,11 +20,11 @@ internal class GetBuyerContractHandler(ReadDbContext context, IMapper mapper) : 
             .Include(t => t.SaleOrder).ThenInclude(t=> t.Seller).ThenInclude(t => t.User)
             .FirstOrDefaultAsync(t => t.Id == request.Id);
 
-        if (context is null)
+        if (contract is null)
             throw new BusinessException("قرارداد یافت نشد.");
 
         var data =  mapper.Map<BuyerContractDetailDto>(contract);
-         var scoreHistory = await _scoreHistories.FirstOrDefaultAsync(t => t.ScoreFor == ScoreFor.Buyer && t.BuyerId == contract!.BuyerId && t.ContractId == contract!.Id);
+         var scoreHistory = await _scoreHistories.FirstOrDefaultAsync(t => t.ScoreFor == ScoreFor.Seller && t.BuyerId == contract!.BuyerId && t.ContractId == contract!.Id);
 
         data.ContractScore = scoreHistory?.Score;
 
